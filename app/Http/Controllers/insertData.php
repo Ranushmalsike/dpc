@@ -8,6 +8,7 @@ use App\Models\userRole;
 use App\Models\subjectTB;
 use Illuminate\Http\Request;
 use App\Models\permissionPage;
+use App\Models\permissionPageforuser;
 use App\Rules\customPasswordValidation;
 
 
@@ -192,8 +193,32 @@ class insertData extends Controller
         }
 
     }
-    
-    // >> redirect within alert section
+
+    /**
+     * >> Add permission for user By Admin or Staff
+     */
+
+     public function addPermisisonByAdminOrStaff(Request $request){
+        //dd($request->selectedValues);
+
+
+        
+        foreach ($request->selectedValues as $selectedValue) {
+
+        permissionPageforuser::insertOrIgnore([
+            'permission_id' => $selectedValue,
+            'user_id' => $request->idOfTheUser,
+        ]);
+        }
+        return response()->json(['status' => 'success', 'message' => 'Permission added successfully']);
+             // return $this->redirectOptionCompleted();
+     }
+
+
+
+    /**
+     * Alert within redirect function
+     */
     public function redirectOptionCompleted(){
         return redirect()->back()->with('success', 'Add data successful');
         }

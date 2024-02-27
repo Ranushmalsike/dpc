@@ -1,4 +1,7 @@
 @extends('include.commonstr')
+@section('meta')
+ <meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('css')
 <!-- Start Add link for DataTable -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
@@ -49,14 +52,14 @@
                             <div class="col-sm-4">
                                 <h5 class="text-info"><u><b> >> Normal section</b></u></h5>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol100"
+                                    <input class="form-check-input" type="checkbox" value="1"
                                         id="flexCheckDefault_hmpg">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Dashboard
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol101"
+                                    <input class="form-check-input" type="checkbox" value="2"
                                         id="flexCheckDefault_ownprlsec">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Change Password and add email
@@ -64,35 +67,35 @@
                                 </div>
                                 <h5 class="text-info"><u><b> >> Add and maintain section</b></u></h5>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol108"
+                                    <input class="form-check-input" type="checkbox" value="3"
                                         id="flexCheckDefault_ownprlpasssec">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Add Educator
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol109"
+                                    <input class="form-check-input" type="checkbox" value="4"
                                         id="flexCheckDefault_addSubj">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Add Subject And Schema
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol110"
+                                    <input class="form-check-input" type="checkbox" value="5"
                                         id="flexCheckDefault_addclass">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Add Class
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol111"
+                                    <input class="form-check-input" type="checkbox" value="6"
                                         id="flexCheckDefault_addTeacher">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Arrange Timetable
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol127"
+                                    <input class="form-check-input" type="checkbox" value="7"
                                         id="flexCheckDefault_Summery_Maintain">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Summery Maintain
@@ -102,49 +105,49 @@
                             <div class="col-sm-4">
                                 <h5 class="text-info"><u><b> >> Financial section</b></u></h5>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol112"
+                                    <input class="form-check-input" type="checkbox" value="8"
                                         id="flexCheckDefault_addmonthly_salary_range_allownace">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Define Hourly Pay Criteria
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol114"
+                                    <input class="form-check-input" type="checkbox" value="9"
                                         id="flexCheckDefault_add_month_salary_gen">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Define Salary Bands
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol113"
+                                    <input class="form-check-input" type="checkbox" value="10"
                                         id="flexCheckDefault_add_daySalary_gen">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Transport Benefit Criteria
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol115"
+                                    <input class="form-check-input" type="checkbox" value="11"
                                         id="flexCheckDefault_add_transport_sec">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Detail Salary Criteria (Events/Extras)
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol125"
+                                    <input class="form-check-input" type="checkbox" value="12"
                                         id="flexCheckDefault_add_monthly_salary_event">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Teacher Pay
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol116"
+                                    <input class="form-check-input" type="checkbox" value="13"
                                         id="flexCheckDefault_loan_sec">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Credit Section
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol120"
+                                    <input class="form-check-input" type="checkbox" value="14"
                                         id="flexCheckDefault_add_monthly_salary_event">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Calculation
@@ -154,14 +157,14 @@
                             <div class="col-sm-4">
                                 <h5 class="text-info"><u><b> >> Report section</b></u></h5>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol117"
+                                    <input class="form-check-input" type="checkbox" value="15"
                                         id="flexCheckDefault_lookTeacheratten">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Teachers Details
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol121"
+                                    <input class="form-check-input" type="checkbox" value="16"
                                         id="flexCheckDefault_lookAllTecher_salary">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Teachers Salary Details
@@ -169,7 +172,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol129"
+                                    <input class="form-check-input" type="checkbox" value="17"
                                         id="flexCheckDefault_Report">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Teacher Attendance Details
@@ -186,7 +189,7 @@
                             <div class="col-sm-4">
                                 <h5 class="text-info"><u><b> >> Normal section</b></u></h5>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol101"
+                                    <input class="form-check-input" type="checkbox" value="18"
                                         id="flexCheckDefault_pg1">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Own Profile access
@@ -196,21 +199,21 @@
                             <div class="col-sm-4">
                                 <h5 class="text-info"><u><b> >> Activity section</b></u></h5>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol118"
+                                    <input class="form-check-input" type="checkbox" value="19"
                                         id="flexCheckDefault_pg2">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Approve Schedule
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol119"
+                                    <input class="form-check-input" type="checkbox" value="20"
                                         id="flexCheckDefault_pg3">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         My Performance
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol128"
+                                    <input class="form-check-input" type="checkbox" value="21"
                                         id="flexCheckDefault_pg6">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Summary Maintain
@@ -220,7 +223,7 @@
                             <div class="col-sm-4">
                                 <h5 class="text-info"><u><b> >> Report section</b></u></h5>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="checkbox" value="dpnCol120"
+                                    <input class="form-check-input" type="checkbox" value="22"
                                         id="flexCheckDefault_pg5">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         My salary Report
@@ -235,41 +238,42 @@
                         <p>No staff members found</p>
                         @endforelse
                         <!-- end staff or teacher permission section-->
+                        
+                        @forelse($getStaff as $forButton)
+                       
+                        <button type="submit" class="btn btn-primary mr-2" id="passThePermission"
+                            value="{{ $forButton->id }}">Add</button>
+                        @empty
 
-                        <button type="submit" class="btn btn-primary mr-2">Add</button>
+                        @endforelse
                     </div>
                 </div>
             </div>
             <!-- End permission section -->
 
             <!-- Start permission section -->
-            <div class="col-md-6 grid-margin stretch-card">
+            <div class="col-md-5 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Permission Details</h4>
                         <table id="permission" class="display table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>Permission Code</th>
-                                    <th>Permission Username</th>
+                                    <th>Permission</th>
                                     <th>Action</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($getStaff as $getStaff)
-                                <tr id="staffId{{ $getStaff->	id }}">
-                                    <td>{{ $getStaff->	id }}</td>
-                                    <td>{{ $getStaff->	name }}</td>
-                                    <td>
-                                        <div class="row">
-
-                                            <!-- Delete -->
-                                            <button type="button" class="btn btn-danger btn-sm h6 mr-1"
-                                                value="{{ $getStaff->id }}" id="delete_staff"><i
-                                                    class="bi bi-trash"></i></button>
-
-                                        </div>
+                                @foreach($HimOrherPermision as $pmv)
+                                <tr id="rmPermission{{ $pmv->pmvid }}">
+                                    <td>{{ $pmv->permissionTg }}</td>
+                                    <td><!-- Delete -->
+                                                <button type="button" class="btn btn-danger btn-sm h6"
+                                                    value="{{ $pmv->pmvid }}" id="delete_permissionforUser"><i
+                                                        class="bi bi-trash"></i></button>
                                     </td>
+                                    
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -285,31 +289,30 @@
 
     @push('scripts')
     <!-- Start DataTable Script Link -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <!-- Start DataTable Script Link -->
-        <script type="text/javascript" charset="utf8"
-            src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <!-- Start DataTable Script Link -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js">
+    </script>
 
-        <script type="text/javascript" charset="utf8"
-            src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
-        <script type="text/javascript" charset="utf8"
-            src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
-        <script type="text/javascript" charset="utf8"
-            src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js">
-        </script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js">
-        </script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js">
-        </script>
-        <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
-        <!-- // End DataTale Script link -->
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js">
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js">
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js">
+    </script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <!-- // End DataTale Script link -->
 
-        <!-- // Start Sweet model script link -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
-        <!-- // End Sweet Alert script link -->
+    <!-- // Start Sweet model script link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
+    <!-- // End Sweet Alert script link -->
 
     <script>
         $(document).ready(function () {
@@ -357,7 +360,7 @@
                         extend: 'pdf',
                         bold: 'true',
                         fontSize: '15',
-                        title: 'Daphne Lord School (Subject And Schema Information)',
+                        title: 'Daphne Lord School (Permision Information for User)',
                         subtitle: 'Line 2 of the subtitle',
                         exportOptions: {
                             modifier: {
@@ -373,16 +376,15 @@
             /*
             >>Delete for permission
             */
-            $(document).on('click', '#delete_permission', function () {
+            $(document).on('click', '#delete_permissionforUser', function () {
                 // Get the value of the clicked button
                 var id = $(this).val();
-                var del_URL = "/administrativehub.permission.delete/";
-                var what_function = "staff";
-                deleteDataOfTable(id, del_URL, what_function);
+                var del_URL = "/administrativehub.permissionForUser.delete/";
+                deleteDataOfTable(id, del_URL);
             });
 
             //>> Delete function
-            function deleteDataOfTable(id, del_URL, what_function) {
+            function deleteDataOfTable(id, del_URL) {
 
                 Swal.fire({
                     title: "Are you sure?",
@@ -401,27 +403,61 @@
                                 'X-CSRF-TOKEN': $("input[name=_token]").val()
                             },
                             success: function (response) {
-                                //if class 
-                                if (what_function == "staff") {
-                                    $('#staffId' + id).remove();
+                            
+                                    $('#rmPermission' + id).remove();
                                     success();
-                                }
-                                //if subject
-                                else if (what_function == "teacher") {
-                                    $('#teacherId' + id).remove();
-                                    success();
-                                } else {
-                                    fail();
-                                }
+                               
                             }
                         });
                     }
                 });
-                //alert();
 
             }
 
+            /**
+             * Add permission for user
+             */
+            const selectedValues = [];
+            $("#passThePermission").click(function (e) {
+                //e.preventDefault();
+                var idOfTheUser = $(this).val();
+                var URL_OF_permission_add = "{{ route('AddPermissionForUser') }}";
+                selectedValues.length = 0;
 
+                $('input[type=checkbox]:checked').each(function () {
+                    const valuseOfthePermission = $(this).val();
+                    //alert(valuseOfthePermission);
+                    // element == this
+                    if (!selectedValues.includes(valuseOfthePermission)) {
+                        selectedValues.push(valuseOfthePermission);
+                    }
+
+                });
+
+
+                $.ajax({
+                    type: "POST",
+                    url: URL_OF_permission_add,
+                    data: {
+                        selectedValues: selectedValues,
+                        idOfTheUser: idOfTheUser
+                    }, // Send actual data as JSON object
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('X-CSRF-TOKEN', $("meta[name='csrf-token']").attr('content'));
+                    },
+                    dataType:'json',
+                    success: function (response) {
+                        if(response.message == 'Permission added successfully'){
+                        success();
+                        location.reload(true);
+                        }
+
+                    }
+                    //
+                });
+            });
+
+            //alert();
             /*
              >> Insert function of Alert Section
             */

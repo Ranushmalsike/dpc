@@ -4,6 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    @yield('meta')
     <title>CelestialUI Admin</title>
     <!-- base:css -->
     <link rel="stylesheet" href="{{ asset('assets/adminHub/vendors/typicons.font/font/typicons.css') }}">

@@ -8,6 +8,7 @@ use App\Models\subjectTB;
 use App\Models\User;
 use App\Models\userRole;
 use App\Models\permissionPage;
+use App\Models\permissionPageforuser;
 
 class pgControll extends Controller
 {
@@ -61,7 +62,15 @@ class pgControll extends Controller
             ->select('users.*', 'user_roles.roleType')
             ->get();
             
-        return view('layout.pemissionAddOrUpdate', compact('getStaff'));
+            $HimOrherPermision = permissionPageforuser::groupBy('permission_pageforusers.user_id', 'permission_pageforusers.id', 'users.name')
+    ->join('users', 'permission_pageforusers.user_id', '=', 'users.id')
+    ->join('permission_pages', 'permission_pages.id', '=', 'permission_pageforusers.permission_id')
+    ->where('permission_pageforusers.user_id', '=', $id)
+    ->select('permission_pageforusers.id AS pmvid', 'users.name AS name', permissionPageforuser::raw("GROUP_CONCAT(permission_pages.nameOfPage ORDER BY permission_pageforusers.permission_id) AS permissionTg"))
+    ->get();
+
+
+        return view('layout.pemissionAddOrUpdate', compact('getStaff', 'HimOrherPermision'));
         
     }    
 }

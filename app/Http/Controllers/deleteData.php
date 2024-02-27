@@ -8,6 +8,7 @@ use App\Models\userRole;
 use App\Models\subjectTB;
 use Illuminate\Http\Request;
 use App\Models\permissionPage;
+use App\Models\permissionPageforuser;
 
 class deleteData extends Controller
 {
@@ -50,6 +51,12 @@ class deleteData extends Controller
     // >> PermissionPG delete
     public function permissionPgDelete($id){
        $del = permissionPage::findOrFail($id)->delete();
+       $alertCall = new forAlert();
+       $alertCall->alertTp($del);
+    }
+     // >> Permission for user delete
+    public function permission_foruserDelete($id){
+       $del = permissionPageforuser::findOrFail($id)->delete();
        $alertCall = new forAlert();
        $alertCall->alertTp($del);
     }

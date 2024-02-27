@@ -54,6 +54,7 @@ Route::POST('/input.class', [insertData::class, 'classInputeData'])->name('class
 Route::POST('/input.subject', [insertData::class, 'subjectInputeData'])->name('Subject_input');
 Route::POST('/input.registerStaff', [insertData::class, 'staffRegInputeData'])->name('staff_input');
 Route::POST('/input.registerTeacher', [insertData::class, 'teacherRegInputeData'])->name('teacher_input');
+Route::POST('/input.AddPermission', [insertData::class, 'addPermisisonByAdminOrStaff'])->name('AddPermissionForUser');
 
 
 //Delete
@@ -61,6 +62,7 @@ Route::GET('/administrativehub.Class.delete/{id}', [deleteData::class, 'classDel
 Route::GET('/administrativehub.subject.delete/{id}', [deleteData::class, 'subjectDelete'])->name('subject.delete');
 Route::GET('/administrativehub.staff.delete/{id}', [deleteData::class, 'staffDelete'])->name('staff.delete');
 Route::GET('/administrativehub.teacher.delete/{id}', [deleteData::class, 'teacherDelete'])->name('teacher.delete');
+Route::GET('/administrativehub.permissionForUser.delete/{id}', [deleteData::class, 'permission_foruserDelete'])->name('permissionForUser.delete');
 
 //Update
 Route::GET('/administrativehub.Class.edit/{class_id}', [updateData::class, 'classEdit'])->name('class.edit');
