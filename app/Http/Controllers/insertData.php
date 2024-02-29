@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\permissionPage;
 use App\Models\permissionPageforuser;
 use App\Rules\customPasswordValidation;
+use Illuminate\Support\Facades\DB;
 
 
 class insertData extends Controller
@@ -210,10 +211,12 @@ class insertData extends Controller
             'user_id' => $request->idOfTheUser,
         ]);
         }
+        // Call procudure for remove duplicate values
+        DB::select('CALL RemoveDuplicates()'); 
+
         return response()->json(['status' => 'success', 'message' => 'Permission added successfully']);
              // return $this->redirectOptionCompleted();
      }
-
 
 
     /**

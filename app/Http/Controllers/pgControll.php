@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\userRole;
 use App\Models\permissionPage;
 use App\Models\permissionPageforuser;
+use App\Models\user_privet_data;
 
 class pgControll extends Controller
 {
@@ -29,10 +30,12 @@ class pgControll extends Controller
         $userRole = userRole::all();
         return view('adm.homeStaff', compact('admintb', 'permissionTB', 'userRole'));
     }
+
     //Administrative section of route
     public function administrativehub(){
         return view('layout.home');
     }
+
 
     //Administrative section of route class and subject
     public function administrativehubClassAndSubject(){
@@ -40,6 +43,8 @@ class pgControll extends Controller
         $getSubjectData = subjectTB::all();
         return view('layout.createClassAndSubject', compact('getClassData', 'getSubjectData'));
     }
+
+
     //Administrative section of route register Staff or Teacher
     public function administrativehubRegStaffAndTeacher(){
         $getStaff = User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
@@ -53,10 +58,10 @@ class pgControll extends Controller
             ->get();
         return view('layout.createSupperUserAndTeacher', compact('getStaff', 'getTeacher'));
     }
+
     //Administrative section of route permission
     public function administrativehubpermission($id){
-        //$id = $this->$id;
-        // dd($id);
+
          $getStaff = User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
             ->where('users.id', '=', $id)
             ->select('users.*', 'user_roles.roleType')
@@ -73,4 +78,31 @@ class pgControll extends Controller
         return view('layout.pemissionAddOrUpdate', compact('getStaff', 'HimOrherPermision'));
         
     }    
+
+    //Administrative section PrivateDataInsert By Admin
+    public function addPrivateDataUserByStaff($id){
+        $getData = User::join('user_privet_datas', 'users.id', '=', 'user_privet_datas.user_id')
+            ->where('users.id', '=', $id)
+            ->select('users.name', 
+                'user_privet_datas.user_id',
+                'user_privet_datas.first_name',
+                'user_privet_datas.second_name',
+                'user_privet_datas.address',
+                'user_privet_datas.NIC',
+                'user_privet_datas.contact_number',
+            )
+            ->get();
+           
+        return view('layout.addPrivateData', compact('getData'));
+        
+    }    
+
+    //Administrative section Add Salary Band  By staff 
+    public function addSalaryRangeData(){
+        $getData = user_privet_data::all();
+        return view('layout.salaryBand', compact('getData'));
+        
+    }    
+
+
 }

@@ -44,6 +44,8 @@ Route::get('/administrativehub.index', [pgControll::class, 'administrativehub'])
 Route::get('/administrativehub.Class&Subject', [pgControll::class, 'administrativehubClassAndSubject'])->name('classAndSubject');
 Route::get('/administrativehub.RegisterStaff', [pgControll::class, 'administrativehubRegStaffAndTeacher'])->name('RegisterStaff');
 Route::get('/administrativehub.permission/{id}', [pgControll::class, 'administrativehubpermission'])->name('permissionForStaffOrTeacher');
+Route::get('/administrativehub.userPrivateData/{id}', [pgControll::class, 'addPrivateDataUserByStaff'])->name('userPrivateData');
+Route::get('/administrativehub.SalaryRangePerHour', [pgControll::class, 'addSalaryRangeData'])->name('SalaryRangePerHour');
 
 
 /*
@@ -69,6 +71,7 @@ Route::GET('/administrativehub.Class.edit/{class_id}', [updateData::class, 'clas
 Route::GET('/administrativehub.Subject.edit/{subject_id}', [updateData::class, 'subjectEdit'])->name('subject.edit');
 Route::GET('/administrativehub.staff.edit/{staff_id}', [updateData::class, 'staffEdit'])->name('staff.edit');
 Route::GET('/administrativehub.teacher.edit/{teacher_id}', [updateData::class, 'teacherEdit'])->name('teacher.edit');
+Route::POST('/administrativehub.teacher.PrivateData/', [updateData::class, 'addUserPrivateDataByStaff'])->name('teacher.PrivateData');
 
 
 

@@ -53,6 +53,7 @@ class User extends Authenticatable
     public function role() {
         return $this->belongsTo(UserRole::class, 'user_role');
         return $this->hasMany(permissionPageforuser::class, 'id');
+        return $this->belongsTo(user_privet_data::class, 'user_id');
 
     }
 }
