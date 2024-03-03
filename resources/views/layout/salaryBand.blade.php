@@ -1,7 +1,4 @@
 @extends('include.commonstr')
-@section('meta')
- <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
 @section('css')
 <!-- Start Add link for DataTable -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
@@ -33,6 +30,8 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Per One Hour Salary</h4>
+                        <form method="POST" action="{{ route('AddTeacherSalaryByStaff') }}" >
+                            @csrf
                             <div class="form-group mb-2">
                                     <label for="TeacherName" class="col-sm-5 col-form-label">Select Teacher</label>
                                     <select class="selectTeacher form-control rounded-0" name="TeacherName" id="TeacherName"
@@ -42,6 +41,7 @@
                                         <option value="{{ $user->user_id }}"> {{ $user->first_name }} &nbsp; {{ $user->second_name }}</option>
                                         @endforeach
                                     </select>
+                                    <span style="color:red"> @error ('TeacherName') {{ $message }} @enderror </span>                                    
                                 </div>
                                 <label for="Salary" class="col-sm-6 col-form-label">Per hour salary (1H =
                                     LKR)</label>
@@ -50,14 +50,16 @@
                                         <span class="input-group-text">LKR</span>
                                     </div>
                                     <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)"
-                                        id="Salary">
+                                        id="Salary" name="Salary">
                                     <div class="input-group-append">
                                         <span class="input-group-text">.00</span>
                                     </div>
+                                    <span style="color:red"> @error ('Salary') {{ $message }} @enderror </span>
                                 </div>
                                 <div class="text-center">
                                     <button id="daysalrysave_158" class="btn btn-primary" value="158">Add</button>
                                 </div>
+                            </form>
                     </div>
                 </div>
             </div>
@@ -81,7 +83,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                              
+                              @foreach($getslarydata as $slarydata)
+                              <tr id="rmPerSalary{{ $slarydata->id }}">
+                                <td>{{ $slarydata->user_id }}</td>
+                                <td>{{ $slarydata->first_name }}</td>
+                                <td>{{ $slarydata->second_name }}</td>
+                                <td>{{ $slarydata->published }}</td>
+                                <td>{{ $slarydata->perHourSalary }}</td>
+                                <td>
+                                    <div class="row">
+                                    <!-- Delete -->
+                                    <button type="button" class="btn btn-danger btn-sm h6 mr-1"value="{{ $slarydata->id }}" id="delete_perSalary" data-toggle="tooltip" data-placement="bottom" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                    </button>
+                                    <!-- Look calculation by This block -->
+                                    <button type="button" class="btn btn-info btn-sm h6 mr-1"
+                                    value="{{ $slarydata->id }}" id="toUserPrivateDetails" data-toggle="tooltip" data-placement="bottom" title="Which Calculation By LKR: {{ $slarydata->perHourSalary }}">
+                                    <i class="bi bi-calculator-fill"></i>
+                                    </button>
+                                </div>
+                                </td>
+                                </tr>
+                              @endforeach
                             </tbody>
                         </table>
 
@@ -171,7 +194,7 @@
                         extend: 'pdf',
                         bold: 'true',
                         fontSize: '15',
-                        title: 'Daphne Lord School (Permision Information for User)',
+                        title: 'Daphne Lord School (Per Hour Salary Band)',
                         subtitle: 'Line 2 of the subtitle',
                         exportOptions: {
                             modifier: {
@@ -184,6 +207,47 @@
             });
             // End permission table
 
+
+            /*
+            >>Delete for permission
+            */
+            $(document).on('click', '#delete_perSalary', function () {
+                // Get the value of the clicked button
+                var id = $(this).val();
+                var del_URL = "/administrativehub.PerHourSalaryBand.delete/";
+                deleteDataOfTable(id, del_URL);
+            });
+
+            //>> Delete function
+            function deleteDataOfTable(id, del_URL) {
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to delete this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "GET",
+                            url: del_URL + id,
+                            data: {
+                                'X-CSRF-TOKEN': $("input[name=_token]").val()
+                            },
+                            success: function (response) {
+                            
+                                    $('#rmPerSalary' + id).remove();
+                                    success();
+                               
+                            }
+                        });
+                    }
+                });
+
+            }
 
             //alert();
             /*

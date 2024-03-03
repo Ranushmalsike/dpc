@@ -10,20 +10,23 @@ use App\Models\userRole;
 use App\Models\permissionPage;
 use App\Models\permissionPageforuser;
 use App\Models\user_privet_data;
+use App\Models\perHouserSalaryForTecher;
+use App\Models\transpoer_detail;
+use App\Models\transpoer_price_details;
 
 class pgControll extends Controller
 {
-    //welcome section of route
+    // This function is responsible for the welcome section of the route
     public function index(){
         return view('welcome');
     }
 
-    //Login section of route
+    // This function is responsible for the login section of the route
     public function login(){
         return view('login.login');
     }
 
-    //System maintenance section of route
+    // This function is responsible for system maintenance. It is part of the administrative functionalities.
     public function systemMaintenance(){
         $admintb = User::all();
         $permissionTB = permissionPage::all();
@@ -31,13 +34,13 @@ class pgControll extends Controller
         return view('adm.homeStaff', compact('admintb', 'permissionTB', 'userRole'));
     }
 
-    //Administrative section of route
+    //Administrative section of route 
     public function administrativehub(){
         return view('layout.home');
     }
 
 
-    //Administrative section of route class and subject
+    // This function is responsible for  class and subject. It is part of the administrative functionalities.
     public function administrativehubClassAndSubject(){
         $getClassData = classTb::all();
         $getSubjectData = subjectTB::all();
@@ -45,7 +48,7 @@ class pgControll extends Controller
     }
 
 
-    //Administrative section of route register Staff or Teacher
+    // This function is responsible for staff and teacher members. It is part of the administrative functionalities.
     public function administrativehubRegStaffAndTeacher(){
         $getStaff = User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
             ->where('user_roles.roleType', 'staff')
@@ -59,7 +62,7 @@ class pgControll extends Controller
         return view('layout.createSupperUserAndTeacher', compact('getStaff', 'getTeacher'));
     }
 
-    //Administrative section of route permission
+    // Route for managing permissions in the administrative section
     public function administrativehubpermission($id){
 
          $getStaff = User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
@@ -79,7 +82,7 @@ class pgControll extends Controller
         
     }    
 
-    //Administrative section PrivateDataInsert By Admin
+    //This function is responsible for private data for staff members. It is part of the administrative functionalities.
     public function addPrivateDataUserByStaff($id){
         $getData = User::join('user_privet_datas', 'users.id', '=', 'user_privet_datas.user_id')
             ->where('users.id', '=', $id)
@@ -97,10 +100,33 @@ class pgControll extends Controller
         
     }    
 
-    //Administrative section Add Salary Band  By staff 
+    // This function is responsible for salary bands for staff members. It is part of the administrative functionalities.
     public function addSalaryRangeData(){
         $getData = user_privet_data::all();
-        return view('layout.salaryBand', compact('getData'));
+
+        $getslarydata = perHouserSalaryForTecher::join('user_privet_datas', 'per_houser_salary_for_techers.user_id', '=' , 'user_privet_datas.user_id')
+        ->select('user_privet_datas.first_name', 
+            'user_privet_datas.second_name', 
+            'per_houser_salary_for_techers.user_id', 
+            'per_houser_salary_for_techers.perHourSalary',
+            'per_houser_salary_for_techers.id',
+            'per_houser_salary_for_techers.published')
+        ->get();
+        return view('layout.salaryBand', compact('getData', 'getslarydata'));
+        
+    }    
+
+    // this function is responsible for transport information and price.
+    public function trasnportInformation(){
+        $getTransportInformation = transpoer_detail::all();
+
+        $getTransportPrice = transpoer_detail::join('transpoer_price_details', 'transpoer_details.trasporot_code', '=' , 'transpoer_price_details.trasporot_code')
+        ->select('transpoer_details.description',
+        'transpoer_details.trasporot_code',
+        'transpoer_price_details.id',
+        'transpoer_price_details.transport_price',)
+        ->get();
+        return view('layout.tarnsportInformation', compact('getTransportInformation', 'getTransportPrice'));
         
     }    
 

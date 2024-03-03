@@ -268,7 +268,8 @@
                                 @foreach($HimOrherPermision as $pmv)
                                 <tr id="rmPermission{{ $pmv->pmvid }}">
                                     <td>{{ $pmv->permissionTg }}</td>
-                                    <td><!-- Delete -->
+                                    <td>
+                                        <!-- Delete -->
                                                 <button type="button" class="btn btn-danger btn-sm h6"
                                                     value="{{ $pmv->pmvid }}" id="delete_permissionforUser"><i
                                                         class="bi bi-trash"></i></button>

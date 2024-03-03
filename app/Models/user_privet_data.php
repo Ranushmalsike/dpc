@@ -19,5 +19,6 @@ class user_privet_data extends Model
 
     public function joinDataOtherTB(){
         return $this->hasOne(User::class, 'id');
+        return $this->hasMany(perHouserSalaryForTecher::class, 'user_id');
     }
 }
