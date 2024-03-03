@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 //use App\models\
 use App\Models\User;
 use App\Models\classTb;
 use App\Models\userRole;
 use App\Models\subjectTB;
-use Illuminate\Http\Request;
 use App\Models\permissionPage;
 use App\Models\permissionPageforuser;
 use App\Models\perHouserSalaryForTecher;
 use App\Models\transpoer_detail;
 use App\Models\transpoer_price_details;
+use App\Models\allowanceTb;
+use App\Models\additional_allowance;
 
 
 // use App\Rules\
@@ -114,6 +116,33 @@ class insertData extends Controller
             ['trasporot_code' => $request->TransportCodeSelect, 'transport_price' => $request->TRPA],
             'trasporot_code',
             $request->TransportCodeSelect
+        );
+    }
+
+    //insert_allowance method
+    public function insert_allowance(Request $request)
+    {
+        return $this->handleAddData(
+            $request,
+            ['startSalary' => 'required|string', 'endSalary' => 'required|string', 'allowance' => 'required|string'],
+            allowanceTb::class,
+            ['start_salary' => $request->startSalary, 'end_star' => $request->endSalary, 'allowance' => $request->allowance],
+            'allowance',
+            $request->allowance
+        );
+    }
+
+    
+    //insert_Additional_allowance method
+    public function insert_Additional_allowance(Request $request)
+    {
+        return $this->handleAddData(
+            $request,
+            ['additionalAllowance' => 'required|string', 'description' => 'required|string'],
+            additional_allowance::class,
+            ['allowance_amount' => $request->additionalAllowance, 'Description' => $request->description],
+            'allowance_amount',
+            $request->additionalAllowance
         );
     }
 

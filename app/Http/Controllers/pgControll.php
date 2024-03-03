@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\classTb;
 use App\Models\subjectTB;
 use App\Models\User;
@@ -13,6 +14,8 @@ use App\Models\user_privet_data;
 use App\Models\perHouserSalaryForTecher;
 use App\Models\transpoer_detail;
 use App\Models\transpoer_price_details;
+use App\Models\allowanceTb;
+use App\Models\additional_allowance;
 
 class pgControll extends Controller
 {
@@ -127,6 +130,22 @@ class pgControll extends Controller
         'transpoer_price_details.transport_price',)
         ->get();
         return view('layout.tarnsportInformation', compact('getTransportInformation', 'getTransportPrice'));
+        
+    }    
+
+    // this function is responsible for allowance.
+    public function get_allowance(){
+        $allowanceData = allowanceTb::all();
+
+        return view('layout.aollowance', compact('allowanceData'));
+        
+    }    
+
+    // this function is responsible for additional allowance.
+    public function get_additional_allowance(){
+        $additional_allowanceData = additional_allowance::all();
+
+        return view('layout.additionalAllowance', compact('additional_allowanceData'));
         
     }    
 

@@ -47,6 +47,8 @@ Route::get('/administrativehub.permission/{id}', [pgControll::class, 'administra
 Route::get('/administrativehub.userPrivateData/{id}', [pgControll::class, 'addPrivateDataUserByStaff'])->name('userPrivateData');
 Route::get('/administrativehub.SalaryRangePerHour', [pgControll::class, 'addSalaryRangeData'])->name('SalaryRangePerHour');
 Route::get('/administrativehub.trasnportInformation', [pgControll::class, 'trasnportInformation'])->name('trasnportInformationAdd');
+Route::get('/administrativehub.allowance', [pgControll::class, 'get_allowance'])->name('allowance');
+Route::get('/administrativehub.additional_allowance', [pgControll::class, 'get_additional_allowance'])->name('additional_allowance');
 
 
 /*
@@ -61,6 +63,8 @@ Route::POST('/input.AddPermission', [insertData::class, 'addPermisisonByAdminOrS
 Route::POST('/input.AddsalaryBand', [insertData::class, 'addSalaryBand'])->name('AddTeacherSalaryByStaff');
 Route::POST('/input.AddTrasnport', [insertData::class, 'insert_TranportData'])->name('AddTrasnportData');
 Route::POST('/input.AddTrasnportPrice', [insertData::class, 'insert_TranportData_price'])->name('AddTrasnportDataPrice');
+Route::POST('/input.Addallowance', [insertData::class, 'insert_allowance'])->name('Addallowance');
+Route::POST('/input.Addadditional_allowance', [insertData::class, 'insert_Additional_allowance'])->name('Addadditional_allowance');
 
 
 //Delete
@@ -72,6 +76,8 @@ Route::GET('/administrativehub.permissionForUser.delete/{id}', [deleteData::clas
 Route::GET('/administrativehub.PerHourSalaryBand.delete/{id}', [deleteData::class, 'PerHour_SalaryBandDelete'])->name('perHourSalaryBand.delete');
 Route::GET('/administrativehub.Trasnport_detials.delete/{id}', [deleteData::class, 'delete_Transport_detials'])->name('Trasnport_detials.delete');
 Route::GET('/administrativehub.Trasnport_detials_price.delete/{id}', [deleteData::class, 'delete_transport_detials_price'])->name('Trasnport_detials_price.delete');
+Route::GET('/administrativehub.allowance.delete/{id}', [deleteData::class, 'delete_allowance'])->name('allowance.delete');
+Route::GET('/administrativehub.additional_allowance.delete/{id}', [deleteData::class, 'delete_additional_allowance'])->name('additional_allowance.delete');
 
 
 
