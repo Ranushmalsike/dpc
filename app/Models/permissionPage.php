@@ -11,4 +11,7 @@ class permissionPage extends Model
     protected $fillable = [
         'pageName',
     ];
+    public function pemissionPageForsys() {
+        return $this->hasMany(permissionPageforuser::class, 'permission_id');
+    }
 }

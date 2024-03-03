@@ -159,7 +159,7 @@
                 <!-- End Class table -->
 
                 <!-- Start Subject table -->
-                <div class="col-6">
+                <div class="col-7">
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Teacher Details</h4>
@@ -181,15 +181,19 @@
                                                 <!-- Edit -->
                                                 <button type="button" class="btn btn-warning btn-sm h6 mr-1"
                                                     value="{{ $getTeacher->id }}" id="edit_teacher"
-                                                    data-toggle="modal"><i class="bi bi-pen"></i></button>
+                                                    data-toggle="modal" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="bi bi-pen"></i></button>
                                                 <!-- Delete -->
                                                 <button type="button" class="btn btn-danger btn-sm h6 mr-1"
-                                                    value="{{ $getTeacher->id }}" id="delete_teacher"><i
+                                                    value="{{ $getTeacher->id }}" id="delete_teacher" data-toggle="tooltip" data-placement="bottom" title="Delete User"><i
                                                         class="bi bi-trash"></i></button>
                                                 <!-- Permission -->
-                                                <button type="button" class="btn btn-info btn-sm mr-1"
-                                                    value="{{ $getTeacher->id }}" id="permission_teacher">
-                                                    <i class="bi bi-key"></i></button>
+                                                <button type="button" class="btn btn-info btn-sm h6 mr-1"
+                                                    value="{{ $getTeacher->id }}" id="permission_teacher" data-toggle="tooltip" data-placement="bottom" title="Add permission">
+                                                    <i class="bi bi-key"></i></button> 
+                                                    <!-- Insert User Private Details -->
+                                                <button type="button" class="btn btn-info btn-sm h6 mr-1"
+                                                    value="{{ $getTeacher->id }}" id="toUserPrivateDetails" data-toggle="tooltip" data-placement="bottom" title="Add The user Private information">
+                                                    <i class="bi bi-info-circle"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -482,10 +486,14 @@
                 //alert(id);
                  var newPageURL = "/administrativehub.permission/"+id;
                  window.location.href = newPageURL;
-                // var del_URL = "administrativehub.teacher.delete/";
-                // var what_function = "teacher";
-                // deleteDataOfTable(id, del_URL, what_function);
+            });
 
+            $(document).on('click', '#toUserPrivateDetails', function () {
+                // Get the value of the clicked button
+                var id = $(this).val();
+                //alert(id);
+                 var newPageURL = "/administrativehub.userPrivateData/"+id;
+                 window.location.href = newPageURL;
             });
 
             //Password hidden and show -staff

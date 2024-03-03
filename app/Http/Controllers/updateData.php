@@ -6,7 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\classTb;
 use App\Models\subjectTB;
 use App\Models\User;
+use App\Models\user_privet_data;
 use App\Rules\customPasswordValidation;
+// use App\Rules\user_privet_data;
+// use App\Rules\UserPrivateData;
+use Illuminate\Support\Facades\DB;
+
 
 class updateData extends Controller
 {
@@ -107,5 +112,45 @@ class updateData extends Controller
             return redirect(route('RegisterStaff'))->with('fail', 'Fail data');
     }
     }
+
+
+    /**
+     * >> Add user Private data for user By Admin or Staff
+     */
+public function addUserPrivateDataByStaff(Request $request){
+        $id = $request->idOfUser;
+        $user = user_privet_data::find($id); // Assuming your model is named UserPrivateData
+
+        if ($user) {
+            if (!empty($request->first_name)) {
+                $user->first_name = $request->first_name;
+            }
+            if (!empty($request->Second_Name)) {
+                $user->second_name = $request->Second_Name;
+            }
+            if (!empty($request->Address)) {
+                $user->address = $request->Address;
+            }
+            if (!empty($request->NIC)) {
+                $user->NIC = $request->NIC;
+            }
+            if (!empty($request->Contact_Number)) {
+                $user->contact_number = $request->Contact_Number;
+            }
+
+            $user->update();
+
+            if(empty($request->first_name) && empty($request->Second_Name) && empty($request->Address) && empty($request->NIC) && empty($request->Contact_Number)){
+            return redirect()->back()->with('fail', 'Fail data');
+            }
+
+
+            return redirect(route('userPrivateData', ['id' => $id]))->with('success', 'Add data successful');
+        }
+         else {
+            return redirect()->back()->with('fail', 'Fail data');
+        }
+            }
+
 }
 
