@@ -141,7 +141,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
     <!-- // End Sweet Alert script link -->
 
-    {{-- Start MyScript Link  --}}
+    <!-- {{-- Start MyScript Link  --}} -->
     <script>
         $(document).ready(function () {
 
@@ -253,7 +253,7 @@
         });
 
     </script>
-    {{-- End MyScript Link  --}}
+    <!-- {{-- End MyScript Link  --}} -->
 
     @endpush
 
