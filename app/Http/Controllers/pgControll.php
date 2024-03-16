@@ -189,5 +189,12 @@ $getloanDetails = creditTB_d1::join('credit_t_b_d2s', 'credit_t_b_d1s.id', '=', 
         
     }    
 
+/**
+ * Time Table Arrangement
+ */
+    public function TimeTableArrangement(){
+       
+        return view('layout.timeTable');
+    }
 
 }

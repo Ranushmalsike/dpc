@@ -54,6 +54,7 @@ Route::group(['prefix' => '/administrativehub'], function () {
     Route::get('/allowance', [pgControll::class, 'get_allowance'])->name('allowance');
     Route::get('/additional_allowance', [pgControll::class, 'get_additional_allowance'])->name('additional_allowance');
     Route::get('/credit', [pgControll::class, 'get_creditSection'])->name('credit');
+    Route::get('/TimeTableArrangement', [pgControll::class, 'TimeTableArrangement'])->name('TimeTableArrangement');
    
 });
 
