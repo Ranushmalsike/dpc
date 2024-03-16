@@ -174,7 +174,48 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            <hr>
+                <br>
+                <!-- Process Type -->
+                <div class="col-md-3 bg-success">
+
+                    <h3 class="text-decoration-underline fw-bold">Proccess text</h3>
+                    <form class="container" method="POST" action="{{ route('processData.add') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="username">Process Type:</label>
+                            <input type="text" class="form-control" name="process_text" id="process_text">
+                            <span style="color:red"> @error ('process_text') {{ $message }} @enderror </span>
+                        </div>
+                        <center>
+                            <button type="submit" class="btn btn-danger btn-sm mt-2">Submit</button>
+                        </center>
+                    </form>
+                    <hr>
+                    <table id="processID" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Process ID</th>
+                                <th>Proccess Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($proccessTypeData as $pTD)
+                            <tr id="proccessID{{ $pTD->id  }}">
+                                <td>{{ $pTD->id }}</td>
+                                <td>{{ $pTD->type  }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm h6 mr-1"
+                                        value="{{ $pTD->id }}" id="delete_permisionTB"><i
+                                            class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            
 
             <div class="row mt-2">
                 <!-- Add Permission page section -->
@@ -236,7 +277,7 @@
                 /**
                  * permission page TB
                  */
-                $('#permissionPage, #user_adm, #permission_tb').DataTable({
+                $('#permissionPage, #user_adm, #permission_tb, #processID').DataTable({
                     "pagingType": "full_numbers",
                     "pageLength": 5,
                     "searching": true,

@@ -7,6 +7,10 @@ use App\Models\classTb;
 use App\Models\subjectTB;
 use App\Models\User;
 use App\Models\user_privet_data;
+use App\Models\credit_d3;
+use App\Models\creditTB_d1;
+use App\Models\creditTB_d2;
+
 use App\Rules\customPasswordValidation;
 // use App\Rules\user_privet_data;
 // use App\Rules\UserPrivateData;
@@ -151,6 +155,32 @@ public function addUserPrivateDataByStaff(Request $request){
             return redirect()->back()->with('fail', 'Fail data');
         }
             }
+
+/**
+ * Update pending to Confirmed in Credit Table
+ * confirmed_loan
+ * reject_loan_option
+ * all installment completed of loan
+ */
+public function updateCredit_reject_loan($id){
+    $credit = creditTB_d1::findOrFail($id);
+    $credit->type_id = '2'; 
+    $credit->update();
+}
+ public function updateCredit_confirmed_loan($id){
+    $credit = creditTB_d1::findOrFail($id);
+    $credit->type_id = '3'; 
+    $credit->update();
+}
+
+public function updateCredit_allcompleted($id){
+    $credit = creditTB_d1::findOrFail($id);
+    $credit->type_id = '4'; 
+    $credit->update();
+
+    $installment = creditTB_d2::where('credit_id' , $id)->update(['type_id' => '4']);
+    
+}
 
 }
 

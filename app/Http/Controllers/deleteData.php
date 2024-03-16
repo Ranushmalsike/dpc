@@ -11,6 +11,11 @@ use App\Models\permissionPageforuser;
 use App\Models\perHouserSalaryForTecher;
 use App\Models\transpoer_detail;
 use App\Models\transpoer_price_details;
+use App\Models\allowanceTb;
+use App\Models\additional_allowance;
+use App\Models\credit_d3;
+use App\Models\creditTB_d1;
+use App\Models\creditTB_d2;
 
 class deleteData extends Controller
 {
@@ -86,6 +91,20 @@ class deleteData extends Controller
     // >> delete Tranport_detials_price
    public function delete_transport_detials_price($id){
       $this->deleteResource('transpoer_price_details', $id);
+   }
+    // >> delete allowance
+   public function delete_allowance($id){
+      $this->deleteResource('allowanceTb', $id);
+   }
+
+    // >> delete additional_allowance
+   public function delete_additional_allowance($id){
+      $this->deleteResource('additional_allowance', $id);
+   }
+    // >> delete Credit
+   public function delete_Creadit($id){
+      $this->creditTB_d1('id', $id);
+      $this->creditTB_d2('credit_id', $id);
    }
 
 }

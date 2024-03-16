@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\classTb;
 use App\Models\subjectTB;
 use App\Models\User;
@@ -13,6 +15,11 @@ use App\Models\user_privet_data;
 use App\Models\perHouserSalaryForTecher;
 use App\Models\transpoer_detail;
 use App\Models\transpoer_price_details;
+use App\Models\allowanceTb;
+use App\Models\additional_allowance;
+use App\Models\credit_d3;
+use App\Models\creditTB_d1;
+use App\Models\creditTB_d2;
 
 class pgControll extends Controller
 {
@@ -31,7 +38,9 @@ class pgControll extends Controller
         $admintb = User::all();
         $permissionTB = permissionPage::all();
         $userRole = userRole::all();
-        return view('adm.homeStaff', compact('admintb', 'permissionTB', 'userRole'));
+        $proccessTypeData = credit_d3::all();
+
+        return view('adm.homeStaff', compact('admintb', 'permissionTB', 'userRole', 'proccessTypeData'));
     }
 
     //Administrative section of route 
@@ -130,5 +139,62 @@ class pgControll extends Controller
         
     }    
 
+    // this function is responsible for allowance.
+    public function get_allowance(){
+        $allowanceData = allowanceTb::all();
+
+        return view('layout.aollowance', compact('allowanceData'));
+        
+    }    
+
+    // this function is responsible for additional allowance.
+    public function get_additional_allowance(){
+        $additional_allowanceData = additional_allowance::all();
+
+        return view('layout.additionalAllowance', compact('additional_allowanceData'));
+        
+    }  
+
+    // this function is responsible for credit section.
+    public function get_creditSection(){
+        $getTeacher = User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
+            ->join('user_privet_datas', 'users.id', '=', 'user_privet_datas.user_id')
+            ->where('user_roles.roleType', 'teacher')
+            ->select('user_privet_datas.first_name', 'user_privet_datas.second_name', 'user_privet_datas.user_id')
+            ->get();
+
+$getloanDetails = creditTB_d1::join('credit_t_b_d2s', 'credit_t_b_d1s.id', '=', 'credit_t_b_d2s.credit_id')
+    ->join('credit_d3s', 'credit_t_b_d2s.type_id', '=', 'credit_d3s.id')
+    ->join('user_privet_datas', 'credit_t_b_d1s.user_id', '=', 'user_privet_datas.user_id')
+    ->select('credit_t_b_d1s.id AS credit_id_of_baseTB',
+        'user_privet_datas.first_name AS first_name', 
+        'user_privet_datas.second_name AS second_name', 
+        'user_privet_datas.user_id AS user_id',
+        'credit_t_b_d1s.amount AS amount',
+        'credit_t_b_d1s.provide_date AS provide_date',
+        DB::raw("CASE
+                WHEN credit_t_b_d1s.type_id = 1 THEN 'Pending'
+                WHEN credit_t_b_d1s.type_id = 2 THEN 'Reject'
+                WHEN credit_t_b_d1s.type_id = 3 THEN 'Confirmed'
+                WHEN credit_t_b_d1s.type_id = 4 THEN 'Completed'
+                ELSE 'Unknown'
+            END AS type_ofmainTB"),
+        'credit_t_b_d2s.id AS credit_id_of_detail_subTB',
+        'credit_t_b_d2s.installment AS installment',
+        'credit_t_b_d2s.installment_date AS installment_date',
+        'credit_d3s.type AS type_ofsubTB')
+    ->get();
+
+        return view('layout.creaditSection', compact('getTeacher', 'getloanDetails'));
+        
+    }    
+
+/**
+ * Time Table Arrangement
+ */
+    public function TimeTableArrangement(){
+       
+        return view('layout.timeTable');
+    }
 
 }

@@ -472,8 +472,6 @@
         });
 
     </script>
-    // End DataTable Script link
-    //
     <!-- content-wrapper ends -->
     <script src="{{ asset('assets/adminHub/js/file-upload.js') }}"></script>
     <script src="{{ asset('assets/adminHub/js/typeahead.js') }}"></script>
