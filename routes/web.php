@@ -74,6 +74,7 @@ Route::group(['prefix' => '/input'], function () {
     Route::POST('/Addallowance', [insertData::class, 'insert_allowance'])->name('Addallowance');
     Route::POST('/Addadditional_allowance', [insertData::class, 'insert_Additional_allowance'])->name('Addadditional_allowance');
     Route::POST('/creditInsert', [insertData::class, 'insert_creditSection'])->name('creditInsert');
+    Route::POST('/Add_DeleteData_from_timeArrangement', [insertData::class, 'insert_DateFromArrangeTimeTable'])->name('Add_DeleteData_from_timeArrangement');
 });
 
 //Delete

@@ -18,6 +18,7 @@ use App\Models\additional_allowance;
 use App\Models\credit_d3;
 use App\Models\creditTB_d1;
 use App\Models\creditTB_d2;
+use App\Models\gathherTo_a_delete_date_from_TimeArrangement;
 
 
 // use Carbon\Carbon;
@@ -278,12 +279,40 @@ public function insert_creditSection(Request $request)
 }
 
 
+// subjectInputeData
+public function subjectInputeData(Request $request){
+    return $this->handleAddData(
+        $request,
+        ['subject_name' => 'required|string'],
+        subjectTB::class,
+        ['subject' => $request->subject_name],
+        'subject',
+        $request->subject_name
+    );
+}
 
-        
-    
+// classInputeData
+public function classInputeData(Request $request){
+    return $this->handleAddData(
+        $request,
+        ['class_name' => 'required|string', 'str_date' => 'required|string'],
+        classTb::class,
+        ['dpcclass' => $request->class_name, 'start_date' => $request->str_date, 'end_date' => $request->end_date],
+        'dpcclass',
+        $request->class_name
+    );
+}
 
+// Add Delete Date from arrange Time Table by System
+public function insert_DateFromArrangeTimeTable(Request $request){
+    $dateOfRequest = $request->dateText;
+    $formatted_date = date('Y-m-d', strtotime($dateOfRequest));
+    // dd($formatted_date);
 
-
+    gathherTo_a_delete_date_from_TimeArrangement::insert([
+        'delete_date_from_TimeArrangement' => $formatted_date
+    ]);
+}
 
 
 

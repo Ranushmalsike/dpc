@@ -11,9 +11,27 @@ document.addEventListener('DOMContentLoaded', function () {
             var endSelectDateValue = $('#End_titile_datetime').val();
             var starttime = $('#starttime').val();
             var endtime = $('#endtime').val();
-            var className = $('#className').val();
-            var subject = $('#subject').val();
-            var TeacherName = $('#TeacherName').val();
+
+            var subject = document.getElementById('subject');
+            var subjectVal = $('#subject').val();
+
+            var TeacherName = document.getElementById('TeacherName');
+            var TeacherNameVal = $('#TeacherName').val();
+
+            var className = document.getElementById('className');
+            var classNameVal = $('#className').val();
+
+            var selectedclassName = className.options[className.selectedIndex];
+            var selectedTeacherName = TeacherName.options[TeacherName.selectedIndex];
+            var selectedsubject = subject.options[subject.selectedIndex];
+            
+            var selectedClassValue = selectedclassName.getAttribute('data');
+            var selectedTeacherNamev = selectedTeacherName.getAttribute('data');
+            var selectedsubjectv = selectedsubject.getAttribute('data');
+
+            
+            // var subject = document.getElementById('subject');
+            // var TeacherName = document.getElementById('TeacherName');
             // Make sure the dates are not empty
             if (!startSelectDateValue || !endSelectDateValue) {
                 alert('Please ensure both start and end dates are selected.');
@@ -34,18 +52,21 @@ document.addEventListener('DOMContentLoaded', function () {
             // Generate and insert new rows for each weekday
             var idOfTime = 1;
             weekdays.forEach(function(date) {
+                // Increment idOfTime only once for use in this iteration.
+                const currentIdOfTime = idOfTime++;
+            
                 const newRow = `
-                    <tr id="idOfshedule${idOfTime++}">
-                        <td>${ idOfTime++ }</td>
-                        <td data="{}">${TeacherName}</td>
+                    <tr id="idOfshedule${currentIdOfTime}">
+                        <td>${currentIdOfTime}</td>
+                        <td data="${TeacherNameVal}">${selectedTeacherNamev}</td>
                         <td><strong>${date}</strong></td>
                         <td>${starttime}</td>
                         <td>${endtime}</td>
-                        <td data="{}">${className}</td>
-                        <td data="{}">${subject}</td>
+                        <td data="${classNameVal}">${selectedClassValue}</td>
+                        <td data="${subjectVal}">${selectedsubjectv}</td>
                         <td>Transport</td>
                         <td>
-                        <button class="btn btn-danger btn-sm" value="${idOfTime++}" id="deleteOfGenShedule"><i class="bi bi-trash"></i></button>
+                        <button class="btn btn-danger btn-sm" value="${currentIdOfTime}" id="deleteOfGenShedule" ><i class="bi bi-trash"></i></button>
                         </td>
                     </tr>
                 `;
@@ -58,6 +79,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }).catch(error => {
         console.error('Failed to initialize the calendar', error);
+    });
+
+    $(document).on('click', '#deleteOfGenShedule', function () {
+        var id = $(this).val();
+        //alert(id);
+        var dateText = $(this).closest('tr').find('td:eq(2)').text();
+        gathherDeleteData(dateText);
+        $('#idOfshedule' + id).remove();
+
     });
 });
 
@@ -79,3 +109,21 @@ function calculateWeekdaysFromDate(startDate, endDate) {
 
     return weekdays; // Now returns all days excluding weekends
 }
+
+// Gather Delete from table 
+function gathherDeleteData(dateText) {
+    $.ajax({
+        type: "POST",
+        url: "/input/Add_DeleteData_from_timeArrangement",
+        data: {
+            dateText: dateText
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRF-TOKEN', $("meta[name='csrf-token']")
+                .attr('content'));
+        },
+        success: function (response) {
+            
+        }
+    });
+  }

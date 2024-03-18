@@ -23,6 +23,12 @@ use App\Models\creditTB_d2;
 
 class pgControll extends Controller
 {
+   public $teachersDetails;
+    public function __construct()
+    {
+        // Constructor logic goes here
+        $this->teachersDetails = new Public_qry();
+    }
     // This function is responsible for the welcome section of the route
     public function index(){
         return view('welcome');
@@ -64,6 +70,7 @@ class pgControll extends Controller
             ->select('users.*', 'user_roles.roleType')
             ->get();
             //dd($getStaff);
+            
         $getTeacher = User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
             ->where('user_roles.roleType', 'teacher')
             ->select('users.*', 'user_roles.roleType')
@@ -157,13 +164,9 @@ class pgControll extends Controller
 
     // this function is responsible for credit section.
     public function get_creditSection(){
-        $getTeacher = User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
-            ->join('user_privet_datas', 'users.id', '=', 'user_privet_datas.user_id')
-            ->where('user_roles.roleType', 'teacher')
-            ->select('user_privet_datas.first_name', 'user_privet_datas.second_name', 'user_privet_datas.user_id')
-            ->get();
+      $getTeacher = $this->teachersDetails->teacherName();
 
-$getloanDetails = creditTB_d1::join('credit_t_b_d2s', 'credit_t_b_d1s.id', '=', 'credit_t_b_d2s.credit_id')
+    $getloanDetails = creditTB_d1::join('credit_t_b_d2s', 'credit_t_b_d1s.id', '=', 'credit_t_b_d2s.credit_id')
     ->join('credit_d3s', 'credit_t_b_d2s.type_id', '=', 'credit_d3s.id')
     ->join('user_privet_datas', 'credit_t_b_d1s.user_id', '=', 'user_privet_datas.user_id')
     ->select('credit_t_b_d1s.id AS credit_id_of_baseTB',
@@ -193,8 +196,37 @@ $getloanDetails = creditTB_d1::join('credit_t_b_d2s', 'credit_t_b_d1s.id', '=', 
  * Time Table Arrangement
  */
     public function TimeTableArrangement(){
-       
-        return view('layout.timeTable');
+        
+        $getTeacher = $this->teachersDetails->teacherName();
+        $getClassVal = $this->teachersDetails->classTBValues();
+        $getSubjectVal = $this->teachersDetails->subjectTBValues();
+        
+        return view('layout.timeTable', compact('getTeacher', 'getClassVal', 'getSubjectVal'));
     }
 
+}
+
+/**
+ * general query 
+ */
+class Public_qry{
+    // Get Only Teachers Name
+    public function teacherName() {
+       return $getTeacher = User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
+        ->join('user_privet_datas', 'users.id', '=', 'user_privet_datas.user_id')
+        ->where('user_roles.roleType', 'teacher')
+        ->select('user_privet_datas.first_name', 'user_privet_datas.second_name', 'user_privet_datas.user_id')
+        ->get();
+        
+    }
+    // Get ClassTb Values
+    public function classTBValues() {
+       return $getClassData = classTb::all();
+        
+    }
+    // Get SubjectTB Values
+    public function subjectTBValues() {
+       return $getSubjectData = subjectTB::all();
+        
+    }
 }

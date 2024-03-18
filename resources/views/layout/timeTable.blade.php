@@ -1,4 +1,7 @@
 @extends('include.commonstr')
+@section('meta')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('css')
 <!-- Start Sweet alert link -->
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.min.css" rel="stylesheet">
@@ -63,7 +66,9 @@
                             <label for="className" class="control-label">Class Name</label>
                             <select class="selectClass form-control form-control-sm rounded-0" data-rel="chosen"
                                 name="className" id="className" placeholder="select Class">
-
+                            @foreach($getClassVal as $classV)
+                                <option value="{{ $classV->id }}" data="{{ $classV->dpcclass }}">{{ $classV->dpcclass }}</option>
+                            @endforeach
                             </select>
                         </div>
 
@@ -73,7 +78,9 @@
                             <!-- Your HTML Select2 dropdown -->
                             <select class="selectSubject form-control form-control-sm rounded-0" name="subject"
                                 id="subject" placeholder="select subject">
-
+                            @foreach($getSubjectVal as $subject)
+                                <option value="{{ $subject->id }}" data="{{ $subject->subject }}">{{ $subject->subject }}</option>
+                            @endforeach
                             </select>
                         </div>
 
@@ -82,7 +89,10 @@
                             <!-- Your HTML Select2 dropdown -->
                             <select class="selectTeacher form-control form-control-sm rounded-0" name="TeacherName"
                                 id="TeacherName" placeholder="select Teacher">
-
+                            @foreach($getTeacher as $teacher)
+                                <option value="{{ $teacher->user_id }}" data="{{ $teacher->first_name }}  {{ $teacher->second_name }}">{{ $teacher->first_name }} {{ $teacher->second_name }}</option>
+                                
+                            @endforeach
                             </select>
                         </div>
 
@@ -110,7 +120,7 @@
             </div>
             <div class="col-md-8">
               <div class="custom-scroll table-responsive">
-                <table class="table table-fixed table-hover table-striped timeSheduleTb">
+                <table class="table table-fixed table-hover table-striped timeSheduleTb" id="schedule_details_ofTb">
                     <thead>
                             <th>Teacher Code</th>
                             <th>Teacher Name</th>
@@ -151,14 +161,18 @@
 
     <script src="{{ asset('assets/fullcalendar-6.1.11/dist/index.global.js') }}"></script>
     <script src="{{ asset('assets/js/clenderMyCode.js') }}"></script>
-    <script src="{{ asset('assets/js/schedule_arrange.js') }}"></script>
+
 
     
 
     <!-- // Start Sweet model script link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
     <!-- // End Sweet Alert script link -->
-
+    
+    {{-- My Script --}} 
+    <script src="{{ asset('assets/js/schedule_arrange.js') }}"></script>
+    <script src="{{ asset('assets/js/disabledBackdate.js') }}"></script>
+    
     <script>
         $(document).ready(function () {
 

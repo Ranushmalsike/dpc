@@ -219,6 +219,7 @@
     <!-- // End Sweet Alert script link -->
 
     <!-- {{-- Start MyScript Link  --}} -->
+    <script src="{{ asset('assets/js/tableLinkWithdataTBl.js') }}"></script>
     <script>
         $(document).ready(function () {
 
@@ -259,35 +260,35 @@
 
 
             // Table
-            $('#creditInfoTb').DataTable({
-                "pagingType": "full_numbers",
-                "pageLength": 5,
-                "searching": true,
-                "fixedHeader": true,
-                "responsive": true,
-                "scrollX": true,
-                order: [
-                    [0, 'asc']
-                ],
-                paging: true,
-                scrollCollapse: true,
-                scrollY: '500px',
-                dom: 'Blfrtip',
-                buttons: [{
-                        extend: 'pdf',
-                        bold: 'true',
-                        fontSize: '15',
-                        title: 'Daphne Lord School (System Developer Section)',
-                        subtitle: 'Line 2 of the subtitle',
-                        exportOptions: {
-                            modifier: {
-                                page: 'current'
-                            },
-                        }
-                    },
-                    'excel', 'print'
-                ]
-            });
+            // $('#creditInfoTb').DataTable({
+            //     "pagingType": "full_numbers",
+            //     "pageLength": 5,
+            //     "searching": true,
+            //     "fixedHeader": true,
+            //     "responsive": true,
+            //     "scrollX": true,
+            //     order: [
+            //         [0, 'asc']
+            //     ],
+            //     paging: true,
+            //     scrollCollapse: true,
+            //     scrollY: '500px',
+            //     dom: 'Blfrtip',
+            //     buttons: [{
+            //             extend: 'pdf',
+            //             bold: 'true',
+            //             fontSize: '15',
+            //             title: 'Daphne Lord School (System Developer Section)',
+            //             subtitle: 'Line 2 of the subtitle',
+            //             exportOptions: {
+            //                 modifier: {
+            //                     page: 'current'
+            //                 },
+            //             }
+            //         },
+            //         'excel', 'print'
+            //     ]
+            // });
 
             //    Start generate installment of Installment section 
             // Generate popup alert for selected the of <select class="form-control" id="TeacherName" name="TeacherName">

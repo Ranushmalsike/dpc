@@ -291,7 +291,8 @@
     <!-- // Start Sweet model script link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
     <!-- // End Sweet Alert script link -->
-    
+    {{-- My script --}}
+    <script src="{{ asset('assets/js/tableLinkWithdataTBl.js') }}"></script>
     <script>
         $(document).ready(function () {
 
@@ -317,73 +318,6 @@
             }
             // End Alert Section
 
-            /*
-            >> staff table 
-            */
-            $('#staff').DataTable({
-                "pagingType": "full_numbers",
-                "pageLength": 5,
-                "searching": true,
-                "fixedHeader": true,
-                "responsive": true,
-                "scrollX": true,
-                order: [
-                    [0, 'desc']
-                ],
-                paging: true,
-                scrollCollapse: true,
-                scrollY: '500px',
-                dom: 'Blfrtip',
-                buttons: [{
-                        extend: 'pdf',
-                        bold: 'true',
-                        fontSize: '15',
-                        title: 'Daphne Lord School (Subject And Schema Information)',
-                        subtitle: 'Line 2 of the subtitle',
-                        exportOptions: {
-                            modifier: {
-                                page: 'current'
-                            },
-                        }
-                    },
-                    'excel', 'print'
-                ]
-            });
-            // End staff table
-
-            /*
-            >> teacher table 
-            */
-            $('#teacher').DataTable({
-                "pagingType": "full_numbers",
-                "pageLength": 5,
-                "searching": true,
-                "fixedHeader": true,
-                "responsive": true,
-                "scrollX": true,
-                order: [
-                    [0, 'desc']
-                ],
-                paging: true,
-                scrollCollapse: true,
-                scrollY: '500px',
-                dom: 'Blfrtip',
-                buttons: [{
-                        extend: 'pdf',
-                        bold: 'true',
-                        fontSize: '15',
-                        title: 'Daphne Lord School (Subject And Schema Information)',
-                        subtitle: 'Line 2 of the subtitle',
-                        exportOptions: {
-                            modifier: {
-                                page: 'current'
-                            },
-                        }
-                    },
-                    'excel', 'print'
-                ]
-            });
-            //End  teacher Table
 
             /*
             >>Edit for staff

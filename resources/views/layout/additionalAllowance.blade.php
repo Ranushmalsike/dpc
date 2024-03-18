@@ -127,6 +127,7 @@
     <!-- // End Sweet Alert script link -->
 
     {{-- Start MyScript Link  --}}
+    <script src="{{ asset('assets/js/tableLinkWithdataTBl.js') }}"></script>
     <script>
         $(document).ready(function () {
 
@@ -152,37 +153,6 @@
             }
             // End Alert Section
 
-                // Start trasport table with price section
-                    $('#Trasport_detail_salary, #Trasport_detail').DataTable({
-                    "pagingType": "full_numbers",
-                    "pageLength": 5,
-                    "searching": true,
-                    "fixedHeader": true,
-                    "responsive": true,
-                    "scrollX": true,
-                    order: [
-                        [0, 'desc']
-                    ],
-                    paging: true,
-                    scrollCollapse: true,
-                    scrollY: '500px',
-                    dom: 'Blfrtip',
-                    buttons: [{
-                            extend: 'pdf',
-                            bold: 'true',
-                            fontSize: '15',
-                            title: 'Daphne Lord School (Trasport Information)',
-                            subtitle: 'Line 2 of the subtitle',
-                            exportOptions: {
-                                modifier: {
-                                    page: 'current'
-                                },
-                            }
-                        },
-                        'excel', 'print'
-                    ]
-                });
-            // End trasport table with price section
 
             // Start Delete
             $(document).on('click', '#delete_allowance', function () {
