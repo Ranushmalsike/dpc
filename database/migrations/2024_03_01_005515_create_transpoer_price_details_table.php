@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('trasporot_code')->constrains('transpoer_details', 'trasporot_code')->onDelete('cascade');
             $table->string('transport_price');
+            $table->integer('setDef')->default(0);
             $table->timestamps();
         });
     }

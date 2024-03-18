@@ -72,9 +72,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         <td>${endtime}</td>
                         <td data="${classNameVal}">${selectedClassValue}</td>
                         <td data="${subjectVal}">${selectedsubjectv}</td>
-                        <td>Transport</td>
+                        <td data="">0</td>
                         <td>
-                        <button class="btn btn-danger btn-sm" value="${currentIdOfTime}" id="deleteOfGenShedule" ><i class="bi bi-trash"></i></button>
+                        <button class="btn btn-danger btn-sm" value="${currentIdOfTime}" id="deleteOfGenShedule" data-toggle="tooltip" data-placement="bottom"
+                                            title="Delete system generated time arrangement"><i class="bi bi-trash"></i></button>
                         </td>
                     </tr>
                 `;
@@ -98,19 +99,119 @@ document.addEventListener("DOMContentLoaded", function () {
         $("#idOfshedule" + id).remove();
     });
 
-    // New code to handle Transport TD clicks
+    // Enhanced modal interaction
+    const modal = $("#transportModal");
+    const closeButton = $(".close-button");
+
+    // Function to hide the modal
+    function hideModal() {
+        modal.hide();
+    }
+
+    // Opens the modal and sets up the save functionality
     $("#schedule_gen_tb").on("click", 'td:contains("Transport")', function () {
-        const currentTd = $(this); // Store the current TD to update it later
-        $("#transportModal").show(); // Show the modal
+        const currentTd = $(this); // Store the current TD to update later
+        modal.show(); // Show the modal
 
         $("#saveTransport")
             .off("click")
             .on("click", function () {
-                // Remove any old click handlers and add a new one
-                const selectedTransport = $("#transportSelect").val(); // Get the selected transport option
-                currentTd.text(selectedTransport); // Update the TD text with the selected option
-                $("#transportModal").hide(); // Hide the modal
+                // Setup Save button click event
+                const selectedTransport = $("#transportSelect").val(); // Get the selected transport value
+                const selectedTransportText = $(
+                    "#transportSelect option:selected"
+                ).text(); // Correct way to get the selected transport text
+                currentTd.attr("data", selectedTransport); // Update the TD's data attribute with the selected transport value
+                currentTd.text(selectedTransportText); // Update the TD text with the selected transport text
+                hideModal(); // Hide the modal
             });
+    });
+
+    // Close the modal when the close button is clicked
+    closeButton.on("click", function () {
+        hideModal();
+    });
+
+    // Close the modal when clicking outside of it
+    $(window).on("click", function (event) {
+        if ($(event.target).is(modal)) {
+            hideModal();
+        }
+    });
+
+    // Save all time table values in database
+    $("#get_and_save_time_schedule").click(function (e) {
+        e.preventDefault();
+        // Check if the table is empty
+        // Check if the table is empty
+        var rowCount = $("#schedule_details_ofTb tr").length;
+
+        if (rowCount === 0) {
+            alert(
+                "The schedule table is empty. Please add some data before saving."
+            );
+            return;
+        }
+
+        var timeArrangement_array = []; // Initialize the array to hold data
+        $("#schedule_details_ofTb")
+            .find("tr")
+            .each(function () {
+                var $columns = $(this).find("td");
+                var getTeacher_idV = $columns.eq(1).attr("data")?.trim(); // Use optional chaining with trim()
+                var date_text_val = $columns.eq(2).text().trim();
+                var starttime_text_val = $columns.eq(3).text().trim();
+                var endtime_text_val = $columns.eq(4).text().trim();
+                var classNameVal_data = $columns.eq(5).attr("data")?.trim();
+                var subjectVal_data = $columns.eq(6).attr("data")?.trim();
+                var transport_data = $columns.eq(7).attr("data")?.trim();
+
+                // Check if any of the required values are empty
+                if (
+                    getTeacher_idV &&
+                    date_text_val &&
+                    starttime_text_val &&
+                    endtime_text_val &&
+                    classNameVal_data &&
+                    subjectVal_data
+                ) {
+                    // Only add the entry if all values are non-empty
+                    timeArrangement_array.push({
+                        getTeacher_idV: getTeacher_idV,
+                        date_text_val: date_text_val,
+                        starttime_text_val: starttime_text_val,
+                        endtime_text_val: endtime_text_val,
+                        classNameVal_data: classNameVal_data,
+                        subjectVal_data: subjectVal_data,
+                        transport_data: transport_data,
+                    });
+                }
+            });
+
+        // Assuming you want to do something with timeArrangement_array here, like an AJAX call to save the data
+        // save process
+        console.log(timeArrangement_array);
+        $.ajax({
+            type: "POST",
+            url: "/input/timeArrangement_save", // Replace with the actual PHP script URL
+            data: {
+                timeArrangement_array: timeArrangement_array,
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(
+                    "X-CSRF-TOKEN",
+                    $("meta[name='csrf-token']").attr("content")
+                );
+            },
+            // dataType:'json',
+            success: function (response) {
+                //msgbxInstance.okCompleted();
+                success();
+            },
+            error: function (error) {
+                console.error("Error:", error);
+            },
+        });
     });
 });
 

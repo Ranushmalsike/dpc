@@ -10,6 +10,8 @@ use App\Models\user_privet_data;
 use App\Models\credit_d3;
 use App\Models\creditTB_d1;
 use App\Models\creditTB_d2;
+use App\Models\transpoer_detail;
+use App\Models\transpoer_price_details;
 
 use App\Rules\customPasswordValidation;
 // use App\Rules\user_privet_data;
@@ -181,6 +183,30 @@ public function updateCredit_allcompleted($id){
     $installment = creditTB_d2::where('credit_id' , $id)->update(['type_id' => '4']);
     
 }
+
+
+
+public function setDefaultTransportPrice($id)
+{
+    
+    $query = "CALL updateTransportSetDefByEntryId(:your_data);";
+
+    $bind = [
+        'your_data' => $id,
+    ];
+
+    DB::beginTransaction();
+    try {
+        DB::statement($query, $bind);
+        DB::commit();
+    } catch (\Exception $e) {
+        DB::rollBack();
+        // Handle the exception
+    }
+   
+    
+}
+
 
 }
 

@@ -75,6 +75,7 @@ Route::group(['prefix' => '/input'], function () {
     Route::POST('/Addadditional_allowance', [insertData::class, 'insert_Additional_allowance'])->name('Addadditional_allowance');
     Route::POST('/creditInsert', [insertData::class, 'insert_creditSection'])->name('creditInsert');
     Route::POST('/Add_DeleteData_from_timeArrangement', [insertData::class, 'insert_DateFromArrangeTimeTable'])->name('Add_DeleteData_from_timeArrangement');
+    Route::POST('/timeArrangement_save', [insertData::class, 'timeArrangement_save'])->name('timeArrangement_save');
 });
 
 //Delete
@@ -103,6 +104,7 @@ Route::group(['prefix' => '/administrativehub/edit'], function () {
     Route::GET('/updateCredit_reject_loan/{id}', [updateData::class, 'updateCredit_reject_loan'])->name('updateCredit_reject_loan.Update');
     Route::GET('/updateCredit_confirmed_loan/{id}', [updateData::class, 'updateCredit_confirmed_loan'])->name('updateCredit_confirmed_loan.Update');
     Route::GET('/updateCredit_allcompleted/{id}', [updateData::class, 'updateCredit_allcompleted'])->name('updateCredit_allcompleted.Update');
+    Route::GET('/SetDefaultTrasportCode/{id}', [updateData::class, 'setDefaultTransportPrice'])->name('SetDefaultTrasportCode.Update');
 });
 
 

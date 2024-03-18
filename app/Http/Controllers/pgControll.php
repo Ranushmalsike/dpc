@@ -23,11 +23,11 @@ use App\Models\creditTB_d2;
 
 class pgControll extends Controller
 {
-   public $teachersDetails;
+   public $generallyInfo;
     public function __construct()
     {
         // Constructor logic goes here
-        $this->teachersDetails = new Public_qry();
+        $this->generallyInfo = new Public_qry();
     }
     // This function is responsible for the welcome section of the route
     public function index(){
@@ -134,13 +134,14 @@ class pgControll extends Controller
 
     // this function is responsible for transport information and price.
     public function trasnportInformation(){
-        $getTransportInformation = transpoer_detail::all();
+        $getTransportInformation = $this->generallyInfo->transportDetials();
 
         $getTransportPrice = transpoer_detail::join('transpoer_price_details', 'transpoer_details.trasporot_code', '=' , 'transpoer_price_details.trasporot_code')
         ->select('transpoer_details.description',
         'transpoer_details.trasporot_code',
         'transpoer_price_details.id',
-        'transpoer_price_details.transport_price',)
+        'transpoer_price_details.transport_price',
+        'transpoer_price_details.setDef')
         ->get();
         return view('layout.tarnsportInformation', compact('getTransportInformation', 'getTransportPrice'));
         
@@ -164,7 +165,7 @@ class pgControll extends Controller
 
     // this function is responsible for credit section.
     public function get_creditSection(){
-      $getTeacher = $this->teachersDetails->teacherName();
+      $getTeacher = $this->generallyInfo->teacherName();
 
     $getloanDetails = creditTB_d1::join('credit_t_b_d2s', 'credit_t_b_d1s.id', '=', 'credit_t_b_d2s.credit_id')
     ->join('credit_d3s', 'credit_t_b_d2s.type_id', '=', 'credit_d3s.id')
@@ -197,11 +198,11 @@ class pgControll extends Controller
  */
     public function TimeTableArrangement(){
         
-        $getTeacher = $this->teachersDetails->teacherName();
-        $getClassVal = $this->teachersDetails->classTBValues();
-        $getSubjectVal = $this->teachersDetails->subjectTBValues();
-        
-        return view('layout.timeTable', compact('getTeacher', 'getClassVal', 'getSubjectVal'));
+        $getTeacher = $this->generallyInfo->teacherName();
+        $getClassVal = $this->generallyInfo->classTBValues();
+        $getSubjectVal = $this->generallyInfo->subjectTBValues();
+        $getTransportInformation = $this->generallyInfo->transport_DefaultValues();
+        return view('layout.timeTable', compact('getTeacher', 'getClassVal', 'getSubjectVal', 'getTransportInformation'));
     }
 
 }
@@ -229,4 +230,23 @@ class Public_qry{
        return $getSubjectData = subjectTB::all();
         
     }
+
+    // Transport details
+    public function transportDetials() {
+        return $getTransportInformation = transpoer_detail::all();
+        
+    }
+
+    //select Default transport values
+    public function transport_DefaultValues(){
+        return $getTransportPrice_default = transpoer_detail::join('transpoer_price_details', 'transpoer_details.trasporot_code', '=' , 'transpoer_price_details.trasporot_code')
+       ->where('setDef', '1')
+        ->select('transpoer_details.description',
+        'transpoer_details.trasporot_code',
+        'transpoer_price_details.id',
+        'transpoer_price_details.transport_price',
+        'transpoer_price_details.setDef')
+        ->get();
+        
+    } 
 }

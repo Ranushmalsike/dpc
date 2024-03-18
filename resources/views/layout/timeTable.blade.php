@@ -15,6 +15,41 @@
     overflow-y: auto;
 }
 
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 30%; /* Could be more or less, depending on screen size */
+}
+
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 
 </style>
 @endsection
@@ -114,13 +149,17 @@
                 </div>
 
                 <div class="text-center">
-                  <button class="btn btn-primary" id="Generate_shedule" value="">Generate</button>
+                  <button class="btn btn-primary" id="Generate_shedule" value="" data-toggle="tooltip" data-placement="bottom"
+                                            title="Generate Time arrangement by system">Generate</button>
                     <button class="btn btn-default border btn-sm rounded-0" type="reset" form="schedule-form"><i
                             class="fa fa-reset"></i> Cancel</button>
                 </div>
                 <hr />
             </div>
             <div class="col-md-8">
+                <button type="submit" class="btn btn-success btn-sm" id="get_and_save_time_schedule" data-toggle="tooltip" data-placement="bottom"
+                                            title="Time arrangement save into database">Save Time Arrangement</button>
+                <hr/>
               <div class="custom-scroll table-responsive">
                 <table class="table table-fixed table-hover table-striped timeSheduleTb" id="schedule_details_ofTb">
                     <thead>
@@ -140,6 +179,7 @@
                     </tbody>
                 </table>
               </div>
+              
             </div>
             <div class="col-md-12">
                 <div id='calendar'></div>
@@ -150,18 +190,23 @@
         </div>
     </div>
 
-    <!-- Transport Selection Modal -->
-<div id="transportModal" style="display:none;">
+
+<!-- Transport Selection Modal -->
+<div id="transportModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
     <h2>Select Transport</h2>
-    <select id="transportSelect">
-      <option value="Bus">Bus</option>
-      <option value="Van">Van</option>
-      <option value="Car">Car</option>
-      <!-- Add more transport options here -->
+    <select id="transportSelect" class="form-control">
+        @foreach($getTransportInformation as $TRP)
+         <option value="{{ $TRP->id  }}">{{ $TRP->trasporot_code }} -( LKR : {{ $TRP->transport_price }} )</option>                  
+        @endforeach
     </select>
-    <button id="saveTransport">Save</button>
+    <hr>
+    <button id="saveTransport" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
+                                            title="Add transport code">Add</button>
   </div>
-  
+</div>
+
 
   
   

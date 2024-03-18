@@ -19,6 +19,7 @@ use App\Models\credit_d3;
 use App\Models\creditTB_d1;
 use App\Models\creditTB_d2;
 use App\Models\gathherTo_a_delete_date_from_TimeArrangement;
+use App\Models\time_arrangemtn_confirm_and_transfer;
 
 
 // use Carbon\Carbon;
@@ -134,9 +135,7 @@ class insertData extends Controller
             $request,
             ['TransportCodeSelect' => 'required|string', 'TRPA' => 'required|string'],
             transpoer_price_details::class,
-            ['trasporot_code' => $request->TransportCodeSelect, 'transport_price' => $request->TRPA],
-            'trasporot_code',
-            $request->TransportCodeSelect
+            ['trasporot_code' => $request->TransportCodeSelect, 'transport_price' => $request->TRPA]
         );
     }
 
@@ -317,6 +316,26 @@ public function insert_DateFromArrangeTimeTable(Request $request){
 }
 
 
+/***
+ * Time Arrangement
+ */
+public function timeArrangement_save(Request $request){
+
+    foreach ($request->timeArrangement_array as $data_ofTimeArrangement) {
+        // print($data_ofTimeArrangement['getTeacher_idV']);
+        # code...
+        $formatted_date_of_time_arrangement = date('Y-m-d', strtotime($data_ofTimeArrangement['date_text_val']));
+                 time_arrangemtn_confirm_and_transfer::insert([
+            'Time_arrangement' =>  $formatted_date_of_time_arrangement, 
+            'start_time' => $data_ofTimeArrangement['starttime_text_val'],
+            'end_time' => $data_ofTimeArrangement['endtime_text_val'],
+            'user_id' => $data_ofTimeArrangement['getTeacher_idV'],
+            'class_id' => $data_ofTimeArrangement['classNameVal_data'],
+            'subject_id' => $data_ofTimeArrangement['subjectVal_data'],
+            'transport_id' => $data_ofTimeArrangement['transport_data'] == null ? 0 : $data_ofTimeArrangement['transport_data']
+        ]);
+    }
+}
 
     /**
      * Alert within redirect function
