@@ -306,11 +306,13 @@ public function classInputeData(Request $request){
 // Add Delete Date from arrange Time Table by System
 public function insert_DateFromArrangeTimeTable(Request $request){
     $dateOfRequest = $request->dateText;
+    $holidayDetails = $request->holidayName;
     $formatted_date = date('Y-m-d', strtotime($dateOfRequest));
-    // dd($formatted_date);
 
+   
     gathherTo_a_delete_date_from_TimeArrangement::insert([
-        'delete_date_from_TimeArrangement' => $formatted_date
+        'delete_date_from_TimeArrangement' => $formatted_date,
+        'Description' => $holidayDetails
     ]);
 }
 

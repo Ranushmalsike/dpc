@@ -14,6 +14,8 @@
     max-height: 400px; /* Adjust based on your needs */
     overflow-y: auto;
 }
+
+
 </style>
 @endsection
 @section('content')
@@ -148,7 +150,23 @@
         </div>
     </div>
 
+    <!-- Transport Selection Modal -->
+<div id="transportModal" style="display:none;">
+    <h2>Select Transport</h2>
+    <select id="transportSelect">
+      <option value="Bus">Bus</option>
+      <option value="Van">Van</option>
+      <option value="Car">Car</option>
+      <!-- Add more transport options here -->
+    </select>
+    <button id="saveTransport">Save</button>
+  </div>
+  
+
+  
+  
     @push('scripts')
+    
     <!-- content-wrapper ends -->
     <script src="{{ asset('assets/adminHub/js/file-upload.js') }}"></script>
     <script src="{{ asset('assets/adminHub/js/typeahead.js') }}"></script>
