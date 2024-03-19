@@ -12,6 +12,7 @@ use App\Models\creditTB_d1;
 use App\Models\creditTB_d2;
 use App\Models\transpoer_detail;
 use App\Models\transpoer_price_details;
+use App\Models\time_arrangemtn_confirm_and_transfer;
 
 use App\Rules\customPasswordValidation;
 // use App\Rules\user_privet_data;
@@ -206,6 +207,26 @@ public function setDefaultTransportPrice($id)
    
     
 }
+
+/**
+ * Update - schedule arrangement data
+ * confirm schedule by admin or user
+ * reject process
+ */
+
+public function confirm_schedule($id){
+    $confirmed_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($id);
+    $confirmed_schedule->confirm = '1'; 
+    $confirmed_schedule->Transfer = '0'; 
+    $confirmed_schedule->update();
+}
+public function reject_schedule($id){
+    $confirmed_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($id);
+    $confirmed_schedule->confirm = '0'; 
+    $confirmed_schedule->Transfer = '0'; 
+    $confirmed_schedule->update();
+}
+
 
 
 }

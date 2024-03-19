@@ -105,6 +105,8 @@ Route::group(['prefix' => '/administrativehub/edit'], function () {
     Route::GET('/updateCredit_confirmed_loan/{id}', [updateData::class, 'updateCredit_confirmed_loan'])->name('updateCredit_confirmed_loan.Update');
     Route::GET('/updateCredit_allcompleted/{id}', [updateData::class, 'updateCredit_allcompleted'])->name('updateCredit_allcompleted.Update');
     Route::GET('/SetDefaultTrasportCode/{id}', [updateData::class, 'setDefaultTransportPrice'])->name('SetDefaultTrasportCode.Update');
+    Route::GET('/confirmedByAdmin/schedule/{id}', [updateData::class, 'confirm_schedule'])->name('confirmedByAdmin.Update');
+    Route::GET('/rejectByAdmin/schedule/{id}', [updateData::class, 'reject_schedule'])->name('rejectByAdmin.Update');
 });
 
 

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
+    /** 
      * Run the migrations.
      */
     public function up(): void
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->bigInteger('user_id');
             $table->bigInteger('class_id');
             $table->bigInteger('subject_id');
-            $table->bigInteger('transport_id')->default(0);
+            $table->bigInteger('transport_id')->default(1);
             $table->tinyInteger('confirm')->default(0);
             $table->tinyInteger('Transfer')->default(0);
             $table->timestamps();

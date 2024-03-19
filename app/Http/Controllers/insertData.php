@@ -332,7 +332,7 @@ public function timeArrangement_save(Request $request){
             'user_id' => $data_ofTimeArrangement['getTeacher_idV'],
             'class_id' => $data_ofTimeArrangement['classNameVal_data'],
             'subject_id' => $data_ofTimeArrangement['subjectVal_data'],
-            'transport_id' => $data_ofTimeArrangement['transport_data'] == null ? 0 : $data_ofTimeArrangement['transport_data']
+            'transport_id' => $data_ofTimeArrangement['transport_data'] == null ? 1 : $data_ofTimeArrangement['transport_data']
         ]);
     }
 }

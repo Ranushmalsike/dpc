@@ -13,5 +13,6 @@ class transpoer_price_details extends Model
 public function transpoerDetails()
 {
     return $this->hasMany(transpoer_detail::class, 'trasporot_code');
+    return $this->hasOne(time_arrangemtn_confirm_and_transfer::class, 'transport_id');
 }
 }

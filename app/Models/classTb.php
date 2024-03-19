@@ -17,4 +17,8 @@ class classTb extends Model
         'end_date'
 
     ];
+
+    public function join_with_otherTB(){
+        return $this->hasOne(time_arrangemtn_confirm_and_transfer::class, 'class_id');
+    }
 }

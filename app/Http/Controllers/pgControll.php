@@ -20,6 +20,7 @@ use App\Models\additional_allowance;
 use App\Models\credit_d3;
 use App\Models\creditTB_d1;
 use App\Models\creditTB_d2;
+use App\Models\time_arrangemtn_confirm_and_transfer;
 
 class pgControll extends Controller
 {
@@ -202,7 +203,8 @@ class pgControll extends Controller
         $getClassVal = $this->generallyInfo->classTBValues();
         $getSubjectVal = $this->generallyInfo->subjectTBValues();
         $getTransportInformation = $this->generallyInfo->transport_DefaultValues();
-        return view('layout.timeTable', compact('getTeacher', 'getClassVal', 'getSubjectVal', 'getTransportInformation'));
+        $getTimeArrangementDetails = $this->generallyInfo->selectTimeArrangement();
+        return view('layout.timeTable', compact('getTeacher', 'getClassVal', 'getSubjectVal', 'getTransportInformation', 'getTimeArrangementDetails'));
     }
 
 }
@@ -249,4 +251,25 @@ class Public_qry{
         ->get();
         
     } 
+
+    // select Time Arrangement data
+    public function selectTimeArrangement(){
+      return  time_arrangemtn_confirm_and_transfer::join('user_privet_datas', 'time_arrangemtn_confirm_and_transfers.user_id', '=', 'user_privet_datas.user_id')
+        ->join('class_tbs', 'time_arrangemtn_confirm_and_transfers.class_id', '=', 'class_tbs.id')
+        ->join('subject_t_b_s', 'time_arrangemtn_confirm_and_transfers.subject_id', '=', 'subject_t_b_s.id')
+        ->join('transpoer_price_details', 'time_arrangemtn_confirm_and_transfers.transport_id', '=', 'transpoer_price_details.id')
+        ->select('user_privet_datas.first_name',
+                'user_privet_datas.second_name',
+                'class_tbs.dpcclass',
+                'subject_t_b_s.subject',
+                'transpoer_price_details.trasporot_code',
+                'time_arrangemtn_confirm_and_transfers.confirm',
+                'time_arrangemtn_confirm_and_transfers.Transfer',
+                'time_arrangemtn_confirm_and_transfers.Time_arrangement',
+                'time_arrangemtn_confirm_and_transfers.start_time',
+                'time_arrangemtn_confirm_and_transfers.end_time',
+                'time_arrangemtn_confirm_and_transfers.id')
+        ->get();
+    }
 }
+

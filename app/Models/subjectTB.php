@@ -13,4 +13,8 @@ class subjectTB extends Model
         'subject_name_edit',
         
     ];
+
+        public function join_with_otherTB(){
+        return $this->hasOne(time_arrangemtn_confirm_and_transfer::class, 'subject_id');
+    }
 }

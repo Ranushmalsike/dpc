@@ -21,5 +21,6 @@ class user_privet_data extends Model
         return $this->hasOne(User::class, 'id');
         return $this->hasMany(perHouserSalaryForTecher::class, 'user_id');
         return $this->hasOne(creditTB_d1::class, 'user_id');
+        return $this->hasOne(time_arrangemtn_confirm_and_transfer::class, 'user_id');
     }
 }

@@ -3,6 +3,8 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('css')
+<!-- Include Bootstrap CSS -->
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 <!-- Start Sweet alert link -->
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.min.css" rel="stylesheet">
 <!-- End Sweet alert Link -->
@@ -208,10 +210,128 @@
 </div>
 
 
-  
+
+<!-- Event Details Modal -->
+            <div class="modal fade" tabindex="-1" data-bs-backdrop="static" id="event_details_modal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content rounded-0">
+                        <div class="modal-header rounded-0">
+                            <h5 class="modal-title">Schedule Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body rounded-0">
+                            <div class="container-fluid">
+                                <dl>
+                                    <dt class="text-muted">Title</dt>
+                                    <dd id="title" class="fw-bold fs-4"></dd>
+                                    <table>
+                                        <tr class="table-danger">
+                                            <td>
+                                                <dt class="text-muted">Start Time</dt>
+                                                <dd id="stTime" class=""></dd>
+                                            </td>
+
+                                            <td>
+                                                <dt class="text-muted">End Time</dt>
+                                                <dd id="edTime" class=""></dd>
+                                            </td>
+                                        <tr class="table-success">
+                                            <td>
+                                                <dt class="text-muted">Class name</dt>
+                                                <dd id="ClassName" class=""></dd>
+                                            </td>
+
+                                            <td>
+                                                <dt class="text-muted">Subject</dt>
+                                                <dd id="Subjectname" class=""></dd>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                    <hr>
+                                    <table>
+                                        <tr class="table-warning">
+                                            <td>
+                                                <dt class="text-muted">First Name</dt>
+                                                <dd id="fstname" class=""></dd>
+                                            </td>
+
+                                            <td>
+                                                <dt class="text-muted">Last Name</dt>
+                                                <dd id="lstname" class=""></dd>
+                                            </td>
+
+                                            <td height='40%' width='30%'>
+
+                                                <dd id="profile2" class=""></dd>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table>
+                                        <tr class="table-light">
+                                            <dt>Session Transfer</dt>
+                                        </tr>
+                                        <tr class="table-info">
+                                            <td>
+                                                <dt class="text-muted">First Name</dt>
+                                                <dd id="fstname_trsn" class=""></dd>
+                                            </td>
+
+                                            <td>
+                                                <dt class="text-muted">Last Name</dt>
+                                                <dd id="lstname_tran" class=""></dd>
+                                            </td>
+
+                                            <td>
+
+                                                <dd id="profile2_tran" class="">
+                                                </dd>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="modal-footer rounded-0">
+                            <div class="text-end">
+                                <!--button type="button" class="btn btn-primary btn-sm rounded-0" id="edit"
+                                    data-id="">Edit</!--button-->
+
+                                <button type="button" class="btn btn-danger btn-sm rounded-0" id="delete"
+                                    data-id="">Delete</button>
+
+                                <button type="button" class="btn btn-secondary btn-sm rounded-0"
+                                    data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+ <?php
+    $sched_res = [];
+    foreach($getTimeArrangementDetails as $row10){
+        $row10['Time_arrangement_conv'] = date("F d, Y",strtotime($row10['Time_arrangement']));
+        $row10['sdate'] = date("h:i A",strtotime($row10['start_time']));
+        $row10['edate'] = date("h:i A",strtotime($row10['end_time']));
+        $sched_res[$row10['id']] = $row10;
+    }
+ ?>
   
     @push('scripts')
-    
+    <script>
+        var timeArrangementDetails_client = $.parseJSON('<?= json_encode($sched_res) ?>')
+    </script>
+    <!-- Include jQuery
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+
+        <!-- Include Bootstrap JS (after jQuery) -->
+        <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> -->
+
     <!-- content-wrapper ends -->
     <script src="{{ asset('assets/adminHub/js/file-upload.js') }}"></script>
     <script src="{{ asset('assets/adminHub/js/typeahead.js') }}"></script>
@@ -234,11 +354,13 @@
     
     {{-- My Script --}} 
     <script src="{{ asset('assets/js/schedule_arrange.js') }}"></script>
-    <script src="{{ asset('assets/js/disabledBackdate.js') }}"></script>
+    <!-- <script src="{{ asset('assets/js/disabledBackdate.js') }}"></script> -->
     
     <script>
-        $(document).ready(function () {
+        
+        
 
+        $(document).ready(function () {
             // Start Alert section
             // Success Alert
             function success() {
