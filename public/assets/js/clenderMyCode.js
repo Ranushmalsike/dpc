@@ -43,6 +43,30 @@
     return specificHolidays;
 }*/
 
+//schedule_arrange.js
+const model_trp = $("#TeacherModal");
+const EditModal = $("#EditModal");
+const closeButton = $(".close-button");
+
+function hideModal() {
+    model_trp.hide();
+    EditModal.hide();
+}
+// Close the modal when the close button is clicked
+closeButton.on("click", function () {
+    hideModal();
+});
+
+// Close the modal when clicking outside of it
+$(window).on("click", function (event) {
+    if ($(event.target).is(model_trp)) {
+        hideModal();
+    }
+    if ($(event.target).is(EditModal)) {
+        hideModal();
+    }
+});
+
 function generateWeekendEvents(startYear, endYear) {
     let weekendEvents = [];
     for (let year = startYear; year <= endYear; year++) {
@@ -65,6 +89,15 @@ function generateWeekendEvents(startYear, endYear) {
     return weekendEvents;
 }
 
+function getRandomColor() {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
 async function initializeCalendar() {
     // php event
     const events_ofphp = [];
@@ -75,8 +108,9 @@ async function initializeCalendar() {
             events_ofphp.push({
                 id: row.id,
                 title: row.first_name,
-                start: row.Time_arrangement,
-                end: row.Time_arrangement,
+                start: row.Time_arrangement + " " + row.start_time,
+                end: row.Time_arrangement + " " + row.end_time,
+                color: getRandomColor(),
             });
         });
     }
@@ -102,6 +136,9 @@ async function initializeCalendar() {
         selectMirror: true,
         dayMaxEvents: true,
         events: [...weekendEvents, ...events_ofphp],
+        /**
+         * Alert Process section
+         */
         eventClick: function (info) {
             // var _details = $("#event-details-modal");
             var id = info.event.id;
@@ -110,10 +147,28 @@ async function initializeCalendar() {
                 var id_oftble = timeArrangementDetails_client[id].id;
                 var cnf = timeArrangementDetails_client[id].confirm;
                 var trp = timeArrangementDetails_client[id].Transfer;
+                var Trp_confirmed =
+                    timeArrangementDetails_client[id].Trp_confirmed;
                 var dateOfSchedule =
                     timeArrangementDetails_client[id].Time_arrangement;
                 var dayofnow = new Date();
-                var formattedDate = dayofnow.toISOString().slice(0, 10);
+                var current_date_today = dayofnow.toISOString().slice(0, 10);
+                var sevenDaysBefore = new Date(
+                    dayofnow.getTime() - 7 * 24 * 60 * 60 * 1000
+                )
+                    .toISOString()
+                    .slice(0, 10);
+
+                var sevenDaysAfter = new Date(
+                    dayofnow.getTime() + 7 * 24 * 60 * 60 * 1000
+                )
+                    .toISOString()
+                    .slice(0, 10);
+                var oneDaysAfter = new Date(
+                    dayofnow.getTime() + 0 * 24 * 60 * 60 * 1000
+                )
+                    .toISOString()
+                    .slice(0, 10);
                 Swal.fire({
                     title: "Scheduled Time",
                     html: `<hr/>
@@ -157,7 +212,11 @@ async function initializeCalendar() {
                         </tr>
                         <tr>
                         <td>${cnf == 0 ? "No" : "Yes"}</td>
-                        <td>${trp == 0 ? "No" : "Yes"}
+                        <td>${
+                            trp == 0
+                                ? "No"
+                                : "Yes  <button id='look' class='swal2-confirm btn btn-primary btn-sm'>Look</button>"
+                        }</td>
                         </tr>
                     </table>
                     <hr/>
@@ -171,7 +230,7 @@ async function initializeCalendar() {
                                 <button id="confirmBtn" class="swal2-confirm btn btn-success btn-sm">Confirm</button>
                             </td>
                             <td>
-                                <button id="rejectBtn" class="swal2-confirm btn btn-primary btn-sm">Reject</button>
+                                <button id="resetBtn" class="swal2-confirm btn btn-primary btn-sm">Reset</button>
                             </td>
                         </tr>
                     </table>
@@ -179,65 +238,153 @@ async function initializeCalendar() {
                     <hr/>`,
                     showDenyButton: true,
                     showCancelButton: true,
-                    denyButtonText: `Don't save`,
-                    confirmButtonText: "Save", // Rename cancel button to "Close"
+                    denyButtonText: `Delete`,
+                    confirmButtonText: "Edit", // Rename cancel button to "Close"
                 }).then((result) => {
                     // This is triggered when the dialog is closed, but not by custom buttons
                     if (result.isConfirmed) {
-                        // This case may not be reached with custom buttons unless you trigger `Swal.clickConfirm()`
-                        Swal.fire("Saved!", "", "success");
+                        if (cnf == 1 || Trp_confirmed == 1 || trp == 1) {
+                            Swal.fire(
+                                "Cannot do this!.because previously confirmed",
+                                "",
+                                "error"
+                            );
+                        } else {
+                            $("#get_tb_id").val(id_oftble);
+                            EditModal.show();
+
+                            let timerInterval;
+                            Swal.fire({
+                                title: "Auto Load Data!",
+                                html: "Detecting Data <b></b> milliseconds.",
+                                timer: 2000,
+                                timerProgressBar: true,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                    const timer =
+                                        Swal.getPopup().querySelector("b");
+                                    timerInterval = setInterval(() => {
+                                        timer.textContent = `${Swal.getTimerLeft()}`;
+                                    }, 100);
+                                },
+                                willClose: () => {
+                                    clearInterval(timerInterval);
+                                },
+                            }).then((result) => {
+                                /* Read more about handling dismissals below */
+                                if (
+                                    result.dismiss === Swal.DismissReason.timer
+                                ) {
+                                    console.log("I was closed by the timer");
+                                }
+                            });
+                        }
+                        // Swal.fire("Saved!", "", "success");
                     } else if (result.isDenied) {
                         // This case may not be reached with custom buttons
-                        Swal.fire("Changes are not saved", "", "info");
+                        if (cnf == 1 || Trp_confirmed == 1 || trp == 1) {
+                            Swal.fire(
+                                "Cannot do this!.because previously confirmed",
+                                "",
+                                "error"
+                            );
+                        } else {
+                            Swal.fire({
+                                title: "Are you sure?",
+                                text: "You won't be able to revert this!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, delete it!",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    utl_of_this =
+                                        "/administrativehub/delete_TimeArrangement.delete/";
+                                    dataProcessWithDatabase(
+                                        utl_of_this,
+                                        id_oftble
+                                    );
+                                }
+                            });
+                        }
                     }
                 });
 
-                // Now, attach event listeners to custom buttons
+                /**
+                 * Transfer section Process
+                 */
                 document
                     .getElementById("transferBtn")
                     .addEventListener("click", function () {
-                        console.log("Transfer details clicked");
-                        // Handle the action for transferring details
-                        var sevenDaysBefore = new Date(
-                            dayofnow.getTime() - 7 * 24 * 60 * 60 * 1000
-                        )
-                            .toISOString()
-                            .slice(0, 10);
-
-                        var sevenDaysAfter = new Date(
-                            dayofnow.getTime() + 7 * 24 * 60 * 60 * 1000
-                        )
-                            .toISOString()
-                            .slice(0, 10);
-
-                        // alert(sevenDaysBefore);
                         if (
-                            dateOfSchedule >= sevenDaysBefore &&
+                            dateOfSchedule >= oneDaysAfter &&
                             dateOfSchedule <= sevenDaysAfter
                         ) {
-                            alert("valid");
+                            if (cnf == 1 || Trp_confirmed == 1 || trp == 1) {
+                                Swal.fire(
+                                    "Cannot do this!.because previously confirmed this",
+                                    "",
+                                    "error"
+                                );
+                            } else {
+                                $("#id_tb").val(id_oftble);
+                                $("#Data_of_this").val(dateOfSchedule);
+                                model_trp.show();
+                                let timerInterval;
+                                Swal.fire({
+                                    title: "Auto Load Data!",
+                                    html: "Detecting Data <b></b> milliseconds.",
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    didOpen: () => {
+                                        Swal.showLoading();
+                                        const timer =
+                                            Swal.getPopup().querySelector("b");
+                                        timerInterval = setInterval(() => {
+                                            timer.textContent = `${Swal.getTimerLeft()}`;
+                                        }, 100);
+                                    },
+                                    willClose: () => {
+                                        clearInterval(timerInterval);
+                                    },
+                                }).then((result) => {
+                                    /* Read more about handling dismissals below */
+                                    if (
+                                        result.dismiss ===
+                                        Swal.DismissReason.timer
+                                    ) {
+                                        console.log(
+                                            "I was closed by the timer"
+                                        );
+                                    }
+                                });
+                            }
                         } else {
-                            alert("not valid");
+                            Swal.fire(
+                                "Cannot do this! because cannot be system rule violate",
+                                "",
+                                "error"
+                            );
                         }
                     });
-
+                /**
+                 * Confirmed section
+                 */
                 document
                     .getElementById("confirmBtn")
                     .addEventListener("click", function () {
                         // Handle the confirmation action
                         if (
-                            formattedDate > dateOfSchedule ||
-                            formattedDate < dateOfSchedule
+                            current_date_today > dateOfSchedule ||
+                            current_date_today < dateOfSchedule
                         ) {
                             Swal.fire(
-                                "Cannot do this!.because You can confirmed this schedule for only relevant day",
+                                "Cannot do this!.because You can confirmed this schedule in for only relevant day",
                                 "",
                                 "error"
                             );
                         } else {
-                            utl_of_this =
-                                "/administrativehub/edit/confirmedByAdmin/schedule/";
-
                             if (cnf == 1) {
                                 Swal.fire(
                                     "Cannot do this!.because previously confirmed this",
@@ -245,52 +392,110 @@ async function initializeCalendar() {
                                     "error"
                                 );
                             } else {
+                                utl_of_this =
+                                    "/administrativehub/edit/confirmedByAdmin/schedule/";
                                 dataProcessWithDatabase(utl_of_this, id_oftble);
                             }
                         }
                         //  // Example action
                     });
-
+                /**
+                 * Reset section
+                 */
                 document
-                    .getElementById("rejectBtn")
+                    .getElementById("resetBtn")
                     .addEventListener("click", function () {
-                        // alert(formattedDate + " " + dateOfSchedule);
-                        if (formattedDate > dateOfSchedule) {
-                            Swal.fire(
-                                "Cannot do this!.because < 24H",
-                                "",
-                                "error"
-                            );
-                        } else {
-                            utl_of_this =
-                                "/administrativehub/edit/rejectByAdmin/schedule/";
-
-                            if (trp == 0 && cnf == 0) {
+                        // Only current date with forward 7 days
+                        if (
+                            dateOfSchedule >= oneDaysAfter &&
+                            dateOfSchedule <= sevenDaysAfter
+                        ) {
+                            if (cnf == 0 && trp == 0) {
                                 Swal.fire(
-                                    "Cannot do this!.because No Yet confirmed this",
+                                    "Cannot do this! because Nothing to reset",
+                                    "",
+                                    "error"
+                                );
+                            }
+                            // Must be Add if else statment if: trp == 1 and trp.confirmed == 1
+                            else if (trp == 1 && Trp_confirmed == 1) {
+                                Swal.fire(
+                                    "Cannot do this! because cannot system rule violate",
                                     "",
                                     "error"
                                 );
                             } else {
+                                utl_of_this =
+                                    "/administrativehub/edit/resetByAdmin/schedule/";
                                 dataProcessWithDatabase(utl_of_this, id_oftble);
                             }
+                        } else {
+                            Swal.fire(
+                                "Cannot do this! because cannot system rule violate",
+                                "",
+                                "error"
+                            );
                         }
-                        // Example action
+                    });
+                /**
+                 * Transfer section Details
+                 */
+                document
+                    .getElementById("look")
+                    .addEventListener("click", function () {
+                        // Only current date with forward 7 days Trp_confirmed
+                        Swal.fire({
+                            title: "Session Transfer Details",
+                            html: `<hr/>
+                    <h3 class="text-primary">Schedule Date: <b>${dateOfSchedule}</b></h3>
+                    <h3 class="text-info">Name: <b>${
+                        timeArrangementDetails_client[id].first_name_second_name
+                    }</b></h3>
+                        <hr/>
+                        <li>Confirmed : ${
+                            Trp_confirmed == 0 ? "No" : "Yes"
+                        }</li>
+                        <hr/>`,
+                            showDenyButton: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Confirmed",
+                        }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+                                if (
+                                    current_date_today > dateOfSchedule ||
+                                    current_date_today < dateOfSchedule
+                                ) {
+                                    Swal.fire(
+                                        "Cannot do this!.because You can confirmed this schedule in for only relevant day",
+                                        "",
+                                        "error"
+                                    );
+                                } else {
+                                    if (Trp_confirmed == 1) {
+                                        Swal.fire(
+                                            "Cannot do this!.because previously confirmed this",
+                                            "",
+                                            "error"
+                                        );
+                                    } else {
+                                        utl_of_this =
+                                            "/administrativehub/edit/trp_schedule_Up/schedule/";
+                                        dataProcessWithDatabase(
+                                            utl_of_this,
+                                            id_oftble
+                                        );
+                                    }
+                                }
+                            } else if (result.isDenied) {
+                                Swal.fire("Changes are not saved", "", "info");
+                            }
+                        });
                     });
             } else {
-                alert("Event is undefined");
+                Swal.fire("Weekend", "", "error");
             }
-            // console.log(_details);
         },
-
-        // eventClick: function(info) {
-
-        //   // Check if the event color is red or the event is for weekends
-        //   if (info.event.backgroundColor === '#fc1303' || ['Saturday', 'Sunday'].includes(info.event.title)) {
-        //     alert(`Event: ${info.event.title} on ${info.event.start.toLocaleDateString()}`);
-        //   }
-
-        // }
     });
 
     calendar.render();
@@ -316,8 +521,90 @@ function dataProcessWithDatabase(utl_of_this, id_oftble) {
         },
         // dataType: "dataType",
         success: function (response) {
-            Swal.fire("Your Job Completed", "", "success");
+            success();
             location.reload();
         },
     });
 }
+
+// Transfer Process
+$("#saveTeacher")
+    .off("click")
+    .on("click", function () {
+        var trp_tb_id = $("#id_tb").val();
+        var Teacher_id_ofTRp = $(
+            "#Teachers_selection_for_transfer_section"
+        ).val();
+        // alert(trp_tb_id);
+        $.ajax({
+            type: "Get",
+            url:
+                "/administrativehub/edit/transferSessionByAdmin/schedule/" +
+                trp_tb_id +
+                "/" +
+                Teacher_id_ofTRp,
+            data: {
+                trp_tb_id: trp_tb_id,
+                Teacher_id_ofTRp: Teacher_id_ofTRp,
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(
+                    "X-CSRF-TOKEN",
+                    $("meta[name='csrf-token']").attr("content")
+                );
+            },
+            success: function (response) {
+                success();
+                location.reload();
+            },
+        });
+
+        hideModal(); // Hide the modal
+    });
+
+// Edit Section
+$("#Edit_saveTeacher").click(function (e) {
+    e.preventDefault();
+    var edit_TB_id = $("#get_tb_id").val();
+    // alert(edit_TB_id);
+    var edit_start_time = $("#edit_starttime").val();
+    var edit_end_time = $("#edit_endtime").val();
+    var edit_class = $("#edit_className").val();
+    var edit_subject = $("#Edit_subject").val();
+    var edit_trp = $("#Edit_transportSelect").val();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to edit this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Edit it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: "/administrativehub/edit/schedule_edit/schedule/",
+                data: {
+                    edit_TB_id: edit_TB_id,
+                    edit_start_time: edit_start_time,
+                    edit_end_time: edit_end_time,
+                    edit_class: edit_class,
+                    edit_subject: edit_subject,
+                    edit_trp: edit_trp,
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(
+                        "X-CSRF-TOKEN",
+                        $("meta[name='csrf-token']").attr("content")
+                    );
+                },
+                success: function (response) {
+                    success();
+                    location.reload();
+                },
+            });
+        }
+    });
+    hideModal();
+});

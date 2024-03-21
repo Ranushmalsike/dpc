@@ -91,6 +91,7 @@ Route::group(['prefix' => '/administrativehub'], function () {
     Route::GET('/allowance.delete/{id}', [deleteData::class, 'delete_allowance'])->name('allowance.delete');
     Route::GET('/additional_allowance.delete/{id}', [deleteData::class, 'delete_additional_allowance'])->name('additional_allowance.delete');
     Route::GET('/credit.delete/{id}', [deleteData::class, 'delete_Creadit'])->name('credit.delete');
+    Route::GET('/delete_TimeArrangement.delete/{id}', [deleteData::class, 'delete_TimeArrangement'])->name('delete_TimeArrangement.delete');
 });
 
 
@@ -106,7 +107,9 @@ Route::group(['prefix' => '/administrativehub/edit'], function () {
     Route::GET('/updateCredit_allcompleted/{id}', [updateData::class, 'updateCredit_allcompleted'])->name('updateCredit_allcompleted.Update');
     Route::GET('/SetDefaultTrasportCode/{id}', [updateData::class, 'setDefaultTransportPrice'])->name('SetDefaultTrasportCode.Update');
     Route::GET('/confirmedByAdmin/schedule/{id}', [updateData::class, 'confirm_schedule'])->name('confirmedByAdmin.Update');
-    Route::GET('/rejectByAdmin/schedule/{id}', [updateData::class, 'reject_schedule'])->name('rejectByAdmin.Update');
+    Route::GET('/resetByAdmin/schedule/{id}', [updateData::class, 'reset_schedule'])->name('resetByAdmin.Update');
+    Route::GET('/trp_schedule_Up/schedule/{id}', [updateData::class, 'trp_schedule_Up'])->name('trp_schedule_Up.Update');
+    Route::POST('/schedule_edit/schedule/', [updateData::class, 'schedule_edit'])->name('schedule_edit.Update');
 });
 
 

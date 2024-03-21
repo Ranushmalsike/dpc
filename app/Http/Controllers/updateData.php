@@ -211,20 +211,54 @@ public function setDefaultTransportPrice($id)
 /**
  * Update - schedule arrangement data
  * confirm schedule by admin or user
- * reject process
+ * reject process Up
+ * Transfer section Up
  */
-
+// confirmed
 public function confirm_schedule($id){
     $confirmed_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($id);
     $confirmed_schedule->confirm = '1'; 
-    $confirmed_schedule->Transfer = '0'; 
     $confirmed_schedule->update();
 }
-public function reject_schedule($id){
+// reset
+public function reset_schedule($id){
     $confirmed_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($id);
     $confirmed_schedule->confirm = '0'; 
     $confirmed_schedule->Transfer = '0'; 
     $confirmed_schedule->update();
+}
+// transfer _ confirmed
+public function trp_schedule_Up($id){
+    $confirmed_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($id);
+    $confirmed_schedule->Trp_confirmed = '1';
+    $confirmed_schedule->update();
+}
+// transfer _ active
+public function trp_schedule_Active($id, $Teacher_id_ofTRp){
+    $confirmed_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($id);
+    $confirmed_schedule->Trp_for_whom_user_id = $Teacher_id_ofTRp;
+    $confirmed_schedule->update();
+}
+// timeArrangement _ Update
+public function schedule_edit(Request $request){
+    // print($request->edit_TB_id);
+    $Edit_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($request->edit_TB_id);
+    if($request->edit_start_time != null){
+    $Edit_schedule-> start_time = $request->edit_start_time;
+    }
+    if($request->edit_end_time != null){
+    $Edit_schedule-> end_time = $request->edit_end_time;
+     }
+    if($request->edit_class != 0){
+    $Edit_schedule-> class_id = $request->edit_class;
+    }
+    if($request->edit_subject != 0){
+    $Edit_schedule-> subject_id = $request->edit_subject;
+    }
+    if($request->edit_trp != "bypass"){
+    $Edit_schedule-> transport_id = $request->edit_trp;
+    }
+    $Edit_schedule->update();
 }
 
 

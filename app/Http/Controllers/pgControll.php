@@ -254,22 +254,31 @@ class Public_qry{
 
     // select Time Arrangement data
     public function selectTimeArrangement(){
-      return  time_arrangemtn_confirm_and_transfer::join('user_privet_datas', 'time_arrangemtn_confirm_and_transfers.user_id', '=', 'user_privet_datas.user_id')
-        ->join('class_tbs', 'time_arrangemtn_confirm_and_transfers.class_id', '=', 'class_tbs.id')
-        ->join('subject_t_b_s', 'time_arrangemtn_confirm_and_transfers.subject_id', '=', 'subject_t_b_s.id')
-        ->join('transpoer_price_details', 'time_arrangemtn_confirm_and_transfers.transport_id', '=', 'transpoer_price_details.id')
-        ->select('user_privet_datas.first_name',
-                'user_privet_datas.second_name',
-                'class_tbs.dpcclass',
-                'subject_t_b_s.subject',
-                'transpoer_price_details.trasporot_code',
-                'time_arrangemtn_confirm_and_transfers.confirm',
-                'time_arrangemtn_confirm_and_transfers.Transfer',
-                'time_arrangemtn_confirm_and_transfers.Time_arrangement',
-                'time_arrangemtn_confirm_and_transfers.start_time',
-                'time_arrangemtn_confirm_and_transfers.end_time',
-                'time_arrangemtn_confirm_and_transfers.id')
-        ->get();
+return time_arrangemtn_confirm_and_transfer::join('user_privet_datas', 'time_arrangemtn_confirm_and_transfers.user_id', '=', 'user_privet_datas.user_id')
+    ->join('class_tbs', 'time_arrangemtn_confirm_and_transfers.class_id', '=', 'class_tbs.id')
+    ->join('subject_t_b_s', 'time_arrangemtn_confirm_and_transfers.subject_id', '=', 'subject_t_b_s.id')
+    ->join('transpoer_price_details', 'time_arrangemtn_confirm_and_transfers.transport_id', '=', 'transpoer_price_details.id')
+    ->select(
+        'user_privet_datas.first_name',
+        'user_privet_datas.second_name',
+        'class_tbs.dpcclass',
+        'subject_t_b_s.subject',
+        'transpoer_price_details.trasporot_code',
+        'time_arrangemtn_confirm_and_transfers.confirm',
+        'time_arrangemtn_confirm_and_transfers.Transfer',
+        'time_arrangemtn_confirm_and_transfers.Time_arrangement',
+        'time_arrangemtn_confirm_and_transfers.start_time',
+        'time_arrangemtn_confirm_and_transfers.end_time',
+        'time_arrangemtn_confirm_and_transfers.id',
+        \DB::raw("CASE 
+            WHEN time_arrangemtn_confirm_and_transfers.Trp_for_whom_user_id = user_privet_datas.user_id THEN 
+                CONCAT(user_privet_datas.first_name, ' ', user_privet_datas.second_name) 
+            ELSE 'none' 
+            END AS first_name_second_name"),
+        'time_arrangemtn_confirm_and_transfers.Trp_confirmed'
+    )
+    ->get();
+
     }
 }
 

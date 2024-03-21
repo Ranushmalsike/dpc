@@ -1,5 +1,3 @@
-//schedule_arrange.js
-
 document.addEventListener("DOMContentLoaded", function () {
     // Assuming initializeCalendar is an async function you've defined elsewhere
     initializeCalendar()
@@ -109,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Opens the modal and sets up the save functionality
-    $("#schedule_gen_tb").on("click", 'td:contains("Transport")', function () {
+    $("#schedule_gen_tb").on("click", 'td:contains("0")', function () {
         const currentTd = $(this); // Store the current TD to update later
         modal.show(); // Show the modal
 
@@ -144,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         // Check if the table is empty
         // Check if the table is empty
-        var rowCount = $("#schedule_details_ofTb tr").length;
+        var rowCount = $("#schedule_details_ofTb").length;
 
         if (rowCount === 0) {
             alert(
@@ -207,6 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
             success: function (response) {
                 //msgbxInstance.okCompleted();
                 success();
+                location.reload();
             },
             error: function (error) {
                 console.error("Error:", error);
@@ -237,7 +236,7 @@ function calculateWeekdaysFromDate(startDate, endDate) {
 }
 
 // Seve and gather information delete date by staff
-function fetchHolidayData(dateText) {
+/*function fetchHolidayData(dateText) {
     const apiKey = "p86SLqsywONmkkdv3nnLHpZ1dcqU6Zt7";
     const dateParts = dateText.split("/");
     const year = dateParts[2]; // Extract year from dateText
@@ -299,4 +298,4 @@ function addDeleteDataFromTimeArrangement(processedData) {
             console.error("Error sending data to the server:", error);
         },
     });
-}
+}*/

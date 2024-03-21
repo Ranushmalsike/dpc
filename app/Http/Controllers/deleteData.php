@@ -16,6 +16,7 @@ use App\Models\additional_allowance;
 use App\Models\credit_d3;
 use App\Models\creditTB_d1;
 use App\Models\creditTB_d2;
+use App\Models\time_arrangemtn_confirm_and_transfer;
 
 class deleteData extends Controller
 {
@@ -103,9 +104,18 @@ class deleteData extends Controller
    }
     // >> delete Credit
    public function delete_Creadit($id){
-      $this->creditTB_d1('id', $id);
-      $this->creditTB_d2('credit_id', $id);
+      $this->deleteResource('creditTB_d1', $id);
+      creditTB_d2::where('credit_id', $id)->delete();
+
    }
+
+/**
+ * Time arrangement
+ */
+   public function delete_TimeArrangement($id){
+      $this->deleteResource('time_arrangemtn_confirm_and_transfer', $id);
+   }
+
 
 }
 

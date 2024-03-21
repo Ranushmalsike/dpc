@@ -10,7 +10,13 @@ class time_arrangemtn_confirm_and_transfer extends Model
     use HasFactory;
 
     protected $fillable = [
-        'timeArrangement_array'
+        'timeArrangement_array',
+        'edit_TB_id',
+        'edit_start_time',
+        'edit_end_time',
+        'edit_class',
+        'edit_subject',
+        'edit_trp'
     ];
 
     public function join_with_timeArrangement(){

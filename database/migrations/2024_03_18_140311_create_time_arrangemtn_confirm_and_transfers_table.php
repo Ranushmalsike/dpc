@@ -22,6 +22,8 @@ return new class extends Migration
             $table->bigInteger('transport_id')->default(1);
             $table->tinyInteger('confirm')->default(0);
             $table->tinyInteger('Transfer')->default(0);
+            $table->bigInteger('Trp_for_whom_user_id')->default(0);
+            $table->tinyInteger('Trp_confirmed')->default(0);
             $table->timestamps();
         });
     }
