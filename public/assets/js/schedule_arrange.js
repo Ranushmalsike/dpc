@@ -35,9 +35,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 // var TeacherName = document.getElementById('TeacherName');
                 // Make sure the dates are not empty
                 if (!startSelectDateValue || !endSelectDateValue) {
-                    alert(
-                        "Please ensure both start and end dates are selected."
+                    Swal.fire(
+                        "Please ensure both start and end dates are selected.",
+                        "",
+                        "error"
                     );
+                    alert();
                     return;
                 }
 
@@ -46,7 +49,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Ensure that the start date is before the end date
                 if (startSelectDate > endSelectDate) {
-                    alert("Start date must be before end date.");
+                    Swal.fire(
+                        "Start date must be before end date.",
+                        "",
+                        "error"
+                    );
                     return;
                 }
 
@@ -93,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var id = $(this).val();
         //alert(id);
         var dateText = $(this).closest("tr").find("td:eq(2)").text();
-        fetchHolidayData(dateText);
+        addDeleteDataFromTimeArrangement(dateText);
         $("#idOfshedule" + id).remove();
     });
 
@@ -145,9 +152,12 @@ document.addEventListener("DOMContentLoaded", function () {
         var rowCount = $("#schedule_details_ofTb").length;
 
         if (rowCount === 0) {
-            alert(
-                "The schedule table is empty. Please add some data before saving."
+            Swal.fire(
+                "The schedule table is empty. Please add some data before saving.",
+                "",
+                "error"
             );
+
             return;
         }
 
@@ -208,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 location.reload();
             },
             error: function (error) {
-                console.error("Error:", error);
+                Swal.fire(error, "", "error");
             },
         });
     });
@@ -236,55 +246,54 @@ function calculateWeekdaysFromDate(startDate, endDate) {
 }
 
 // Seve and gather information delete date by staff
-/*function fetchHolidayData(dateText) {
-    const apiKey = "p86SLqsywONmkkdv3nnLHpZ1dcqU6Zt7";
-    const dateParts = dateText.split("/");
-    const year = dateParts[2]; // Extract year from dateText
-    const url = `https://calendarific.com/api/v2/holidays?&api_key=${apiKey}&country=LK&year=${year}&type=national`;
+// function fetchHolidayData(dateText) {
+//     const apiKey = "p86SLqsywONmkkdv3nnLHpZ1dcqU6Zt7";
+//     const dateParts = dateText.split("/");
+//     const year = dateParts[2]; // Extract year from dateText
+//     const url = `https://calendarific.com/api/v2/holidays?&api_key=${apiKey}&country=LK&year=${year}&type=national`;
 
-    fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-            processHolidayData(data, dateText);
-        })
-        .catch((error) => console.error("Error fetching holiday data:", error));
-}
+//     fetch(url)
+//         .then((response) => response.json())
+//         .then((data) => {
+//             processHolidayData(data, dateText);
+//         })
+//         .catch((error) => console.error("Error fetching holiday data:", error));
+// }
 
-function processHolidayData(data, dateText) {
-    const dateParts = dateText.split("/");
-    const month = parseInt(dateParts[0], 10);
-    const day = parseInt(dateParts[1], 10);
-    const year = parseInt(dateParts[2], 10);
+// function processHolidayData(data, dateText) {
+//     const dateParts = dateText.split("/");
+//     const month = parseInt(dateParts[0], 10);
+//     const day = parseInt(dateParts[1], 10);
+//     const year = parseInt(dateParts[2], 10);
 
-    let matchingHoliday = null;
+//     let matchingHoliday = null;
 
-    if (data.response && data.response.holidays) {
-        matchingHoliday = data.response.holidays.find((holiday) => {
-            const holidayDate = new Date(holiday.date.iso);
-            return (
-                holidayDate.getDate() === day &&
-                holidayDate.getMonth() + 1 === month && // Months are 0-indexed in JavaScript Date
-                holidayDate.getFullYear() === year
-            );
-        });
-    }
+//     if (data.response && data.response.holidays) {
+//         matchingHoliday = data.response.holidays.find((holiday) => {
+//             const holidayDate = new Date(holiday.date.iso);
+//             return (
+//                 holidayDate.getDate() === day &&
+//                 holidayDate.getMonth() + 1 === month && // Months are 0-indexed in JavaScript Date
+//                 holidayDate.getFullYear() === year
+//             );
+//         });
+//     }
 
-    if (matchingHoliday) {
-        // If a matching holiday is found, prepare and send data to your server
-        addDeleteDataFromTimeArrangement({
-            dateText: dateText,
-            holidayName: matchingHoliday.name,
-        });
-    } else {
-        console.log("No matching holiday found for the given date.");
-    }
-}
+//     if (matchingHoliday) {
+//         // If a matching holiday is found, prepare and send data to your server
+//         addDeleteDataFromTimeArrangement({
+//             dateText: dateText,
+//         });
+//     } else {
+//         Swal.fire("No matching holiday found for the given date.", "", "error");
+//     }
+// }
 
-function addDeleteDataFromTimeArrangement(processedData) {
+function addDeleteDataFromTimeArrangement(dateText) {
     $.ajax({
         type: "POST",
         url: "/input/Add_DeleteData_from_timeArrangement",
-        data: processedData,
+        data: { dateText: dateText },
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "X-CSRF-TOKEN",
@@ -298,4 +307,4 @@ function addDeleteDataFromTimeArrangement(processedData) {
             console.error("Error sending data to the server:", error);
         },
     });
-}*/
+}

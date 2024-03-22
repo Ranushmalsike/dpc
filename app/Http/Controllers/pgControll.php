@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 
 use App\Models\classTb;
 use App\Models\subjectTB;
@@ -127,7 +130,8 @@ class pgControll extends Controller
             'per_houser_salary_for_techers.user_id', 
             'per_houser_salary_for_techers.perHourSalary',
             'per_houser_salary_for_techers.id',
-            'per_houser_salary_for_techers.published')
+            'per_houser_salary_for_techers.published',
+            'per_houser_salary_for_techers.Default_set')
         ->get();
         return view('layout.salaryBand', compact('getData', 'getslarydata'));
         
@@ -194,11 +198,10 @@ class pgControll extends Controller
         
     }    
 
-/**
- * Time Table Arrangement
- */
+    /**
+    * Time Table Arrangement
+    */
     public function TimeTableArrangement(){
-        
         $getTeacher = $this->generallyInfo->teacherName();
         $getClassVal = $this->generallyInfo->classTBValues();
         $getSubjectVal = $this->generallyInfo->subjectTBValues();
@@ -207,7 +210,53 @@ class pgControll extends Controller
         return view('layout.timeTable', compact('getTeacher', 'getClassVal', 'getSubjectVal', 'getTransportInformation', 'getTimeArrangementDetails'));
     }
 
+    /**
+     * Login section
+     */
+    protected function login_data(Request $request){
+        try {
+        // Retrieve the user by username
+        $user = User::where('name', $request->user_name)->first();
+        
+        // Check if user exists and password is correct
+        if ($user && Hash::check($request->user_pass, $user->password)) {
+            // Manually log in the user
+            Auth::login($user);
+            
+            // Authentication passed, user is logged in
+            return response()->json(['success' => true, 'message' => 'Login successful.', 'redirectUrl' => route('administrativehub')]);
+        }
+        
+        // Authentication failed
+        return response()->json(['success' => false, 'message' => 'Invalid credentials.']);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+             return response()->json(['success' => false, 'message' => $th]);
+        }
+    }
+
+/**
+ * 
+ */
+public function teacher_time_tableConfirm(){
+    $getTeacher = $this->generallyInfo->teacherName();
+    $getTimeArrangementDetails = $this->generallyInfo->selectTimeArrangement();
+    return view('layout.timetble_Teacher', compact('getTeacher', 'getTimeArrangementDetails'));
+    
 }
+
+}
+
+
+
+
+
+
+
+
+
+
 
 /**
  * general query 
@@ -270,7 +319,7 @@ return time_arrangemtn_confirm_and_transfer::join('user_privet_datas', 'time_arr
         'time_arrangemtn_confirm_and_transfers.start_time',
         'time_arrangemtn_confirm_and_transfers.end_time',
         'time_arrangemtn_confirm_and_transfers.id',
-        \DB::raw("CASE 
+        DB::raw("CASE 
             WHEN time_arrangemtn_confirm_and_transfers.Trp_for_whom_user_id = user_privet_datas.user_id THEN 
                 CONCAT(user_privet_datas.first_name, ' ', user_privet_datas.second_name) 
             ELSE 'none' 

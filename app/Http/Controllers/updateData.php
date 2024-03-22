@@ -13,6 +13,7 @@ use App\Models\creditTB_d2;
 use App\Models\transpoer_detail;
 use App\Models\transpoer_price_details;
 use App\Models\time_arrangemtn_confirm_and_transfer;
+use App\Models\perHouserSalaryForTecher;
 
 use App\Rules\customPasswordValidation;
 // use App\Rules\user_privet_data;
@@ -219,6 +220,21 @@ public function confirm_schedule($id){
     $confirmed_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($id);
     $confirmed_schedule->confirm = '1'; 
     $confirmed_schedule->update();
+    // ProcessTimeArrangementFinal
+     $query = "CALL ProcessTimeArrangementFinal(:your_data);";
+
+    $bind = [
+        'your_data' => $id,
+    ];
+
+    DB::beginTransaction();
+    try {
+        DB::statement($query, $bind);
+        DB::commit();
+    } catch (\Exception $e) {
+        DB::rollBack();
+        // Handle the exception
+    }
 }
 // reset
 public function reset_schedule($id){
@@ -261,6 +277,26 @@ public function schedule_edit(Request $request){
     $Edit_schedule->update();
 }
 
+/**
+ * Salary band update set to defualt
+ */
+public function setDefaultSalaryBand($id){
+    
+    $query = "CALL salaryBand_defaults(:your_data);";
+
+    $bind = [
+        'your_data' => $id,
+    ];
+
+    DB::beginTransaction();
+    try {
+        DB::statement($query, $bind);
+        DB::commit();
+    } catch (\Exception $e) {
+        DB::rollBack();
+        // Handle the exception
+    }
+}
 
 
 }

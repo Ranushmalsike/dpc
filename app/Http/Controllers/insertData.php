@@ -305,13 +305,11 @@ public function classInputeData(Request $request){
 // Add Delete Date from arrange Time Table by System
 public function insert_DateFromArrangeTimeTable(Request $request){
     $dateOfRequest = $request->dateText;
-    $holidayDetails = $request->holidayName;
     $formatted_date = date('Y-m-d', strtotime($dateOfRequest));
 
    
     gathherTo_a_delete_date_from_TimeArrangement::insert([
-        'delete_date_from_TimeArrangement' => $formatted_date,
-        'Description' => $holidayDetails
+        'delete_date_from_TimeArrangement' => $formatted_date
     ]);
 }
 
@@ -336,7 +334,19 @@ public function timeArrangement_save(Request $request){
         ]);
     }
 }
+/**
+ * per hour salary
+ *
+ */
 
+ public function addSalaryBand(Request $request) {
+    return $this->handleAddData(
+        $request,
+        ['TeacherName' => 'required|string', 'Salary' => 'required|string'],
+        perHouserSalaryForTecher::class,
+        ['user_id' => $request->TeacherName, 'perHourSalary' => $request->Salary, 'published' => now()]
+    );
+ }
     /**
      * Alert within redirect function
      */

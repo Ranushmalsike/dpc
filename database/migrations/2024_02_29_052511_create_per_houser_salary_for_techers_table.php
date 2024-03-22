@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id');
             $table->decimal('perHourSalary', 65,2);
-            $table->date('published')->useCurrent();
+            $table->date('published')->useCurrent(); //  need add migration 22/03/24
+            $table->tinyInteger('Default_set')->default(0);
             $table->index('user_id');
         });
 

@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(TransportPriceDetailsTableSeeder::class);
         $this->call(user_roles_DeraultRoles::class);
+        $this->call(AllowanceTableSeeder::class);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('allowance_tbs', function (Blueprint $table) {
+        Schema::create('allowance_for_users', function (Blueprint $table) {
             $table->id();
-            $table->decimal('start_salary', 65, 2);
-            $table->decimal('end_star', 65, 2);
-            $table->decimal('allowance', 65, 2);
+            $table->bigInteger('user_id');
+            $table->bigInteger('allowance_id');
+            $table->date('define_month');
             $table->timestamps();
-            $table->index(['start_salary', 'end_star']);
         });
     }
 
@@ -26,7 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('allowance_tbs');
+        Schema::dropIfExists('allowance_for_users');
     }
 };
-

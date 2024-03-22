@@ -357,7 +357,7 @@
             $(document).on('click', '#delete_staff', function () {
                 // Get the value of the clicked button
                 var id = $(this).val();
-                var del_URL = "/administrativehub.staff.delete/";
+                var del_URL = "/administrativehub/staff.delete/";
                 var what_function = "staff";
                 deleteDataOfTable(id, del_URL, what_function);
             });
@@ -367,7 +367,7 @@
             $(document).on('click', '#delete_teacher', function () {
                 // Get the value of the clicked button
                 var id = $(this).val();
-                var del_URL = "administrativehub.teacher.delete/";
+                var del_URL = "administrativehub/teacher.delete/";
                 var what_function = "teacher";
                 deleteDataOfTable(id, del_URL, what_function);
 
@@ -418,7 +418,7 @@
                 // Get the value of the clicked button
                 var id = $(this).val();
                 //alert(id);
-                 var newPageURL = "/administrativehub.permission/"+id;
+                 var newPageURL = "/administrativehub/permission/"+id;
                  window.location.href = newPageURL;
             });
 
@@ -426,7 +426,7 @@
                 // Get the value of the clicked button
                 var id = $(this).val();
                 //alert(id);
-                 var newPageURL = "/administrativehub.userPrivateData/"+id;
+                 var newPageURL = "/administrativehub/userPrivateData/"+id;
                  window.location.href = newPageURL;
             });
 
@@ -468,8 +468,8 @@
         });
 
     </script>
-    // End DataTable Script link
-    //
+    <!-- // End DataTable Script link
+    // -->
     <!-- content-wrapper ends -->
     <script src="{{ asset('assets/adminHub/js/file-upload.js') }}"></script>
     <script src="{{ asset('assets/adminHub/js/typeahead.js') }}"></script>

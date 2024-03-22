@@ -45,6 +45,7 @@ Route::group(['prefix' => '/systemMaintenance'], function () {
 */
 Route::group(['prefix' => '/administrativehub'], function () {
     Route::get('/index', [pgControll::class, 'administrativehub'])->name('administrativehub');
+    Route::POST('/login_data', [pgControll::class, 'login_data'])->name('login');
     Route::get('/Class&Subject', [pgControll::class, 'administrativehubClassAndSubject'])->name('classAndSubject');
     Route::get('/RegisterStaff', [pgControll::class, 'administrativehubRegStaffAndTeacher'])->name('RegisterStaff');
     Route::get('/permission/{id}', [pgControll::class, 'administrativehubpermission'])->name('permissionForStaffOrTeacher');
@@ -55,6 +56,7 @@ Route::group(['prefix' => '/administrativehub'], function () {
     Route::get('/additional_allowance', [pgControll::class, 'get_additional_allowance'])->name('additional_allowance');
     Route::get('/credit', [pgControll::class, 'get_creditSection'])->name('credit');
     Route::get('/TimeTableArrangement', [pgControll::class, 'TimeTableArrangement'])->name('TimeTableArrangement');
+    Route::get('/teacher_time_tableConfirm', [pgControll::class, 'teacher_time_tableConfirm'])->name('teacher_time_tableConfirm');
    
 });
 
@@ -110,6 +112,7 @@ Route::group(['prefix' => '/administrativehub/edit'], function () {
     Route::GET('/resetByAdmin/schedule/{id}', [updateData::class, 'reset_schedule'])->name('resetByAdmin.Update');
     Route::GET('/trp_schedule_Up/schedule/{id}', [updateData::class, 'trp_schedule_Up'])->name('trp_schedule_Up.Update');
     Route::POST('/schedule_edit/schedule/', [updateData::class, 'schedule_edit'])->name('schedule_edit.Update');
+    Route::GET('/setDefaultSalaryBand/{id}', [updateData::class, 'setDefaultSalaryBand'])->name('setDefaultSalaryBand.Update');
 });
 
 
