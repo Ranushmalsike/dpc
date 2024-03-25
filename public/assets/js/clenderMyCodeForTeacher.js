@@ -207,30 +207,17 @@ async function initializeCalendar() {
                         </tr>
                         <tr>
                         <td>${cnf == 0 ? "No" : "Yes"}</td>
-                        <td>${
-                            trp == 0
-                                ? "No"
-                                : "Yes"
-                        }</td>
+                        <td>${trp == 0 ? "No" : "Yes"}</td>
                         </tr>
                     </table>
-                    <hr/>
-                    <center>
-                    <table border="0" style="width:60%;">
-                        <tr>
-                            <td>
-                                <button id="transferBtn" class="swal2-confirm btn btn-secondary btn-sm">Transfer details</button>
-                            </td>
-                        </tr>
-                    </table>
-                    </center>
+
                     <hr/>`,
-                    showDenyButton: false,
+                    showDenyButton: true,
                     showCancelButton: true,
                     denyButtonText: `Confirm`,
-                    confirmButtonText: "Transfer details", // Rename cancel button to "Close"
+                    confirmButtonText: "Transfer session",
                 }).then((result) => {
-                    // This is triggered when the dialog is closed, but not by custom buttons
+                    //    Confirm
                     if (result.isConfirmed) {
                         if (
                             current_date_today > dateOfSchedule ||
@@ -306,11 +293,8 @@ async function initializeCalendar() {
                                 "error"
                             );
                         }
-
                     }
                 });
-               
-
             } else {
                 Swal.fire("Weekend", "", "error");
             }
@@ -380,4 +364,3 @@ $("#saveTeacher")
 
         hideModal(); // Hide the modal
     });
-

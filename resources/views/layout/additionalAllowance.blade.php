@@ -26,10 +26,24 @@
                         <h4 class="card-title">Additional Allowance</h4>
                         <form method="POST" action="{{ route('Addadditional_allowance') }}">
                             @csrf
-
-                            <label for="additionalAllowance" class="col-sm-6 col-form-label">Add Additional Allowance</label>
+                            <label for="TeacherName">Select Member</label>
                             <div class="input-group mb-3">
-                                <input type="number" class="form-control" id="additionalAllowance" name="additionalAllowance">
+                                <select class="form-control" id="TeacherName" name="TeacherName">
+                                    @foreach($getTeacher as $teach)
+                                    <option value="{{ $teach->user_id }}">
+                                        {{ $teach->first_name }}
+                                        &nbsp;
+                                        {{ $teach->second_name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <label for="additionalAllowance" class="col-sm-6 col-form-label">Add Additional
+                                Allowance</label>
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" id="additionalAllowance"
+                                    name="additionalAllowance">
                                 <div class="input-group-append">
                                     <span class="input-group-text">.00</span>
                                 </div>
@@ -38,7 +52,7 @@
 
                             <label for="description" class="col-sm-6 col-form-label">Description</label>
                             <div class="input-group mb-3">
-                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="5" col="15"></textarea>
                                 <span style="color:red"> @error ('description') {{ $message }} @enderror </span>
                             </div>
 
@@ -52,7 +66,7 @@
             {{-- End trasport Price input section --}}
 
             {{-- Start trasport table with price section --}}
-            <div class="col-md-7 grid-margin stretch-card">
+            <div class="col-md-8 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Additional Allowance</h4>
@@ -60,6 +74,8 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Second Name</th>
                                     <th>Allowance Amount (LKR)</th>
                                     <th>Description</th>
                                     <th>Action</th>
@@ -69,6 +85,8 @@
                                 @foreach($additional_allowanceData as $alwdata)
                                 <tr id="allowanceId{{ $alwdata->id }}">
                                     <td>{{ $alwdata->id }}</td>
+                                    <td>{{ $alwdata->first_name }}</td>
+                                    <td>{{ $alwdata->second_name }}</td>
                                     <td>{{ $alwdata->allowance_amount }}</td>
                                     <td>{{ $alwdata->Description }}</td>
                                     <td>
@@ -183,7 +201,7 @@
                                 'X-CSRF-TOKEN': $("input[name=_token]").val()
                             },
                             success: function (response) {
-                                
+
                                 $('#allowanceId' + id).remove();
                                 success();
 

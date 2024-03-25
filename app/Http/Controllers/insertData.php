@@ -154,16 +154,45 @@ class insertData extends Controller
 
     
     //insert_Additional_allowance method
-    public function insert_Additional_allowance(Request $request)
+        public function insert_Additional_allowance(Request $request)
     {
-        return $this->handleAddData(
-            $request,
-            ['additionalAllowance' => 'required|string', 'description' => 'required|string'],
-            additional_allowance::class,
-            ['allowance_amount' => $request->additionalAllowance, 'Description' => $request->description],
-            'allowance_amount',
-            $request->additionalAllowance
-        );
+        // Validation
+        $this->validate($request, [
+            'TeacherName' => 'required|integer', // Assuming this is a user ID, validate accordingly
+            'additionalAllowance' => 'required|string',
+            'description' => 'required|string'
+        ]);
+
+        // Use the DB facade with parameter binding to prevent SQL injection
+           $result = \DB::select("SELECT insert_additional_allowance(:TeacherName, :additionalAllowance, :description) AS last_insert_id", [
+        'TeacherName' => $request->TeacherName,
+        'additionalAllowance' => $request->additionalAllowance,
+        'description' => $request->description,
+    ]);
+
+        if (!empty($result)) {
+           $lastInsertId = $result[0]->last_insert_id;
+            $query = "CALL Insert_allowance_into_how_gen(:teacher_id, :id_of_allowance_additional);";
+
+            $bind = [
+                'teacher_id' => $request->TeacherName,
+                'id_of_allowance_additional' => $lastInsertId // Ensure this is correct
+            ];
+
+            DB::beginTransaction();
+            try {
+                DB::statement($query, $bind);
+                DB::commit();
+                // Consider adding a return statement here to indicate success
+            } catch (\Exception $e) {
+                DB::rollBack();
+                // Log the error or return an error response
+            }
+        } else {
+            return $this->redirectOptionFail();
+            // Handle the case where $result is empty, indicating the function did not execute as expected
+        }
+        return $this->redirectOptionCompleted();
     }
 
     //insert_creditSection method

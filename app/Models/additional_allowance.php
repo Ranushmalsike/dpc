@@ -11,5 +11,6 @@ class additional_allowance extends Model
     protected $fillable = [
         'additionalAllowance',
         'description',
+        'TeacherName'
     ];
 }
