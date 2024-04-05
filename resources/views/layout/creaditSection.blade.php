@@ -221,6 +221,27 @@
     <!-- {{-- Start MyScript Link  --}} -->
     <script src="{{ asset('assets/js/tableLinkWithdataTBl.js') }}"></script>
     <script>
+        // Start Alert section
+            // Success Alert
+            function success() {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Your work has been saved",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+            // Fail Alert
+            function fail() {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                    footer: ''
+                });
+            }
+            // End Alert Section
         $(document).ready(function () {
 
             // Start Alert section
@@ -364,10 +385,12 @@
                     },
                     // dataType:'json',
                     success: function (response) {
-                        msgbxInstance.okCompleted();
+                       success();
+                       location.reload();
                     },
                     error: function (error) {
-                        console.error('Error:', error);
+                        fail();
+                        
                     }
                 });
             });

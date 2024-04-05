@@ -322,18 +322,23 @@
               </ul>
             </div>
           </li>
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
               <i class="typcn typcn-compass menu-icon"></i>
-              <span class="menu-title">Icons</span>
+              <span class="menu-title">Summery</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="icons">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/icons/mdi.html">My Activity</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{ route('summery_add') }}">Create Summery Summery</a></li>
               </ul>
             </div>
-          </li> -->
+            <!-- <div class="collapse" id="icons">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{{ route('teacher_time_tableConfirm') }}">Summery</a></li>
+              </ul>
+            </div> -->
+          </li>
           <!-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
               <i class="typcn typcn-user-add-outline menu-icon"></i>
@@ -367,26 +372,26 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pages/documentation/documentation.html">
+            <a class="nav-link" href="{{ route('summery_for_teacher') }}">
               <i class="typcn typcn-document-text menu-icon"></i>
               <span class="menu-title">Subject & schema</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pages/documentation/documentation.html">
+            <a class="nav-link" href="{{ route('myActivity_salaryCal') }}">
               <i class="typcn typcn-document-text menu-icon"></i>
               <span class="menu-title">My Activity</span>
             </a>
           </li>
-        </ul>
-        <!-- <ul class="sidebar-legend">
+        <!-- </ul>
+         <ul class="sidebar-legend">
           <li>
             <p class="sidebar-menu-title">Category</p>
           </li>
           <li class="nav-item"><a href="#" class="nav-link">#Sales</a></li>
           <li class="nav-item"><a href="#" class="nav-link">#Marketing</a></li>
           <li class="nav-item"><a href="#" class="nav-link">#Growth</a></li>
-        </ul> -->
+        </ul> --> 
       </nav>
       
   @yield('content')

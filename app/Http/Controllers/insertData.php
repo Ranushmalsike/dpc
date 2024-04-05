@@ -20,6 +20,9 @@ use App\Models\creditTB_d1;
 use App\Models\creditTB_d2;
 use App\Models\gathherTo_a_delete_date_from_TimeArrangement;
 use App\Models\time_arrangemtn_confirm_and_transfer;
+use App\Models\summery_schema;
+use App\Models\summery_recomendation;
+use App\Models\chat_of_summery;
 
 
 // use Carbon\Carbon;
@@ -376,6 +379,79 @@ public function timeArrangement_save(Request $request){
         ['user_id' => $request->TeacherName, 'perHourSalary' => $request->Salary, 'published' => now()]
     );
  }
+ /**
+  * Add Summery
+  */
+ public function Add_summery_schema(Request $request) {
+      summery_schema::insert(
+         [
+         'month_of_summery'=>$request->month_of_summery,
+         'summery_col_1'=> $request->EXERCS_POEMS,
+         'summery_col_2'=> $request->VOCABULARY,
+         'summery_col_3'=> $request->IDENTIFICATION_3,
+         'summery_col_4'=> $request->CONVERSATION_4,
+         'summery_col_5'=> $request->INSTRCTNS_5,
+         'summery_col_6'=> $request->READING_6,
+         'summery_col_7'=> $request->WRITING_7,
+         'class_id'=>$request->class_id
+         ]
+     );
+     return $this->redirectOptionCompleted();
+ }
+
+ /**
+  * selected teacher
+  */
+public function selected_teacher(Request $request) {
+     $summery_id = $request->summery_id;
+
+    try {
+        foreach ($request->selected_values as $selectedData) {
+            // Insert each selected teacher ID with the summary ID
+            summery_recomendation::insert([
+                'summery_id' => $summery_id,
+                'teacher_id' => $selectedData  // Assuming $selectedData is the teacher ID
+            ]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Data saved successfully']);
+    } catch (\Exception $e) {
+        // Log the exception
+        Log::error('Error saving teacher selection: ' . $e->getMessage());
+        // Return an error response
+        return response()->json(['success' => false, 'message' => 'Error saving data'], 500);
+    }
+}
+
+/**
+ * chat input
+ */
+public function chat_input(Request $request){
+    $getSessionID = auth()->user()->id;
+    if(auth()->user()->roleType == 'admin' || auth()->user()->roleType == 'staff'){
+        try {
+        chat_of_summery::insert(
+        ['summery_id' => $request->idOfRow, 'chat_staff'=> $request->chatInput, 'staff_id'=> $getSessionID, 'Column_id'=> $request->columnNumberOfRow]
+        );
+        return response()->json(['success' => true, 'message' => 'Data send successfully']);
+    } catch (\Throwable $th) {
+        //throw $th;
+        return response()->json(['success' => false, 'message' => $th]);
+    }
+    }
+    else{
+  try {
+        chat_of_summery::insert(
+        ['summery_id' => $request->idOfRow, 'chat_teacher'=> $request->chatInput, 'teacher_id'=> $getSessionID, 'Column_id'=> $request->columnNumberOfRow]
+        );
+        return response()->json(['success' => true, 'message' => 'Data send successfully']);
+    } catch (\Throwable $th) {
+        //throw $th;
+        return response()->json(['success' => false, 'message' => $th]);
+    }
+    }
+    
+}
     /**
      * Alert within redirect function
      */
@@ -388,4 +464,5 @@ public function timeArrangement_save(Request $request){
     {
         return redirect()->back()->with('fail', 'Data already exists');
     }
+
 }

@@ -214,8 +214,8 @@ async function initializeCalendar() {
                     <hr/>`,
                     showDenyButton: true,
                     showCancelButton: true,
-                    denyButtonText: `Confirm`,
-                    confirmButtonText: "Transfer session",
+                    denyButtonText: `Transfer session`,
+                    confirmButtonText: "Confirm",
                 }).then((result) => {
                     //    Confirm
                     if (result.isConfirmed) {

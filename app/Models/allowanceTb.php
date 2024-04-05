@@ -14,4 +14,14 @@ class allowanceTb extends Model
         'endSalary',
         'allowance',
     ];
+
+    /**
+     * Get the for_allowance_for_user associated with the allowanceTb
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function for_allowance_for_user(): HasOne
+    {
+        return $this->hasOne(allowance_for_user::class, 'allowance_id');
+    }
 }

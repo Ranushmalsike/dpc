@@ -57,6 +57,11 @@ Route::group(['prefix' => '/administrativehub'], function () {
     Route::get('/credit', [pgControll::class, 'get_creditSection'])->name('credit');
     Route::get('/TimeTableArrangement', [pgControll::class, 'TimeTableArrangement'])->name('TimeTableArrangement');
     Route::get('/teacher_time_tableConfirm', [pgControll::class, 'teacher_time_tableConfirm'])->name('teacher_time_tableConfirm');
+    Route::get('/myActivity_salaryCal', [pgControll::class, 'myActivity_salaryCal'])->name('myActivity_salaryCal');
+    Route::get('/summery_add', [pgControll::class, 'summery_for_staff'])->name('summery_add');
+    Route::POST('/summery_for_chat', [pgControll::class, 'summery_for_chat'])->name('summery_for_chat');
+    Route::POST('/summery_recommendedTeacher', [pgControll::class, 'summery_recommendedTeacher'])->name('summery_recommendedTeacher');
+    Route::get('/summery_for_teacher', [pgControll::class, 'summery_for_teacher'])->name('summery_for_teacher');
    
 });
 
@@ -78,6 +83,10 @@ Route::group(['prefix' => '/input'], function () {
     Route::POST('/creditInsert', [insertData::class, 'insert_creditSection'])->name('creditInsert');
     Route::POST('/Add_DeleteData_from_timeArrangement', [insertData::class, 'insert_DateFromArrangeTimeTable'])->name('Add_DeleteData_from_timeArrangement');
     Route::POST('/timeArrangement_save', [insertData::class, 'timeArrangement_save'])->name('timeArrangement_save');
+    Route::POST('/Add_summery_schema', [insertData::class, 'Add_summery_schema'])->name('Add_summery_schema');
+    Route::POST('/selected_teacher_forSummery', [insertData::class, 'selected_teacher'])->name('selected_teacher_forSummery');
+    Route::POST('/chat_input', [insertData::class, 'chat_input'])->name('chat_input');
+   
 });
 
 //Delete
@@ -94,6 +103,8 @@ Route::group(['prefix' => '/administrativehub'], function () {
     Route::GET('/additional_allowance.delete/{id}', [deleteData::class, 'delete_additional_allowance'])->name('additional_allowance.delete');
     Route::GET('/credit.delete/{id}', [deleteData::class, 'delete_Creadit'])->name('credit.delete');
     Route::GET('/delete_TimeArrangement.delete/{id}', [deleteData::class, 'delete_TimeArrangement'])->name('delete_TimeArrangement.delete');
+    Route::GET('/delete_summery.delete/{id}', [deleteData::class, 'delete_summery'])->name('delete_summery.delete');
+    Route::GET('/delete_recommended.delete/{id}', [deleteData::class, 'delete_recommended'])->name('delete_recommended.delete');
 });
 
 
@@ -113,6 +124,7 @@ Route::group(['prefix' => '/administrativehub/edit'], function () {
     Route::GET('/trp_schedule_Up/schedule/{id}', [updateData::class, 'trp_schedule_Up'])->name('trp_schedule_Up.Update');
     Route::POST('/schedule_edit/schedule/', [updateData::class, 'schedule_edit'])->name('schedule_edit.Update');
     Route::GET('/setDefaultSalaryBand/{id}', [updateData::class, 'setDefaultSalaryBand'])->name('setDefaultSalaryBand.Update');
+    Route::POST('/Update_percentage', [updateData::class, 'Update_percentage'])->name('Update_percentage.Update');
 });
 
 

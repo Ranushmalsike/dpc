@@ -17,6 +17,8 @@ use App\Models\credit_d3;
 use App\Models\creditTB_d1;
 use App\Models\creditTB_d2;
 use App\Models\time_arrangemtn_confirm_and_transfer;
+use App\Models\summery_schema;
+use App\Models\summery_recomendation;
 
 class deleteData extends Controller
 {
@@ -116,6 +118,20 @@ class deleteData extends Controller
       $this->deleteResource('time_arrangemtn_confirm_and_transfer', $id);
    }
 
+/**
+ * delete summery
+ */
+public function delete_summery($id){
+   $this->deleteResource('summery_schema', $id);
+    return response()->json(['success' => true, 'message' => 'ok']);
+}
+/**
+ * delete recommended
+ */
+public function delete_recommended($id){
+   $this->deleteResource('summery_recomendation', $id);
+   return response()->json(['success' => true, 'message' => 'ok']);
+}
 
 }
 

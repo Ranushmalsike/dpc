@@ -14,6 +14,8 @@ use App\Models\transpoer_detail;
 use App\Models\transpoer_price_details;
 use App\Models\time_arrangemtn_confirm_and_transfer;
 use App\Models\perHouserSalaryForTecher;
+use App\Models\summery_schema;
+
 
 use App\Rules\customPasswordValidation;
 // use App\Rules\user_privet_data;
@@ -277,6 +279,23 @@ public function schedule_edit(Request $request){
     $Edit_schedule->update();
 }
 
+/**
+ * Percentage Update
+ */
+public function Update_percentage(Request $request){
+    $columnId = $request->column_id;
+    $balancecol = $columnId - 2;
+    $Percentage = "Percentage_sum_co_".(string)$balancecol;
+    for ($i=3; $i <= 9 ; $i++) {
+        if($i == $columnId){ 
+    $summery_percentage = summery_schema::findOrFail($request->summery_id);
+    $summery_percentage-> $Percentage = $request->percentage_val;
+    $summery_percentage->update();
+        // dd($i);
+        }
+    }
+    return response()->json(['success' => true, 'message' => 'ok']);
+}
 /**
  * Salary band update set to defualt
  */
