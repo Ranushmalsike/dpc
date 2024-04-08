@@ -129,6 +129,7 @@
                                         <!--For Admin -->
                                         <hr />
                                         <div class="row">
+                                             @if($loandetails->type_ofmainTB != "Confirmed")
                                             <!-- Reject Option -->
                                             <button type="button" class="btn btn-danger btn-sm h6 mr-1"
                                                 value="{{ $loandetails->credit_id_of_baseTB }}" id="reject_loan_option"
@@ -136,12 +137,14 @@
                                                 <i class="bi bi-clipboard-x"></i>
                                             </button>
                                             <!-- Confirmed -->
+                                           
                                             <button type="button" class="btn btn-warning btn-sm h6 mr-1"
                                                 value="{{ $loandetails->credit_id_of_baseTB }}"
                                                 id="confirmed_loan_option" data-toggle="tooltip" data-placement="bottom"
                                                 title="Confirmed Loan">
                                                 <i class="bi bi-check-circle"></i>
                                             </button>
+                                            @endif
                                             <!-- All loan Completed -->
                                             <button type="button" class="btn btn-secondary btn-sm h6 mr-1"
                                                 value="{{ $loandetails->credit_id_of_baseTB }}" id="all_loan_completed"

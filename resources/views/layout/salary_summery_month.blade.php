@@ -24,132 +24,38 @@
 <div class="main-panel">
     <div class="content-wrapper">
         <div class="row">
-            <!-- Start total Salary of section-->
-            <div class="col-md-4 grid-margin stretch-card">
-                <div class="card">
-                    <br>
-                    <center>
-                        <h2>
-                            <u>
-                                @php
-                                echo date("Y") ."/". date("m");
-                                @endphp
-                            </u>
-                        </h2>
-                    </center>
-                    <div class="card-body">
-                        <table border="0">
-                            <tbody>
-                                <tr>
-                                    <td>Received Total Schedule :</td>
-                                    <td style="text-align: right;">
-                                        @if($getTotalReceived_task)
-                                        {{ $getTotalReceived_task }}
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Completed Total Schedule :</td>
-                                    <td style="text-align: right;">
-                                        @if($getTotalCompleted_task)
-                                        {{ $getTotalCompleted_task }}
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Completed Additional Schedule :</td>
-                                    <td style="text-align: right;">
-                                        @if($getTotalAdditionalTask)
-                                        {{ $getTotalAdditionalTask}}
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <hr>
-                                        Schedule calculation (+) :</td>
-                                    <td style="text-align: right;">
-                                    <hr>
-                                        @if($getTotalSchedule_calculationForMonth)
-                                        {{ $getTotalSchedule_calculationForMonth }}
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Total Allowance (+) :</td>
-                                    <td style="text-align: right;">
-                                        @if($Teacher_for_total_Allowance_Task )
-                                        {{ $Teacher_for_total_Allowance_Task   }}
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Total Transport (+) :</td>
-                                    <td style="text-align: right;">
-                                        @if($Teacher_for_total_trp_Task)
-                                        {{ $Teacher_for_total_trp_Task }}
-                                        @endif
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    
-                                    <td>Total Additional Allowance (+) :</td>
-                                    <td style="text-align: right;">
-                                        @if($Teacher_for_total_Additional_Allowance_Task)
-                                        {{ $Teacher_for_total_Additional_Allowance_Task }}
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Credit (-):</td>
-                                    <td style="text-align: right;">
-                                        @if($Teacher_for_total_credit_Task)
-                                         {{ $Teacher_for_total_credit_Task }}
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>
-                                        <hr>
-                                        Total : </strong></td>
-                                    <td style="text-align: right;"><strong>
-                                        <hr>
-                                            @if($Teacher_for_total_Total_Salary )
-                                             {{ $Teacher_for_total_Total_Salary  }}
-                                            @endif
-                                        </strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <!-- End permission section -->
 
-            <!-- Start permission section -->
-            <div class="col-md-8 grid-margin stretch-card">
+            <!-- Start payment section -->
+            <div class="col-md-7 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Salary Details</h4>
                         <table id="PerHourSalary" class="display table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Payment Description</th>
-                                    <th>Time Duration for Schedule (H)</th>
-                                    <th>Payment (LKR)</th>
+                                    <th>Month</th>
+                                    <th>First name</th>
+                                    <th>Second Name</th>
+                                    <th>Total Balance (LKR)</th>
+                                    <th>Calculation</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($getMyActivity as $myData)
-                                <tr id="rmPerSalary{{ $myData->id }}">
+                                @foreach($getSalaryByTeacherByTeacher as $myData)
+                                <tr>
                                     <td>{{ $myData->today_day }}</td>
-                                    <td>{{ $myData->description }}</td>
-                                    <td>{{ $myData->Paymenent_description }}</td>
-                                    <td>{{ $myData->timeduration }}</td>
-                                    <td>{{ $myData->Paymenent }}</td>
+                                    <td>{{ $myData->first_name }}</td>
+                                    <td>{{ $myData->second_name }}</td>
+                                    <td>{{ $myData->netSumV }}.00</td>
+                                    <td>
+                                        <!-- Look calculation by This block -->
+                                            <button type="button" class="btn btn-info btn-sm h6 mr-1"
+                                                value="{{ $myData->user_id }}" value_month="{{ $myData->today_day }}" id="calDetails"
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                title="Look Calculation Process">
+                                                <i class="bi bi-calculator-fill"></i>
+                                            </button>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -158,8 +64,48 @@
                     </div>
                 </div>
             </div>
-            <!-- End permission input section -->
-            <!-- == End input sections == -->
+            <!-- End payment  section -->
+            <div class="col-md-11 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Salary Details</h4>
+                        <table id="calTbl" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Year & Month</th>
+                                    <th rowspan="2">Description</th>
+                                    <th colspan="2">Name</th>
+                                    <th colspan="4">Schedule</th>
+                                    <th rowspan="2">Additional Payment(LKR)</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" data-dt-order="disable">First</th>
+                                    <th colspan="1" data-dt-order="disable">Second</th>
+                                    <th colspan="1">Date</th>
+                                    <th colspan="1">Hour</th>
+                                    <th colspan="1">payment(LKR)</th>
+                                    <th colspan="1">Transport(LKR)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2024-04</td>
+                                    <td>Schedule</td>
+                                    <td>amal</td>
+                                    <td>xx</td>
+                                    <td>2024-04-05</td>
+                                    <td>2.00</td>
+                                    <td>200.00</td>
+                                    <td>100.00</td>
+                                    <td>100.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- == End  sections == -->
         </div>
     </div>
 
@@ -295,6 +241,62 @@
                     }
                 });
             });
+            /**
+             * 
+             */
+                $(document).on('click', '#calDetails', function () {
+                    var value = $(this).attr('value');
+                    var value_month = $(this).attr('value_month');
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/administrativehub/teacher_salary_cal_details",
+                        data: {
+                            value: value,
+                            value_month: value_month
+                        },
+                        beforeSend: function (xhr) {
+                                    xhr.setRequestHeader('X-CSRF-TOKEN', $(
+                                        "meta[name='csrf-token']").attr(
+                                        'content'));
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.length > 0) {
+                                        var item = response[
+                                            0
+                                        ];
+                                        $('#staff').text(item.name);
+                                        $('#staff_chat').text(item.chat_staff);
+                                        if (item.name == null) {
+                                            $('#time_of_staff').text("");
+                                        } else {
+                                            $('#time_of_staff').text(item
+                                                .chat_time);
+                                        }
+                                        $('#teacher').text(item.first_name + ' ' +
+                                            item
+                                            .second_name);
+                                        $('#teacher_chat').text(item.chat_teacher);
+                                        if (item.first_name == null) {
+                                            $('#time_of_teacher').text("");
+                                        } else {
+                                            $('#time_of_teacher').text(item
+                                                .chat_time);
+                                        }
+                                    } else {
+                                        $('#staff').text("none");
+                                        $('#staff_chat').text("none");
+                                        $('#time_of_staff').text("--");
+                                        $('#teacher').text("none");
+                                        $('#teacher_chat').text("none");
+                                        $('#time_of_teacher').text("--");
+                                    }
+
+                        }
+                    });
+                });
+
             //alert();
             /*
              >> Insert function of Alert Section

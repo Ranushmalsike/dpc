@@ -103,10 +103,14 @@
             <li class="nav-item dropdown  d-flex">
               <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-toggle="dropdown">
                 <i class="typcn typcn-bell mr-0"></i>
-                <span class="count bg-danger">2</span>
+                <span class="count bg-danger">
+                 {{ $summery_new_notification_count }}
+                </span>
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
                 <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+               @if ($summery_new_notification !== 'none')
+                @foreach($summery_new_notification as $notif)
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-success">
@@ -114,13 +118,18 @@
                     </div>
                   </div>
                   <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                   ID : <strong> {{ $notif->summery_id }} </strong>
+                   <br>
+                   column number : <strong> {{ $notif->Column_id+1 }} </strong>
+                    <h6 class="preview-subject font-weight-normal"> {{ Str::limit($notif->chat_person, 10) }} </h6>
                     <p class="font-weight-light small-text mb-0">
-                      Just now
+                      {{ $notif->chat_time }}
                     </p>
                   </div>
                 </a>
-                <a class="dropdown-item preview-item">
+                 @endforeach
+                @endif
+                <!-- <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-warning">
                       <i class="typcn typcn-cog mx-0"></i>
@@ -145,22 +154,22 @@
                       2 days ago
                     </p>
                   </div>
-                </a>
+                </a> -->
               </div>
             </li>
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle  pl-0 pr-0" href="#" data-toggle="dropdown" id="profileDropdown">
                 <i class="typcn typcn-user-outline mr-0"></i>
                 <span class="nav-profile-name">
-                  {{-- { { auth()->user()->name }} --}}
+                {{ auth()->user()->name }}
                 </span>
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                <a class="dropdown-item">
+                <a class="dropdown-item" href="{{ route('addPrivateDataUserBy_teacher') }}">
                 <i class="typcn typcn-cog text-primary"></i>
                 Settings
                 </a>
-                <a class="dropdown-item">
+                <a class="dropdown-item" href="{{ route('logout') }}">
                 <i class="typcn typcn-power text-primary"></i>
                 Logout
                 </a>
@@ -295,7 +304,7 @@
             </div>
             <div class="collapse" id="charts">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{ route('credit') }}">credit</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{ route('credit') }}">Credit</a></li>
               </ul>
             </div>
           </li>
@@ -308,17 +317,7 @@
             </a>
             <div class="collapse" id="tables">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="#">Salary by month</a></li>
-              </ul>
-            </div>
-            <div class="collapse" id="tables">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="#">Salary by Year</a></li>
-              </ul>
-            </div>
-            <div class="collapse" id="tables">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="#">Attendance</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{ route('bySalaryOfTeachers') }}">Salary by month</a></li>
               </ul>
             </div>
           </li>

@@ -62,6 +62,10 @@ Route::group(['prefix' => '/administrativehub'], function () {
     Route::POST('/summery_for_chat', [pgControll::class, 'summery_for_chat'])->name('summery_for_chat');
     Route::POST('/summery_recommendedTeacher', [pgControll::class, 'summery_recommendedTeacher'])->name('summery_recommendedTeacher');
     Route::get('/summery_for_teacher', [pgControll::class, 'summery_for_teacher'])->name('summery_for_teacher');
+    Route::get('/addPrivateDataUserBy_teacher', [pgControll::class, 'addPrivateDataUserBy_teacher'])->name('addPrivateDataUserBy_teacher');
+    Route::get('/logout', [pgControll::class, 'logout'])->name('logout');
+    Route::get('/bySalaryOfTeachers', [pgControll::class, 'bySalaryOfTeachers'])->name('bySalaryOfTeachers');
+    Route::get('/teacher_salary_cal_details', [pgControll::class, 'teacher_salary_cal_details'])->name('teacher_salary_cal_details');
    
 });
 
@@ -125,6 +129,7 @@ Route::group(['prefix' => '/administrativehub/edit'], function () {
     Route::POST('/schedule_edit/schedule/', [updateData::class, 'schedule_edit'])->name('schedule_edit.Update');
     Route::GET('/setDefaultSalaryBand/{id}', [updateData::class, 'setDefaultSalaryBand'])->name('setDefaultSalaryBand.Update');
     Route::POST('/Update_percentage', [updateData::class, 'Update_percentage'])->name('Update_percentage.Update');
+    Route::POST('/ownChangePassword', [updateData::class, 'ownChangePassword'])->name('ownChangePassword.Update');
 });
 
 

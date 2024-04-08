@@ -428,10 +428,16 @@ public function selected_teacher(Request $request) {
  */
 public function chat_input(Request $request){
     $getSessionID = auth()->user()->id;
-    if(auth()->user()->roleType == 'admin' || auth()->user()->roleType == 'staff'){
+
+    $getrole = User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
+    ->select('user_roles.roleType')
+    ->where('users.id', $getSessionID)
+    ->first();
+
+    if($getrole->roleType == 'admin' || $getrole->roleType == 'staff'){
         try {
         chat_of_summery::insert(
-        ['summery_id' => $request->idOfRow, 'chat_staff'=> $request->chatInput, 'staff_id'=> $getSessionID, 'Column_id'=> $request->columnNumberOfRow]
+        ['summery_id' => $request->idOfRow, 'chat_staff'=> $request->chatInput, 'staff_id'=> $getSessionID,'staff_id_view'=> 1, 'Column_id'=> $request->columnNumberOfRow]
         );
         return response()->json(['success' => true, 'message' => 'Data send successfully']);
     } catch (\Throwable $th) {
@@ -442,7 +448,7 @@ public function chat_input(Request $request){
     else{
   try {
         chat_of_summery::insert(
-        ['summery_id' => $request->idOfRow, 'chat_teacher'=> $request->chatInput, 'teacher_id'=> $getSessionID, 'Column_id'=> $request->columnNumberOfRow]
+        ['summery_id' => $request->idOfRow, 'chat_teacher'=> $request->chatInput, 'teacher_id'=> $getSessionID,'teacher_id_view' => 1, 'Column_id'=> $request->columnNumberOfRow]
         );
         return response()->json(['success' => true, 'message' => 'Data send successfully']);
     } catch (\Throwable $th) {

@@ -253,6 +253,7 @@
                                     <td>{{ $summery_data->month_of_summery }}</td>
                                     <td>
                                         {{ $summery_data->summery_col_1 }}
+                                        
                                        <hr>
                                         <progress id="file" value="{{ $summery_data->Percentage_sum_co_1 }}" max="100">
                                              </progress>
@@ -303,7 +304,7 @@
                                     <td>
                                         {{ $summery_data->summery_col_7 }}
                                         <hr>
-                                        <progress id="file" value=" {{ $summery_data->Percentage_sum_co_7 }}" max="100">
+                                        <progress id="file" value="{{ $summery_data->Percentage_sum_co_7 }}" max="100">
                                             </progress>
                                             <strong>{{ $summery_data->Percentage_sum_co_7 }}%</strong>
 
@@ -445,6 +446,7 @@
          * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Process of this page by ajax
          */
         $(document).ready(function () {
+           
 
             //==========>> Data table
             $('#summery_table').DataTable({
@@ -567,9 +569,9 @@
                                 },
                                 dataType: 'json',
                                 success: function (response) {
-                                    console.log(
-                                        response
-                                    );
+                                    // console.log(
+                                    //     response
+                                    // );
 
                                     if (response.length > 0) {
                                         var item = response[

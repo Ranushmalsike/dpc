@@ -18,8 +18,10 @@ return new class extends Migration
             $table->dateTime('chat_time')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->text('chat_staff')->nullable();
             $table->bigInteger('staff_id')->nullable();
+            $table->tinyInteger('staff_id_view')->default(0);
             $table->text('chat_teacher')->nullable();
             $table->bigInteger('teacher_id')->nullable();
+            $table->tinyInteger('teacher_id_view')->default(0);
             $table->tinyInteger('Column_id');
             $table->timestamps();
             // $table->unsignedBigInteger('summery_id');

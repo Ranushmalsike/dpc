@@ -56,13 +56,15 @@ class pgControll extends Controller
         $admintb = User::all();
         $permissionTB = permissionPage::all();
         $userRole = userRole::all();
-        $proccessTypeData = credit_d3::all();
-
+        $proccessTypeData = credit_d3::all();      
         return view('adm.homeStaff', compact('admintb', 'permissionTB', 'userRole', 'proccessTypeData'));
     }
 
     //Administrative section of route 
     public function administrativehub(){
+        $which_roletype_of_user = $this->generallyInfo->which_role_for_user();
+
+        if($which_roletype_of_user->roleType == "staff" || $which_roletype_of_user->roleType == "admin"){
         $salarySummaries = salary_summary_by_month::all(); // Fetch all records from the view
         $loanForMonth = $this->generallyInfo->monthLoanTotal();
          $admin_Confirmed_all_session_of_month_for_admin = $this->teacher_task_info->admin_Confirmed_all_session_of_month_for_admin();
@@ -72,7 +74,8 @@ class pgControll extends Controller
          $month_total_loan = $this->generallyInfo->month_total_loan();
          $month_total_additional_allowance = $this->generallyInfo->month_total_additional_allowance();
          $rank_with_month_salary_of_teacher = $this->generallyInfo->rank_with_month_salary_of_teacher();
-        return view('layout.home', compact(
+                  return view('layout.home', compact(
+            'which_roletype_of_user',
             'salarySummaries', 
             'loanForMonth', 
             'admin_Confirmed_all_session_of_month_for_admin',
@@ -81,11 +84,46 @@ class pgControll extends Controller
             'get_allSalary_for_previous_month',
             'month_total_loan',
             'month_total_additional_allowance',
-            'rank_with_month_salary_of_teacher'
+            'rank_with_month_salary_of_teacher',
         ));
+        }else if($which_roletype_of_user->roleType == "teacher"){
+         $get_teacher_loan_info = $this->teacher_task_info->howmany_loan_get_teacher_in_this_month();
+         $get_teacher_schedule = $this->teacher_task_info->count_teacher_scheduled_throughOn_teacher();
+         $get_teacher_schedule_confrimed = $this->teacher_task_info->count_teacher_confirmed_scheduled_throughOn_teacher();
+        //  $get_allSalary_for_this_month_tacher = $this->teacher_task_info->get_allSalary_for_this_month_tacher();
+         $get_get_balance_of_loan_teacher_thisMonth = $this->teacher_task_info->get_balance_of_loan_teacher_thisMonth();
+         
+        //-----
+        $getTotalCompleted_task = $this->teacher_task_info->Teacher_for_total_Completed_Task(); // completed Task
+        $getTotalAdditionalTask = $this->teacher_task_info->Teacher_for_total_additional_Task(); // additional Task
+        $getTotalReceived_task = $this->teacher_task_info->Teacher_for_total_Received_Task(); //month for task
+        $getTotalSchedule_calculationForMonth = $this->teacher_task_info->Teacher_for_total_Schedule_calculation(); //month for task
+        $Teacher_for_total_Additional_Allowance_Task = $this->teacher_task_info->Teacher_for_total_Additional_Allowance_Task(); //month for task
+        $Teacher_for_total_trp_Task = $this->teacher_task_info->Teacher_for_total_trp_Task(); //month for task
+        $Teacher_for_total_Allowance_Task = $this->teacher_task_info->Teacher_for_total_Allowance_Task(); //month for task
+        $Teacher_for_total_credit_Task = $this->teacher_task_info->Teacher_for_total_credit_Task(); //month for task
+        $Teacher_for_total_Total_Salary = $this->teacher_task_info->Teacher_for_total_Total_Salary(); //month for task
+            
+    return view('layout.home', compact(
+                    'which_roletype_of_user',
+                    'get_teacher_loan_info',
+                    'get_teacher_schedule',
+                    'get_teacher_schedule_confrimed',
+                    'get_get_balance_of_loan_teacher_thisMonth',
+                    'getTotalCompleted_task',
+                    'getTotalAdditionalTask',
+                    'getTotalReceived_task',
+                    'getTotalSchedule_calculationForMonth',
+                    'Teacher_for_total_Additional_Allowance_Task',
+                    'Teacher_for_total_trp_Task',
+                    'Teacher_for_total_Allowance_Task',
+                    'Teacher_for_total_credit_Task',
+                    'Teacher_for_total_Total_Salary'
+        ));
+        }
     }
 
-
+    
     // This function is responsible for  class and subject. It is part of the administrative functionalities.
     public function administrativehubClassAndSubject(){
         $getClassData = classTb::all();
@@ -142,8 +180,26 @@ class pgControll extends Controller
                 'user_privet_datas.contact_number',
             )
             ->get();
-           
-        return view('layout.addPrivateData', compact('getData'));
+        $which_roletype_of_user = $this->generallyInfo->which_role_for_user();
+        return view('layout.addPrivateData', compact('getData', 'which_roletype_of_user'));
+        
+    }    
+    //Add own private details by teacher
+    public function addPrivateDataUserBy_teacher(){
+        $user_id = auth()->user()->id;
+        $getData = User::join('user_privet_datas', 'users.id', '=', 'user_privet_datas.user_id')
+            ->where('users.id', '=', $user_id)
+            ->select('users.name', 
+                'user_privet_datas.user_id',
+                'user_privet_datas.first_name',
+                'user_privet_datas.second_name',
+                'user_privet_datas.address',
+                'user_privet_datas.NIC',
+                'user_privet_datas.contact_number',
+            )
+            ->get();
+        $which_roletype_of_user = $this->generallyInfo->which_role_for_user();
+        return view('layout.addPrivateData', compact('getData', 'which_roletype_of_user'));
         
     }    
 
@@ -259,7 +315,7 @@ class pgControll extends Controller
                 'users.password', // Ensure the password is selected for authentication check
                 'user_privet_datas.first_name',
                 'user_privet_datas.second_name',
-                'user_roles.roleType'
+                'user_roles.roleType as roleType'
             )
             ->where('users.name', $request->user_name) // Assuming 'users.name' is the correct column
             ->first();
@@ -332,6 +388,26 @@ public function summery_for_chat(Request $request) {
     try {
     $summeryId = $request->id;  
     $columnId = $request->cellIndex; 
+    // dd($columnId);
+    $getSessionID = auth()->user()->id;
+    
+    $query = "CALL Update_chat_of_summery(:summeryId, :columnId, :getSessionID)";
+
+        $bind = [
+            'summeryId' => $summeryId,
+            'columnId' => $columnId,
+            'getSessionID' => $getSessionID
+        ];
+
+        DB::beginTransaction();
+        try {
+            DB::statement($query, $bind);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Handle the exception
+        }
+
     $chats = chat_of_summery::leftJoin('users', 'chat_of_summeries.staff_id', '=', 'users.id')
     ->leftJoin('user_privet_datas', 'chat_of_summeries.teacher_id', '=', 'user_privet_datas.user_id')
     ->select('chat_of_summeries.chat_time as chat_time', 'chat_of_summeries.chat_staff as chat_staff', 'users.name as name', 'chat_of_summeries.chat_teacher as chat_teacher', 'user_privet_datas.first_name as first_name', 'user_privet_datas.second_name as second_name')
@@ -366,9 +442,76 @@ public function summery_for_teacher() {
     return view('layout.teacher_summery', compact('summery_view_for_teacher'));
     
 }
+/**
+ * Logout
+ */
+public function logout() {
+    Auth::logout();
+    return redirect('login.login');
 }
+/**
+ * teacher all salary -to summery
+ */
+public function bySalaryOfTeachers(){
+    $getSalaryByTeacherByTeacher = $this->teacher_task_info->getSalaryByTeacherByTeacher();    
+    return view('layout.salary_summery_month', compact('getSalaryByTeacherByTeacher'));
+}
+/**
+ * Teacher salary cal details
+ */
+public function teacher_salary_cal_details(Request $request){
+  
+    //dd($getSessionID);
 
+    $data = how_gen_salary::where('how_gen_salaries.user_id', $request->value)
+        ->whereRaw("DATE_FORMAT(how_gen_salaries.today_day, '%Y-%m') = $request->value_month")
+        ->leftJoin('user_privet_datas', 'how_gen_salaries.user_id', '=', 'user_privet_datas.user_id')
+        ->leftJoin('schedul_cals', 'how_gen_salaries.schedule_id', '=', 'schedul_cals.schedule_id_of_cal_gen')
+        ->leftJoin('allowance_for_users', function ($join) {
+            $join->on('how_gen_salaries.user_id', '=', 'allowance_for_users.user_id')
+                ->whereRaw("DATE_FORMAT(allowance_for_users.define_month, '%Y-%m') = DATE_FORMAT(how_gen_salaries.today_day, '%Y-%m')");
+        })
+        ->leftJoin('allowance_tbs', 'allowance_for_users.allowance_id', '=', 'allowance_tbs.id')
+        ->leftJoin('transpoer_price_details', 'how_gen_salaries.trp_transport_id', '=', 'transpoer_price_details.id')
+        ->leftJoin('additional_allowances', 'how_gen_salaries.additional_allowance_id', '=', 'additional_allowances.id')
+        ->leftJoin('credit_t_b_d2s', 'how_gen_salaries.credit_id', '=', 'credit_t_b_d2s.id')
+        ->select(
+            'how_gen_salaries.id',
+            'how_gen_salaries.today_day',
+            'how_gen_salaries.description',
+            'user_privet_datas.first_name',
+            'user_privet_datas.second_name',
+            'schedul_cals.salary_on_schedul',
+            DB::raw("CASE
+            WHEN schedul_cals.time_duration != 0 AND schedul_cals.time_duration IS NOT NULL THEN schedul_cals.time_duration
+            ELSE 'None'
+            END AS `timeduration`"),
+            DB::raw("CASE 
+            WHEN how_gen_salaries.schedule_id != NULL OR how_gen_salaries.schedule_id != 0 THEN
+            'Schedule'
+            WHEN DATE_FORMAT(allowance_for_users.define_month, '%Y-%m') = DATE_FORMAT(how_gen_salaries.today_day, '%Y-%m') AND how_gen_salaries.user_id = allowance_for_users.user_id THEN
+            'Allowance'
+            WHEN how_gen_salaries.trp_transport_id != 0 OR how_gen_salaries.trp_transport_id != NULL THEN
+            'Transport'
+            WHEN how_gen_salaries.additional_allowance_id != 0 OR how_gen_salaries.additional_allowance_id != NULL THEN
+            'Additional Allowance'
+            END AS `Paymenent_description`"),
+            DB::raw("CASE 
+            WHEN how_gen_salaries.schedule_id != NULL OR how_gen_salaries.schedule_id != 0 THEN
+            schedul_cals.salary_on_schedul
+            WHEN DATE_FORMAT(allowance_for_users.define_month, '%Y-%m') = DATE_FORMAT(how_gen_salaries.today_day, '%Y-%m') AND how_gen_salaries.user_id = allowance_for_users.user_id THEN
+            allowance_tbs.allowance
+            WHEN how_gen_salaries.trp_transport_id != 0 OR how_gen_salaries.trp_transport_id != NULL THEN
+            transpoer_price_details.transport_price
+            WHEN how_gen_salaries.additional_allowance_id != 0 OR how_gen_salaries.additional_allowance_id != NULL THEN
+            additional_allowances.allowance_amount
+            END AS `Paymenent`")
+        )
+        ->get();
 
+return response()->json($data);
+}
+}
 
 
 
@@ -711,6 +854,17 @@ public function summery_view_for_teacher(){
         )
     ->get();
 }
+/***
+ * Identify which role of user
+ */
+public function which_role_for_user() {
+     $getSessionID = auth()->user()->id;
+    return User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
+    ->select('user_roles.roleType')
+    ->where('users.id', $getSessionID)
+    ->first();
+}
+
 }
 /**
  * ================================================================================
@@ -776,6 +930,141 @@ public function admin_Confirmed_all_session_of_month_for_admin() {
 // confirmed all session of month for admin
 public function admin_GetFullScheduleOfMonth_all() {
    return $timesedule_MonthOf = DB::select("SELECT GetFullScheduleOfMonth(?) AS timesedule_MonthOf", [$this->year_month])[0]->timesedule_MonthOf;
+}
+/**
+ * which loan get in this month -- teacher
+ */
+public function howmany_loan_get_teacher_in_this_month() {
+     $user_id = auth()->user()->id;
+     $year_month = date("Y-m"); 
+
+    return creditTB_d1::select('amount', 'provide_date')
+    ->where('user_id', $user_id)
+    ->whereRaw("DATE_FORMAT(provide_date, '%Y-%m') = ?", $year_month)
+    ->get();
+}
+/**
+ * count and get how many sheduled for relavent teacher
+ */
+public function count_teacher_scheduled_throughOn_teacher(){
+     $user_id = auth()->user()->id;     
+
+  return DB::select("SELECT get_count_teacher_schedule(?, ?) AS count_result", [$user_id, $this->year_month])[0]->count_result;
+
+}
+/**
+ * count and get how many confirmed sheduled for relavent teacher
+ */
+public function count_teacher_confirmed_scheduled_throughOn_teacher(){
+     $user_id = auth()->user()->id;
+
+  return DB::select("SELECT get_confirmed_transfers_count(?, ?) AS count_result", [$user_id, $this->year_month])[0]->count_result;
+
+}
+/***
+ * get loan this month -- teacher
+ */
+public function get_balance_of_loan_teacher_thisMonth(){
+     $user_id = auth()->user()->id;
+     
+    return DB::table('credit_t_b_d1s')
+    ->select('amount', 'provide_date')
+    ->where('user_id', $user_id)
+    ->get();
+}
+/**
+ * get salary schedule --teacher
+ */
+public function getSalaryByTeacherByTeacher(){
+    return DB::select("
+WITH name_ofuser AS (
+    SELECT
+        prvs.user_id,
+        prvs.first_name,
+        prvs.second_name
+    FROM
+        how_gen_salaries hgs
+        JOIN user_privet_datas prvs ON hgs.user_id = prvs.user_id
+),
+schedulex AS (
+    SELECT
+        hgs.user_id,
+        DATE_FORMAT(hgs.today_day, '%Y-%m') AS year_monthof,
+        COALESCE(SUM(sc.salary_on_schedul), 0.00) AS scheduleV
+    FROM 
+        how_gen_salaries hgs
+        LEFT JOIN schedul_cals sc ON hgs.schedule_id = sc.id
+    GROUP BY 
+        hgs.user_id,
+        DATE_FORMAT(hgs.today_day, '%Y-%m')
+),
+allowance AS (
+    SELECT 
+        afu.user_id,
+        DATE_FORMAT(afu.define_month, '%Y-%m') AS year_monthof,
+        COALESCE(SUM(at.allowance), 0.00) AS allowanceV
+    FROM 
+        allowance_for_users afu
+        LEFT JOIN allowance_tbs at ON afu.allowance_id = at.id
+    GROUP BY 
+        afu.user_id,
+        DATE_FORMAT(afu.define_month, '%Y-%m')
+),
+additional_allowance AS (
+    SELECT 
+        hgs.user_id,
+        DATE_FORMAT(hgs.today_day, '%Y-%m') AS year_monthof,
+        COALESCE(SUM(aa.allowance_amount), 0.00) AS additional_allowance_V
+    FROM 
+        how_gen_salaries hgs
+        LEFT JOIN additional_allowances aa ON hgs.additional_allowance_id = aa.id
+    GROUP BY 
+        hgs.user_id,
+        DATE_FORMAT(hgs.today_day, '%Y-%m')
+),
+transport AS (
+    SELECT 
+        hgs.user_id,
+        DATE_FORMAT(hgs.today_day, '%Y-%m') AS year_monthof,
+        COALESCE(SUM(tpd.transport_price), 0.00) AS transportV
+    FROM 
+        how_gen_salaries hgs
+        LEFT JOIN transpoer_price_details tpd ON hgs.trp_transport_id = tpd.id
+    GROUP BY 
+        hgs.user_id,
+        DATE_FORMAT(hgs.today_day, '%Y-%m')
+),
+credit AS (
+    SELECT 
+        hgs.user_id,
+        DATE_FORMAT(hgs.today_day, '%Y-%m') AS year_monthof,
+        COALESCE(SUM(ctbd.installment), 0.00) AS installmentSumV
+    FROM 
+        how_gen_salaries hgs
+        LEFT JOIN credit_t_b_d2s ctbd ON hgs.credit_id = ctbd.id
+    GROUP BY 
+        hgs.user_id,
+        DATE_FORMAT(hgs.today_day, '%Y-%m')
+)
+SELECT 
+    hgs.user_id,
+    nu.first_name,
+    nu.second_name,
+    DATE_FORMAT(hgs.today_day, '%Y-%m') as today_day,
+    ((sch.scheduleV + al.allowanceV + adal.additional_allowance_V + tr.transportV) - (cr.installmentSumV)) AS netSumV
+FROM 
+    how_gen_salaries hgs
+    LEFT JOIN name_ofuser nu ON hgs.user_id = nu.user_id
+    LEFT JOIN schedulex sch ON hgs.user_id = sch.user_id AND DATE_FORMAT(hgs.today_day, '%Y-%m') = sch.year_monthof
+    LEFT JOIN allowance al ON hgs.user_id = al.user_id AND DATE_FORMAT(hgs.today_day, '%Y-%m') = al.year_monthof
+    LEFT JOIN additional_allowance adal ON hgs.user_id = adal.user_id AND DATE_FORMAT(hgs.today_day, '%Y-%m') = adal.year_monthof
+    LEFT JOIN transport tr ON hgs.user_id = tr.user_id AND DATE_FORMAT(hgs.today_day, '%Y-%m') = tr.year_monthof
+    LEFT JOIN credit cr ON hgs.user_id = cr.user_id AND DATE_FORMAT(hgs.today_day, '%Y-%m') = cr.year_monthof
+ORDER BY 
+    hgs.user_id, 
+    DATE_FORMAT(hgs.today_day, '%Y-%m'),
+    netSumV
+");
 }
 
 }

@@ -4,164 +4,11 @@
 <div class="main-panel">
     <div class="content-wrapper">
         <div class="row">
-            <!-- Confirm Section for admin -->
-            <div class="col-lg-12 d-flex grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex flex-wrap justify-content-between">
-                            <h4 class="card-title mb-3">Confirm section</h4>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <img class="img-sm rounded-circle mb-md-0 mr-2"
-                                                    src="{{ asset('assets/adminHub/images/faces/face30.png') }}"
-                                                    alt="profile image">
-                                                <div>
-                                                    <div> Company</div>
-                                                    <div class="font-weight-bold mt-1">volkswagen</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            Budget
-                                            <div class="font-weight-bold  mt-1">$2322 </div>
-                                        </td>
-                                        <td>
-                                            Status
-                                            <div class="font-weight-bold text-success  mt-1">88% </div>
-                                        </td>
-                                        <td>
-                                            Deadline
-                                            <div class="font-weight-bold  mt-1">07 Nov 2019</div>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-secondary">edit actions</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <img class="img-sm rounded-circle mb-md-0 mr-2"
-                                                    src="{{ asset('assets/adminHub/images/faces/face31.png') }}"
-                                                    alt="profile image">
-                                                <div>
-                                                    <div> Company</div>
-                                                    <div class="font-weight-bold  mt-1">Land Rover</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            Budget
-                                            <div class="font-weight-bold  mt-1">$12022 </div>
-                                        </td>
-                                        <td>
-                                            Status
-                                            <div class="font-weight-bold text-success  mt-1">70% </div>
-                                        </td>
-                                        <td>
-                                            Deadline
-                                            <div class="font-weight-bold  mt-1">08 Nov 2019</div>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-secondary">edit actions</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <img class="img-sm rounded-circle mb-md-0 mr-2"
-                                                    src="{{ asset('assets/adminHub/images/faces/face32.png') }}"
-                                                    alt="profile image">
-                                                <div>
-                                                    <div> Company</div>
-                                                    <div class="font-weight-bold  mt-1">Bentley </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            Budget
-                                            <div class="font-weight-bold  mt-1">$8,725</div>
-                                        </td>
-                                        <td>
-                                            Status
-                                            <div class="font-weight-bold text-success  mt-1">87% </div>
-                                        </td>
-                                        <td>
-                                            Deadline
-                                            <div class="font-weight-bold  mt-1">11 Jun 2019</div>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-secondary">edit actions</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <img class="img-sm rounded-circle mb-md-0 mr-2"
-                                                    src="{{ asset('assets/adminHub/images/faces/face33.png') }}"
-                                                    alt="profile image">
-                                                <div>
-                                                    <div> Company</div>
-                                                    <div class="font-weight-bold  mt-1">Morgan </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            Budget
-                                            <div class="font-weight-bold  mt-1">$5,220 </div>
-                                        </td>
-                                        <td>
-                                            Status
-                                            <div class="font-weight-bold text-success  mt-1">65% </div>
-                                        </td>
-                                        <td>
-                                            Deadline
-                                            <div class="font-weight-bold  mt-1">26 Oct 2019</div>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-secondary">edit actions</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <img class="img-sm rounded-circle mb-md-0 mr-2"
-                                                    src="{{ asset('assets/adminHub/images/faces/face34.png') }}"
-                                                    alt="profile image">
-                                                <div>
-                                                    <div> Company</div>
-                                                    <div class="font-weight-bold  mt-1">volkswagen</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            Budget
-                                            <div class="font-weight-bold  mt-1">$2322 </div>
-                                        </td>
-                                        <td>
-                                            Status
-                                            <div class="font-weight-bold text-success mt-1">88% </div>
-                                        </td>
-                                        <td>
-                                            Deadline
-                                            <div class="font-weight-bold  mt-1">07 Nov 2019</div>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-secondary">edit actions</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
-
+        <!--========================= staff or admin section ===================-->
+        @if($which_roletype_of_user->roleType == "staff" || $which_roletype_of_user->roleType == "admin")
+       
         <div class="row  mt-3">
             {{-- chart Section --}}
             <div class="col-xl-7 d-flex grid-margin stretch-card">
@@ -264,7 +111,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-wrap justify-content-between">
-                            <h4 class="card-title mb-3">Compare salary</h4>
+                            <h4 class="card-title mb-3">Compare Payment</h4>
                         </div>
                         <div class="row">
                             <div class="col-12">
@@ -376,7 +223,185 @@
                 </div>
             </div>
         </div>
+        <!--================================== Teacher section ===========================-->
+        @elseif($which_roletype_of_user->roleType == "teacher")
+        
+        <div class="row  mt-3">
+            {{-- chart Section --}}
+            <div class="col-xl-5 d-flex grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                     
+                    <br>
+                    <center>
+                        <h2>
+                            <u>
+                                @php
+                                echo date("Y") ."/". date("m");
+                                @endphp
+                            </u>
+                        </h2>
+                    </center>
+                    <div class="card-body">
+                        <table border="0">
+                            <tbody>
+                                <tr>
+                                    <td>Received Total Schedule :</td>
+                                    <td style="text-align: right;">
+                                        @if($getTotalReceived_task)
+                                        {{ $getTotalReceived_task }}
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Completed Total Schedule :</td>
+                                    <td style="text-align: right;">
+                                        @if($getTotalCompleted_task)
+                                        {{ $getTotalCompleted_task }}
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Completed Additional Schedule :</td>
+                                    <td style="text-align: right;">
+                                        @if($getTotalAdditionalTask)
+                                        {{ $getTotalAdditionalTask}}
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <hr>
+                                        Schedule calculation (+) :</td>
+                                    <td style="text-align: right;">
+                                    <hr>
+                                        @if($getTotalSchedule_calculationForMonth)
+                                        {{ $getTotalSchedule_calculationForMonth }}
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Total Allowance (+) :</td>
+                                    <td style="text-align: right;">
+                                        @if($Teacher_for_total_Allowance_Task )
+                                        {{ $Teacher_for_total_Allowance_Task   }}
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Total Transport (+) :</td>
+                                    <td style="text-align: right;">
+                                        @if($Teacher_for_total_trp_Task)
+                                        {{ $Teacher_for_total_trp_Task }}
+                                        @endif
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    
+                                    <td>Total Additional Allowance (+) :</td>
+                                    <td style="text-align: right;">
+                                        @if($Teacher_for_total_Additional_Allowance_Task)
+                                        {{ $Teacher_for_total_Additional_Allowance_Task }}
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Credit (-):</td>
+                                    <td style="text-align: right;">
+                                        @if($Teacher_for_total_credit_Task)
+                                         {{ $Teacher_for_total_credit_Task }}
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>
+                                        <hr>
+                                        Total : </strong></td>
+                                    <td style="text-align: right;"><strong>
+                                        <hr>
+                                            @if($Teacher_for_total_Total_Salary )
+                                             {{ $Teacher_for_total_Total_Salary  }}
+                                            @endif
+                                        </strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+              
+                    </div>
+                </div>
+            </div>
+                {{-- process of This month --}}
+                    <div class="col-xl-5 d-flex grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <h4 class="card-title mb-3">Process of this month</h4>
 
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <div>Month</div>
+                                            <div class="text-muted"> 
+                                                @php
+                                        echo date("Y") ."/". date("m");
+                                        @endphp</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <div>Scheduled Task</div>
+                                            <div class="text-muted">
+                                                @if($get_teacher_schedule)
+                                                {{ $get_teacher_schedule }}
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <div>Completed Task</div>
+                                            <div class="text-muted">
+                                                @if($get_teacher_schedule_confrimed)
+                                                {{ $get_teacher_schedule_confrimed }}
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <progress id="file" value="
+                                                @if($get_teacher_schedule_confrimed)
+                                                {{ $get_teacher_schedule_confrimed }}
+                                                @endif
+                                                " max="
+                                                @if($get_teacher_schedule)
+                                                {{ $get_teacher_schedule }}
+                                                @endif
+                                                "> 32% </progress>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="row">
+                                {{-- Loan Chart --}}
+                                <div class="col-lg-8 d-flex grid-margin stretch-card">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex flex-wrap justify-content-between">
+                                                <h4 class="card-title mb-3">Loan</h4>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div>
+                                                        <canvas id="barChart_loan"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    </div>
+        @endif
     </div>
 
     <!-- content-wrapper ends -->
@@ -387,6 +412,9 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <!-- End chart js -->
+
+    <!--============= staff section ====================-->
+     @if($which_roletype_of_user->roleType == "staff" || $which_roletype_of_user->roleType == "admin")
     <script>
         // Assuming $salarySummaries is passed to the Blade view
         const salaryData = @json($salarySummaries -> pluck('groupnetSumV'));
@@ -497,5 +525,41 @@
         });
 
     </script>
+
+    <!--=================== teacher section ================================-->
+    @elseif($which_roletype_of_user->roleType == "teacher")
+    <script>
+        // Assuming $salarySummaries is passed to the Blade view
+        const date_and_year = @json($get_get_balance_of_loan_teacher_thisMonth -> pluck('provide_date'));
+        const credit_month = @json($get_get_balance_of_loan_teacher_thisMonth -> pluck('amount'));
+
+    </script>
+    <script>
+    
+
+        // Loan section
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const loanData = {
+                labels: date_and_year, // Example labels
+                datasets: [{
+                    label: 'Number of Loans',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: credit_month, // Example data
+                }]
+            };
+
+            const config_loan = {
+                type: 'bar',
+                data: loanData,
+                options: {}
+            };
+
+            const loanChartCtx = document.getElementById('barChart_loan').getContext('2d');
+            const loanChart = new Chart(loanChartCtx, config_loan);
+        });
+
+    </script>
+     @endif
     @endpush
     @endsection

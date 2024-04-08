@@ -318,5 +318,30 @@ public function setDefaultSalaryBand($id){
 }
 
 
+    /*
+    >> Staff Update
+    */
+    public function ownChangePassword(Request $request){
+        $getSessionID = auth()->user()->id;
+        //Check empty data and condition
+        $pass = $request->new_pass;
+        $this->validate($request, [
+            'new_pass' => ['required', new CustomPasswordValidation($pass), ],
+        ]);
+
+        $upd = User::findOrFail($getSessionID);
+        if(!empty($request->new_pass)){
+             $upd->password=$request->new_pass;
+        }
+         $upd->update();
+        
+    if($upd){
+            return redirect(route('addPrivateDataUserBy_teacher'))->with('success', 'Add data successful');
+     }
+        else{
+            return redirect(route('addPrivateDataUserBy_teacher'))->with('fail', 'Fail data');
+    }
+    }
+
 }
 
