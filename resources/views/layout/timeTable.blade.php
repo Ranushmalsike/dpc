@@ -1,5 +1,10 @@
 @extends('include.commonstr')
+@section('meta')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('css')
+<!-- Include Bootstrap CSS -->
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 <!-- Start Sweet alert link -->
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.min.css" rel="stylesheet">
 <!-- End Sweet alert Link -->
@@ -7,10 +12,58 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 <!-- End Bootstrap Icon CDN -->
 <style>
-  .custom-scroll {
-    max-height: 400px; /* Adjust based on your needs */
-    overflow-y: auto;
-}
+    .custom-scroll {
+        max-height: 400px;
+        /* Adjust based on your needs */
+        overflow-y: auto;
+    }
+
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%;
+        /* Could be more or less, depending on screen size */
+    }
+
+    .close-button {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
 </style>
 @endsection
 @section('content')
@@ -63,7 +116,10 @@
                             <label for="className" class="control-label">Class Name</label>
                             <select class="selectClass form-control form-control-sm rounded-0" data-rel="chosen"
                                 name="className" id="className" placeholder="select Class">
-
+                                @foreach($getClassVal as $classV)
+                                <option value="{{ $classV->id }}" data="{{ $classV->dpcclass }}">{{ $classV->dpcclass }}
+                                </option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -73,7 +129,10 @@
                             <!-- Your HTML Select2 dropdown -->
                             <select class="selectSubject form-control form-control-sm rounded-0" name="subject"
                                 id="subject" placeholder="select subject">
-
+                                @foreach($getSubjectVal as $subject)
+                                <option value="{{ $subject->id }}" data="{{ $subject->subject }}">
+                                    {{ $subject->subject }}</option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -82,7 +141,12 @@
                             <!-- Your HTML Select2 dropdown -->
                             <select class="selectTeacher form-control form-control-sm rounded-0" name="TeacherName"
                                 id="TeacherName" placeholder="select Teacher">
+                                @foreach($getTeacher as $teacher)
+                                <option value="{{ $teacher->user_id }}"
+                                    data="{{ $teacher->first_name }}  {{ $teacher->second_name }}">
+                                    {{ $teacher->first_name }} {{ $teacher->second_name }}</option>
 
+                                @endforeach
                             </select>
                         </div>
 
@@ -102,16 +166,21 @@
                 </div>
 
                 <div class="text-center">
-                  <button class="btn btn-primary" id="Generate_shedule" value="">Generate</button>
+                    <button class="btn btn-primary" id="Generate_shedule" value="" data-toggle="tooltip"
+                        data-placement="bottom" title="Generate Time arrangement by system">Generate</button>
                     <button class="btn btn-default border btn-sm rounded-0" type="reset" form="schedule-form"><i
                             class="fa fa-reset"></i> Cancel</button>
                 </div>
                 <hr />
             </div>
             <div class="col-md-8">
-              <div class="custom-scroll table-responsive">
-                <table class="table table-fixed table-hover table-striped timeSheduleTb">
-                    <thead>
+                <button type="submit" class="btn btn-success btn-sm" id="get_and_save_time_schedule"
+                    data-toggle="tooltip" data-placement="bottom" title="Time arrangement save into database">Save Time
+                    Arrangement</button>
+                <hr />
+                <div class="custom-scroll table-responsive">
+                    <table class="table table-fixed table-hover table-striped timeSheduleTb" id="schedule_details_ofTb">
+                        <thead>
                             <th>Teacher Code</th>
                             <th>Teacher Name</th>
                             <th>Date</th>
@@ -121,13 +190,14 @@
                             <th>Subject</th>
                             <th>Transport</th>
                             <th>Delete</th>
-                        
-                    </thead>
-                    <tbody id="schedule_gen_tb">
-                        
-                    </tbody>
-                </table>
-              </div>
+
+                        </thead>
+                        <tbody id="schedule_gen_tb">
+
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
             <div class="col-md-12">
                 <div id='calendar'></div>
@@ -138,7 +208,126 @@
         </div>
     </div>
 
+
+    <!-- Transport Selection Modal -->
+    <div id="transportModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Select Transport</h2>
+            <select id="transportSelect" class="form-control">
+                @foreach($getTransportInformation as $TRP)
+                <option value="{{ $TRP->id  }}">{{ $TRP->trasporot_code }} -( LKR : {{ $TRP->transport_price }} )
+                </option>
+                @endforeach
+            </select>
+            <hr>
+            <button id="saveTransport" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
+                title="Add transport code">Add</button>
+        </div>
+    </div>
+
+    <!-- Transport Selection Modal -->
+    <div id="TeacherModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <input type="text" name="" id="id_tb" disabled hidden>
+            <!-- <h5 id="Data_of_this"></h5> -->
+            <p>Transfer Date</p>
+            <input type="text" name="" id="Data_of_this" class="form-control" disabled>
+            <p>Select Teacher</p>
+            <select id="Teachers_selection_for_transfer_section" class="form-control">
+                @foreach($getTeacher as $teacher)
+                <option value="{{ $teacher->user_id }}" data="{{ $teacher->first_name }}  {{ $teacher->second_name }}">
+                    {{ $teacher->first_name }} {{ $teacher->second_name }}</option>
+                @endforeach
+            </select>
+            <hr>
+            <button id="saveTeacher" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
+                title="Add transport code">Add</button>
+        </div>
+    </div>
+
+    <!-- Edit Selection Modal -->
+    <div id="EditModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <input type="text" name="" id="get_tb_id" disabled hidden>
+            <!-- <h5 id="Data_of_this"></h5> -->
+            <div class="form-group mb-2">
+                <label for="edit_starttime" class="control-label">Start Time</label>
+                <input type="time" class="form-control form-control-sm rounded-0" name="edit_starttime" id="edit_starttime"
+                    required>
+            </div>
+
+            <div class="form-group mb-2">
+                <label for="edit_endtime" class="control-label">End Time</label>
+                <input type="time" class="form-control form-control-sm rounded-0" name="edit_endtime" id="edit_endtime" required>
+            </div>
+
+            <div class="form-group mb-2">
+                <label for="edit_className" class="control-label">Class Name</label>
+                <select class="selectClass form-control form-control-sm rounded-0" data-rel="chosen" name="edit_className"
+                    id="edit_className" placeholder="select Class">
+                    <option value="0">Select class</option>
+                    @foreach($getClassVal as $classV)
+                    <option value="{{ $classV->id }}" data="{{ $classV->dpcclass }}">{{ $classV->dpcclass }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group md-2">
+                <label for="Edit_subject" class="control-label">Subject and Schema</label>
+                <!-- Your HTML Select2 dropdown -->
+                <select class="selectSubject form-control form-control-sm rounded-0" name="Edit_subject" id="Edit_subject"
+                    placeholder="select subject">
+                    <option value="0">Select subject</option>
+                    @foreach($getSubjectVal as $subject)
+                    <option value="{{ $subject->id }}" data="{{ $subject->subject }}">
+                        {{ $subject->subject }}</option>
+                    @endforeach
+                </select>
+            <div class="form-group md-2">
+                <p>Select Transport</p>
+                <select id="Edit_transportSelect" class="form-control">
+                    <option value="bypass">Select Transport</option>
+                    <option value="0">None</option>
+                    @foreach($getTransportInformation as $TRP)
+                    <option value="{{ $TRP->id  }}">{{ $TRP->trasporot_code }} -( LKR : {{ $TRP->transport_price }} )
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            </div>
+            <hr>
+            <button id="Edit_saveTeacher" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
+                title="Add transport code">Update</button>
+        </div>
+    </div>
+
+
+
+
+    <?php
+    $sched_res = [];
+    foreach($getTimeArrangementDetails as $row10){
+        $row10['Time_arrangement_conv'] = date("F d, Y",strtotime($row10['Time_arrangement']));
+        $row10['sdate'] = date("h:i A",strtotime($row10['start_time']));
+        $row10['edate'] = date("h:i A",strtotime($row10['end_time']));
+        $sched_res[$row10['id']] = $row10;
+    }
+ ?>
+
     @push('scripts')
+    <script>
+        var timeArrangementDetails_client = $.parseJSON('<?= json_encode($sched_res) ?>')
+
+    </script>
+    <!-- Include jQuery
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+
+    <!-- Include Bootstrap JS (after jQuery) -->
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> -->
+
     <!-- content-wrapper ends -->
     <script src="{{ asset('assets/adminHub/js/file-upload.js') }}"></script>
     <script src="{{ asset('assets/adminHub/js/typeahead.js') }}"></script>
@@ -151,44 +340,41 @@
 
     <script src="{{ asset('assets/fullcalendar-6.1.11/dist/index.global.js') }}"></script>
     <script src="{{ asset('assets/js/clenderMyCode.js') }}"></script>
-    <script src="{{ asset('assets/js/schedule_arrange.js') }}"></script>
 
-    
+
+
 
     <!-- // Start Sweet model script link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
     <!-- // End Sweet Alert script link -->
 
+    {{-- My Script --}}
+    <script src="{{ asset('assets/js/schedule_arrange.js') }}"></script>
+    <!-- <script src="{{ asset('assets/js/disabledBackdate.js') }}"></script> -->
+
     <script>
+        function success() {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Your work has been saved",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+
+        function fail() {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+                footer: ''
+            });
+        }
+
+
         $(document).ready(function () {
 
-            // Start Alert section
-            // Success Alert
-            function success() {
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "Your work has been saved",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
-            // Fail Alert
-            function fail() {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!",
-                    footer: ''
-                });
-            }
-
-
-
-            //alert();
-            /*
-             >> Insert function of Alert Section
-            */
             @if(Session::get('success'))
             success();
             @endif

@@ -12,6 +12,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(TransportPriceDetailsTableSeeder::class);
+        $this->call(user_roles_DeraultRoles::class);
+        $this->call(AllowanceTableSeeder::class);
+        $this->call(credit_d3s::class);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

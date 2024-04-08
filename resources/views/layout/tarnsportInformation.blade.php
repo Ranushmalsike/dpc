@@ -32,14 +32,14 @@
                                 <input type="text" class="form-control" id="TransportCode" name="TransportCode"
                                     placeholder="Enter Transport Code">
                             </div>
-                            <span style="color:red"> @error ('TransportCode') {{ $message }} @enderror </span>                                    
+                            <span style="color:red"> @error ('TransportCode') {{ $message }} @enderror </span>
                             <label for="TransportDescription" class="col-sm-6 col-form-label">Transport
                                 Description</label>
                             <div class="input-group mb-3">
                                 <textarea class="form-control" id="TransportDescription" name="TransportDescription"
                                     placeholder="Enter Transport Description" rows="3"></textarea>
                             </div>
-                            <span style="color:red"> @error ('TransportDescription') {{ $message }} @enderror </span>                                    
+                            <span style="color:red"> @error ('TransportDescription') {{ $message }} @enderror </span>
                             <div class="text-center">
                                 <button id="daysalrysave_158" class="btn btn-primary mt-2" value="158">Add</button>
                             </div>
@@ -73,8 +73,8 @@
                                         <div class="row">
                                             <!-- Delete -->
                                             <button type="button" class="btn btn-danger btn-sm h6 mr-1"
-                                                value="{{ $getTransportInformationD->id }}" id="delete_transportDetail" data-toggle="tooltip"
-                                                data-placement="bottom" title="Delete">
+                                                value="{{ $getTransportInformationD->id }}" id="delete_transportDetail"
+                                                data-toggle="tooltip" data-placement="bottom" title="Delete">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </div>
@@ -107,7 +107,8 @@
                                     @endforeach
                                 </select>
                             </div>
-                            {{-- <span style="color:red"> @ error ('TransportCode') { { $message }} @enderror </span>  --}}
+                            {{-- <span style="color:red"> @ error ('TransportCode') { { $message }} @enderror </span>
+                            --}}
 
                             <label for="TRPA" class="col-sm-6 col-form-label">Transport allowance</label>
                             <div class="input-group mb-3">
@@ -153,10 +154,22 @@
                                     <td>LKR {{ $getTransportPriceData->transport_price }}</td>
                                     <td>
                                         <div class="row">
+                                            <!-- Set Default -->
+                                            @if($getTransportPriceData->setDef == 0)
+                                            <button type="button" class="btn btn-info btn-sm h6 mr-1"
+                                                value="{{ $getTransportPriceData->id }}"
+                                                id="setDefault_transportDetail" data-toggle="tooltip"
+                                                data-placement="bottom" title="Set default">
+                                                <i class="bi bi-check2-all"></i>
+                                            </button>
+                                            @else
+                                            <p class="mr-1 text-success">Default</p>
+                                            @endif
+
                                             <!-- Delete -->
                                             <button type="button" class="btn btn-danger btn-sm h6 mr-1"
-                                                value="{{ $getTransportPriceData->id }}" id="delete_transportPrice" data-toggle="tooltip"
-                                                data-placement="bottom" title="Delete">
+                                                value="{{ $getTransportPriceData->id }}" id="delete_transportPrice"
+                                                data-toggle="tooltip" data-placement="bottom" title="Delete">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </div>
@@ -206,7 +219,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
     <!-- // End Sweet Alert script link -->
 
-    {{-- Start MyScript Link  --}}
+    {{-- My script --}}
+    <script src="{{ asset('assets/js/tableLinkWithdataTBl.js') }}"></script>
     <script>
         $(document).ready(function () {
 
@@ -232,59 +246,34 @@
             }
             // End Alert Section
 
-                // Start trasport table with price section
-                    $('#Trasport_detail_salary, #Trasport_detail').DataTable({
-                    "pagingType": "full_numbers",
-                    "pageLength": 5,
-                    "searching": true,
-                    "fixedHeader": true,
-                    "responsive": true,
-                    "scrollX": true,
-                    order: [
-                        [0, 'desc']
-                    ],
-                    paging: true,
-                    scrollCollapse: true,
-                    scrollY: '500px',
-                    dom: 'Blfrtip',
-                    buttons: [{
-                            extend: 'pdf',
-                            bold: 'true',
-                            fontSize: '15',
-                            title: 'Daphne Lord School (Trasport Information)',
-                            subtitle: 'Line 2 of the subtitle',
-                            exportOptions: {
-                                modifier: {
-                                    page: 'current'
-                                },
-                            }
-                        },
-                        'excel', 'print'
-                    ]
-                });
-            // End trasport table with price section
-
             // Start Delete
-            $(document).on('click', '#delete_transportDetail, #delete_transportPrice', function () {
+            $(document).on('click', '#delete_transportDetail, #delete_transportPrice, #setDefault_transportDetail', function () {
                 const thisElement = $(this); // Get the clicked element
                 const id_name = thisElement.attr('id'); // Extract the ID
                 var id = thisElement.val();
-
+                // Delete process are block 
+                if(id_name == "delete_transportDetail" || id_name =="delete_transportPrice"){
                 if (id_name == "delete_transportDetail") {
 
                     var del_URL = "/administrativehub.Trasnport_detials.delete/";
 
                 } else if (id_name == "delete_transportPrice") {
-                    
+
                     var del_URL = "/administrativehub.Trasnport_detials_price.delete/";
                 }
 
                 deleteDataOfTable(id_name, id, del_URL);
+                }
+                // Set default are process block
+                else{
+                    // alert(id);
+                    var up_URL = "/administrativehub/edit/SetDefaultTrasportCode/";
+                    setDefualt_trp(id, up_URL);
+                }
             });
 
             // >> Delete function
             function deleteDataOfTable(id_name, id, del_URL) {
-
                 Swal.fire({
                     title: "Are you sure?",
                     text: "You won't be able to delete this!",
@@ -302,12 +291,11 @@
                                 'X-CSRF-TOKEN': $("input[name=_token]").val()
                             },
                             success: function (response) {
-                                if(id_name == "delete_transportDetail"){
-                                $('#rmTransportDetail' + id).remove();
-                                location.reload();
-                               
-                                }
-                                else{
+                                if (id_name == "delete_transportDetail") {
+                                    $('#rmTransportDetail' + id).remove();
+                                    location.reload();
+
+                                } else {
                                     $('#rmTransportPrice' + id).remove();
                                 }
                                 success();
@@ -319,6 +307,34 @@
 
             }
             // End Delete
+
+            // Set Default function
+           function setDefualt_trp(id, up_URL){
+            Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to Default this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Default it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "GET",
+                            url: up_URL + id,
+                            data: {
+                                'X-CSRF-TOKEN': $("input[name=_token]").val()
+                            },
+                            success: function (response) {
+                              
+                                success();
+                                location.reload();
+                            }
+                        });
+                    }
+                });
+            }
 
             // Start Alert
             @if(Session::get('success'))

@@ -45,6 +45,7 @@ Route::group(['prefix' => '/systemMaintenance'], function () {
 */
 Route::group(['prefix' => '/administrativehub'], function () {
     Route::get('/index', [pgControll::class, 'administrativehub'])->name('administrativehub');
+    Route::POST('/login_data', [pgControll::class, 'login_data'])->name('login');
     Route::get('/Class&Subject', [pgControll::class, 'administrativehubClassAndSubject'])->name('classAndSubject');
     Route::get('/RegisterStaff', [pgControll::class, 'administrativehubRegStaffAndTeacher'])->name('RegisterStaff');
     Route::get('/permission/{id}', [pgControll::class, 'administrativehubpermission'])->name('permissionForStaffOrTeacher');
@@ -55,6 +56,16 @@ Route::group(['prefix' => '/administrativehub'], function () {
     Route::get('/additional_allowance', [pgControll::class, 'get_additional_allowance'])->name('additional_allowance');
     Route::get('/credit', [pgControll::class, 'get_creditSection'])->name('credit');
     Route::get('/TimeTableArrangement', [pgControll::class, 'TimeTableArrangement'])->name('TimeTableArrangement');
+    Route::get('/teacher_time_tableConfirm', [pgControll::class, 'teacher_time_tableConfirm'])->name('teacher_time_tableConfirm');
+    Route::get('/myActivity_salaryCal', [pgControll::class, 'myActivity_salaryCal'])->name('myActivity_salaryCal');
+    Route::get('/summery_add', [pgControll::class, 'summery_for_staff'])->name('summery_add');
+    Route::POST('/summery_for_chat', [pgControll::class, 'summery_for_chat'])->name('summery_for_chat');
+    Route::POST('/summery_recommendedTeacher', [pgControll::class, 'summery_recommendedTeacher'])->name('summery_recommendedTeacher');
+    Route::get('/summery_for_teacher', [pgControll::class, 'summery_for_teacher'])->name('summery_for_teacher');
+    Route::get('/addPrivateDataUserBy_teacher', [pgControll::class, 'addPrivateDataUserBy_teacher'])->name('addPrivateDataUserBy_teacher');
+    Route::get('/logout', [pgControll::class, 'logout'])->name('logout');
+    Route::get('/bySalaryOfTeachers', [pgControll::class, 'bySalaryOfTeachers'])->name('bySalaryOfTeachers');
+    Route::get('/teacher_salary_cal_details', [pgControll::class, 'teacher_salary_cal_details'])->name('teacher_salary_cal_details');
    
 });
 
@@ -74,6 +85,12 @@ Route::group(['prefix' => '/input'], function () {
     Route::POST('/Addallowance', [insertData::class, 'insert_allowance'])->name('Addallowance');
     Route::POST('/Addadditional_allowance', [insertData::class, 'insert_Additional_allowance'])->name('Addadditional_allowance');
     Route::POST('/creditInsert', [insertData::class, 'insert_creditSection'])->name('creditInsert');
+    Route::POST('/Add_DeleteData_from_timeArrangement', [insertData::class, 'insert_DateFromArrangeTimeTable'])->name('Add_DeleteData_from_timeArrangement');
+    Route::POST('/timeArrangement_save', [insertData::class, 'timeArrangement_save'])->name('timeArrangement_save');
+    Route::POST('/Add_summery_schema', [insertData::class, 'Add_summery_schema'])->name('Add_summery_schema');
+    Route::POST('/selected_teacher_forSummery', [insertData::class, 'selected_teacher'])->name('selected_teacher_forSummery');
+    Route::POST('/chat_input', [insertData::class, 'chat_input'])->name('chat_input');
+   
 });
 
 //Delete
@@ -89,6 +106,9 @@ Route::group(['prefix' => '/administrativehub'], function () {
     Route::GET('/allowance.delete/{id}', [deleteData::class, 'delete_allowance'])->name('allowance.delete');
     Route::GET('/additional_allowance.delete/{id}', [deleteData::class, 'delete_additional_allowance'])->name('additional_allowance.delete');
     Route::GET('/credit.delete/{id}', [deleteData::class, 'delete_Creadit'])->name('credit.delete');
+    Route::GET('/delete_TimeArrangement.delete/{id}', [deleteData::class, 'delete_TimeArrangement'])->name('delete_TimeArrangement.delete');
+    Route::GET('/delete_summery.delete/{id}', [deleteData::class, 'delete_summery'])->name('delete_summery.delete');
+    Route::GET('/delete_recommended.delete/{id}', [deleteData::class, 'delete_recommended'])->name('delete_recommended.delete');
 });
 
 
@@ -102,6 +122,14 @@ Route::group(['prefix' => '/administrativehub/edit'], function () {
     Route::GET('/updateCredit_reject_loan/{id}', [updateData::class, 'updateCredit_reject_loan'])->name('updateCredit_reject_loan.Update');
     Route::GET('/updateCredit_confirmed_loan/{id}', [updateData::class, 'updateCredit_confirmed_loan'])->name('updateCredit_confirmed_loan.Update');
     Route::GET('/updateCredit_allcompleted/{id}', [updateData::class, 'updateCredit_allcompleted'])->name('updateCredit_allcompleted.Update');
+    Route::GET('/SetDefaultTrasportCode/{id}', [updateData::class, 'setDefaultTransportPrice'])->name('SetDefaultTrasportCode.Update');
+    Route::GET('/confirmedByAdmin/schedule/{id}', [updateData::class, 'confirm_schedule'])->name('confirmedByAdmin.Update');
+    Route::GET('/resetByAdmin/schedule/{id}', [updateData::class, 'reset_schedule'])->name('resetByAdmin.Update');
+    Route::GET('/trp_schedule_Up/schedule/{id}', [updateData::class, 'trp_schedule_Up'])->name('trp_schedule_Up.Update');
+    Route::POST('/schedule_edit/schedule/', [updateData::class, 'schedule_edit'])->name('schedule_edit.Update');
+    Route::GET('/setDefaultSalaryBand/{id}', [updateData::class, 'setDefaultSalaryBand'])->name('setDefaultSalaryBand.Update');
+    Route::POST('/Update_percentage', [updateData::class, 'Update_percentage'])->name('Update_percentage.Update');
+    Route::POST('/ownChangePassword', [updateData::class, 'ownChangePassword'])->name('ownChangePassword.Update');
 });
 
 

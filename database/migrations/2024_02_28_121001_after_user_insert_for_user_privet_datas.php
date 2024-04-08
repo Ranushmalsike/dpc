@@ -32,5 +32,6 @@ return new class extends Migration
     public function down(): void
     {
         //
+        DB::unprepared('DROP TRIGGER IF EXISTS after_user_insert_for_user_privet_datas');
     }
 };

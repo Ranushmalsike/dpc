@@ -32,3 +32,4 @@ return new class extends Migration
         Schema::dropIfExists('credit_t_b_d2s');
     }
 };
+

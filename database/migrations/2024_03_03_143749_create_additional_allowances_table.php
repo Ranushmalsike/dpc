@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('additional_allowances', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id');
             $table->decimal('allowance_amount', 65, 2);
             $table->text('Description');
             $table->timestamps();

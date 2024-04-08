@@ -291,7 +291,8 @@
     <!-- // Start Sweet model script link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
     <!-- // End Sweet Alert script link -->
-    
+    {{-- My script --}}
+    <script src="{{ asset('assets/js/tableLinkWithdataTBl.js') }}"></script>
     <script>
         $(document).ready(function () {
 
@@ -317,73 +318,6 @@
             }
             // End Alert Section
 
-            /*
-            >> staff table 
-            */
-            $('#staff').DataTable({
-                "pagingType": "full_numbers",
-                "pageLength": 5,
-                "searching": true,
-                "fixedHeader": true,
-                "responsive": true,
-                "scrollX": true,
-                order: [
-                    [0, 'desc']
-                ],
-                paging: true,
-                scrollCollapse: true,
-                scrollY: '500px',
-                dom: 'Blfrtip',
-                buttons: [{
-                        extend: 'pdf',
-                        bold: 'true',
-                        fontSize: '15',
-                        title: 'Daphne Lord School (Subject And Schema Information)',
-                        subtitle: 'Line 2 of the subtitle',
-                        exportOptions: {
-                            modifier: {
-                                page: 'current'
-                            },
-                        }
-                    },
-                    'excel', 'print'
-                ]
-            });
-            // End staff table
-
-            /*
-            >> teacher table 
-            */
-            $('#teacher').DataTable({
-                "pagingType": "full_numbers",
-                "pageLength": 5,
-                "searching": true,
-                "fixedHeader": true,
-                "responsive": true,
-                "scrollX": true,
-                order: [
-                    [0, 'desc']
-                ],
-                paging: true,
-                scrollCollapse: true,
-                scrollY: '500px',
-                dom: 'Blfrtip',
-                buttons: [{
-                        extend: 'pdf',
-                        bold: 'true',
-                        fontSize: '15',
-                        title: 'Daphne Lord School (Subject And Schema Information)',
-                        subtitle: 'Line 2 of the subtitle',
-                        exportOptions: {
-                            modifier: {
-                                page: 'current'
-                            },
-                        }
-                    },
-                    'excel', 'print'
-                ]
-            });
-            //End  teacher Table
 
             /*
             >>Edit for staff
@@ -423,7 +357,7 @@
             $(document).on('click', '#delete_staff', function () {
                 // Get the value of the clicked button
                 var id = $(this).val();
-                var del_URL = "/administrativehub.staff.delete/";
+                var del_URL = "/administrativehub/staff.delete/";
                 var what_function = "staff";
                 deleteDataOfTable(id, del_URL, what_function);
             });
@@ -433,7 +367,7 @@
             $(document).on('click', '#delete_teacher', function () {
                 // Get the value of the clicked button
                 var id = $(this).val();
-                var del_URL = "administrativehub.teacher.delete/";
+                var del_URL = "administrativehub/teacher.delete/";
                 var what_function = "teacher";
                 deleteDataOfTable(id, del_URL, what_function);
 
@@ -484,7 +418,7 @@
                 // Get the value of the clicked button
                 var id = $(this).val();
                 //alert(id);
-                 var newPageURL = "/administrativehub.permission/"+id;
+                 var newPageURL = "/administrativehub/permission/"+id;
                  window.location.href = newPageURL;
             });
 
@@ -492,7 +426,7 @@
                 // Get the value of the clicked button
                 var id = $(this).val();
                 //alert(id);
-                 var newPageURL = "/administrativehub.userPrivateData/"+id;
+                 var newPageURL = "/administrativehub/userPrivateData/"+id;
                  window.location.href = newPageURL;
             });
 
@@ -534,8 +468,8 @@
         });
 
     </script>
-    // End DataTable Script link
-    //
+    <!-- // End DataTable Script link
+    // -->
     <!-- content-wrapper ends -->
     <script src="{{ asset('assets/adminHub/js/file-upload.js') }}"></script>
     <script src="{{ asset('assets/adminHub/js/typeahead.js') }}"></script>

@@ -129,6 +129,7 @@
                                         <!--For Admin -->
                                         <hr />
                                         <div class="row">
+                                             @if($loandetails->type_ofmainTB != "Confirmed")
                                             <!-- Reject Option -->
                                             <button type="button" class="btn btn-danger btn-sm h6 mr-1"
                                                 value="{{ $loandetails->credit_id_of_baseTB }}" id="reject_loan_option"
@@ -136,12 +137,14 @@
                                                 <i class="bi bi-clipboard-x"></i>
                                             </button>
                                             <!-- Confirmed -->
+                                           
                                             <button type="button" class="btn btn-warning btn-sm h6 mr-1"
                                                 value="{{ $loandetails->credit_id_of_baseTB }}"
                                                 id="confirmed_loan_option" data-toggle="tooltip" data-placement="bottom"
                                                 title="Confirmed Loan">
                                                 <i class="bi bi-check-circle"></i>
                                             </button>
+                                            @endif
                                             <!-- All loan Completed -->
                                             <button type="button" class="btn btn-secondary btn-sm h6 mr-1"
                                                 value="{{ $loandetails->credit_id_of_baseTB }}" id="all_loan_completed"
@@ -219,7 +222,29 @@
     <!-- // End Sweet Alert script link -->
 
     <!-- {{-- Start MyScript Link  --}} -->
+    <script src="{{ asset('assets/js/tableLinkWithdataTBl.js') }}"></script>
     <script>
+        // Start Alert section
+            // Success Alert
+            function success() {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Your work has been saved",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+            // Fail Alert
+            function fail() {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                    footer: ''
+                });
+            }
+            // End Alert Section
         $(document).ready(function () {
 
             // Start Alert section
@@ -259,35 +284,35 @@
 
 
             // Table
-            $('#creditInfoTb').DataTable({
-                "pagingType": "full_numbers",
-                "pageLength": 5,
-                "searching": true,
-                "fixedHeader": true,
-                "responsive": true,
-                "scrollX": true,
-                order: [
-                    [0, 'asc']
-                ],
-                paging: true,
-                scrollCollapse: true,
-                scrollY: '500px',
-                dom: 'Blfrtip',
-                buttons: [{
-                        extend: 'pdf',
-                        bold: 'true',
-                        fontSize: '15',
-                        title: 'Daphne Lord School (System Developer Section)',
-                        subtitle: 'Line 2 of the subtitle',
-                        exportOptions: {
-                            modifier: {
-                                page: 'current'
-                            },
-                        }
-                    },
-                    'excel', 'print'
-                ]
-            });
+            // $('#creditInfoTb').DataTable({
+            //     "pagingType": "full_numbers",
+            //     "pageLength": 5,
+            //     "searching": true,
+            //     "fixedHeader": true,
+            //     "responsive": true,
+            //     "scrollX": true,
+            //     order: [
+            //         [0, 'asc']
+            //     ],
+            //     paging: true,
+            //     scrollCollapse: true,
+            //     scrollY: '500px',
+            //     dom: 'Blfrtip',
+            //     buttons: [{
+            //             extend: 'pdf',
+            //             bold: 'true',
+            //             fontSize: '15',
+            //             title: 'Daphne Lord School (System Developer Section)',
+            //             subtitle: 'Line 2 of the subtitle',
+            //             exportOptions: {
+            //                 modifier: {
+            //                     page: 'current'
+            //                 },
+            //             }
+            //         },
+            //         'excel', 'print'
+            //     ]
+            // });
 
             //    Start generate installment of Installment section 
             // Generate popup alert for selected the of <select class="form-control" id="TeacherName" name="TeacherName">
@@ -363,10 +388,12 @@
                     },
                     // dataType:'json',
                     success: function (response) {
-                        msgbxInstance.okCompleted();
+                       success();
+                       location.reload();
                     },
                     error: function (error) {
-                        console.error('Error:', error);
+                        fail();
+                        
                     }
                 });
             });

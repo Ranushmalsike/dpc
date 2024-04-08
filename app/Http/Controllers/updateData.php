@@ -10,6 +10,12 @@ use App\Models\user_privet_data;
 use App\Models\credit_d3;
 use App\Models\creditTB_d1;
 use App\Models\creditTB_d2;
+use App\Models\transpoer_detail;
+use App\Models\transpoer_price_details;
+use App\Models\time_arrangemtn_confirm_and_transfer;
+use App\Models\perHouserSalaryForTecher;
+use App\Models\summery_schema;
+
 
 use App\Rules\customPasswordValidation;
 // use App\Rules\user_privet_data;
@@ -181,6 +187,161 @@ public function updateCredit_allcompleted($id){
     $installment = creditTB_d2::where('credit_id' , $id)->update(['type_id' => '4']);
     
 }
+
+
+
+public function setDefaultTransportPrice($id)
+{
+    
+    $query = "CALL updateTransportSetDefByEntryId(:your_data);";
+
+    $bind = [
+        'your_data' => $id,
+    ];
+
+    DB::beginTransaction();
+    try {
+        DB::statement($query, $bind);
+        DB::commit();
+    } catch (\Exception $e) {
+        DB::rollBack();
+        // Handle the exception
+    }
+   
+    
+}
+
+/**
+ * Update - schedule arrangement data
+ * confirm schedule by admin or user
+ * reject process Up
+ * Transfer section Up
+ */
+// confirmed
+public function confirm_schedule($id){
+    $confirmed_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($id);
+    $confirmed_schedule->confirm = '1'; 
+    $confirmed_schedule->update();
+    // ProcessTimeArrangementFinal
+     $query = "CALL ProcessTimeArrangementFinal(:your_data);";
+
+    $bind = [
+        'your_data' => $id,
+    ];
+
+    DB::beginTransaction();
+    try {
+        DB::statement($query, $bind);
+        DB::commit();
+    } catch (\Exception $e) {
+        DB::rollBack();
+        // Handle the exception
+    }
+}
+// reset
+public function reset_schedule($id){
+    $confirmed_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($id);
+    $confirmed_schedule->confirm = '0'; 
+    $confirmed_schedule->Transfer = '0'; 
+    $confirmed_schedule->update();
+}
+// transfer _ confirmed
+public function trp_schedule_Up($id){
+    $confirmed_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($id);
+    $confirmed_schedule->Trp_confirmed = '1';
+    $confirmed_schedule->update();
+}
+// transfer _ active
+public function trp_schedule_Active($id, $Teacher_id_ofTRp){
+    $confirmed_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($id);
+    $confirmed_schedule->Trp_for_whom_user_id = $Teacher_id_ofTRp;
+    $confirmed_schedule->update();
+}
+// timeArrangement _ Update
+public function schedule_edit(Request $request){
+    // print($request->edit_TB_id);
+    $Edit_schedule = time_arrangemtn_confirm_and_transfer::findOrFail($request->edit_TB_id);
+    if($request->edit_start_time != null){
+    $Edit_schedule-> start_time = $request->edit_start_time;
+    }
+    if($request->edit_end_time != null){
+    $Edit_schedule-> end_time = $request->edit_end_time;
+     }
+    if($request->edit_class != 0){
+    $Edit_schedule-> class_id = $request->edit_class;
+    }
+    if($request->edit_subject != 0){
+    $Edit_schedule-> subject_id = $request->edit_subject;
+    }
+    if($request->edit_trp != "bypass"){
+    $Edit_schedule-> transport_id = $request->edit_trp;
+    }
+    $Edit_schedule->update();
+}
+
+/**
+ * Percentage Update
+ */
+public function Update_percentage(Request $request){
+    $columnId = $request->column_id;
+    $balancecol = $columnId - 2;
+    $Percentage = "Percentage_sum_co_".(string)$balancecol;
+    for ($i=3; $i <= 9 ; $i++) {
+        if($i == $columnId){ 
+    $summery_percentage = summery_schema::findOrFail($request->summery_id);
+    $summery_percentage-> $Percentage = $request->percentage_val;
+    $summery_percentage->update();
+        // dd($i);
+        }
+    }
+    return response()->json(['success' => true, 'message' => 'ok']);
+}
+/**
+ * Salary band update set to defualt
+ */
+public function setDefaultSalaryBand($id){
+    
+    $query = "CALL salaryBand_defaults(:your_data);";
+
+    $bind = [
+        'your_data' => $id,
+    ];
+
+    DB::beginTransaction();
+    try {
+        DB::statement($query, $bind);
+        DB::commit();
+    } catch (\Exception $e) {
+        DB::rollBack();
+        // Handle the exception
+    }
+}
+
+
+    /*
+    >> Staff Update
+    */
+    public function ownChangePassword(Request $request){
+        $getSessionID = auth()->user()->id;
+        //Check empty data and condition
+        $pass = $request->new_pass;
+        $this->validate($request, [
+            'new_pass' => ['required', new CustomPasswordValidation($pass), ],
+        ]);
+
+        $upd = User::findOrFail($getSessionID);
+        if(!empty($request->new_pass)){
+             $upd->password=$request->new_pass;
+        }
+         $upd->update();
+        
+    if($upd){
+            return redirect(route('addPrivateDataUserBy_teacher'))->with('success', 'Add data successful');
+     }
+        else{
+            return redirect(route('addPrivateDataUserBy_teacher'))->with('fail', 'Fail data');
+    }
+    }
 
 }
 

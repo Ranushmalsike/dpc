@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('end_star', 65, 2);
             $table->decimal('allowance', 65, 2);
             $table->timestamps();
-            $table->index('allowance');
+            $table->index(['start_salary', 'end_star']);
         });
     }
 
@@ -29,3 +29,4 @@ return new class extends Migration
         Schema::dropIfExists('allowance_tbs');
     }
 };
+

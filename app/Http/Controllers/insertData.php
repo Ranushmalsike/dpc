@@ -18,6 +18,11 @@ use App\Models\additional_allowance;
 use App\Models\credit_d3;
 use App\Models\creditTB_d1;
 use App\Models\creditTB_d2;
+use App\Models\gathherTo_a_delete_date_from_TimeArrangement;
+use App\Models\time_arrangemtn_confirm_and_transfer;
+use App\Models\summery_schema;
+use App\Models\summery_recomendation;
+use App\Models\chat_of_summery;
 
 
 // use Carbon\Carbon;
@@ -133,9 +138,7 @@ class insertData extends Controller
             $request,
             ['TransportCodeSelect' => 'required|string', 'TRPA' => 'required|string'],
             transpoer_price_details::class,
-            ['trasporot_code' => $request->TransportCodeSelect, 'transport_price' => $request->TRPA],
-            'trasporot_code',
-            $request->TransportCodeSelect
+            ['trasporot_code' => $request->TransportCodeSelect, 'transport_price' => $request->TRPA]
         );
     }
 
@@ -154,16 +157,45 @@ class insertData extends Controller
 
     
     //insert_Additional_allowance method
-    public function insert_Additional_allowance(Request $request)
+        public function insert_Additional_allowance(Request $request)
     {
-        return $this->handleAddData(
-            $request,
-            ['additionalAllowance' => 'required|string', 'description' => 'required|string'],
-            additional_allowance::class,
-            ['allowance_amount' => $request->additionalAllowance, 'Description' => $request->description],
-            'allowance_amount',
-            $request->additionalAllowance
-        );
+        // Validation
+        $this->validate($request, [
+            'TeacherName' => 'required|integer', // Assuming this is a user ID, validate accordingly
+            'additionalAllowance' => 'required|string',
+            'description' => 'required|string'
+        ]);
+
+        // Use the DB facade with parameter binding to prevent SQL injection
+           $result = \DB::select("SELECT insert_additional_allowance(:TeacherName, :additionalAllowance, :description) AS last_insert_id", [
+        'TeacherName' => $request->TeacherName,
+        'additionalAllowance' => $request->additionalAllowance,
+        'description' => $request->description,
+    ]);
+
+        if (!empty($result)) {
+           $lastInsertId = $result[0]->last_insert_id;
+            $query = "CALL Insert_allowance_into_how_gen(:teacher_id, :id_of_allowance_additional);";
+
+            $bind = [
+                'teacher_id' => $request->TeacherName,
+                'id_of_allowance_additional' => $lastInsertId // Ensure this is correct
+            ];
+
+            DB::beginTransaction();
+            try {
+                DB::statement($query, $bind);
+                DB::commit();
+                // Consider adding a return statement here to indicate success
+            } catch (\Exception $e) {
+                DB::rollBack();
+                // Log the error or return an error response
+            }
+        } else {
+            return $this->redirectOptionFail();
+            // Handle the case where $result is empty, indicating the function did not execute as expected
+        }
+        return $this->redirectOptionCompleted();
     }
 
     //insert_creditSection method
@@ -278,15 +310,154 @@ public function insert_creditSection(Request $request)
 }
 
 
+// subjectInputeData
+public function subjectInputeData(Request $request){
+    return $this->handleAddData(
+        $request,
+        ['subject_name' => 'required|string'],
+        subjectTB::class,
+        ['subject' => $request->subject_name],
+        'subject',
+        $request->subject_name
+    );
+}
 
-        
+// classInputeData
+public function classInputeData(Request $request){
+    return $this->handleAddData(
+        $request,
+        ['class_name' => 'required|string', 'str_date' => 'required|string'],
+        classTb::class,
+        ['dpcclass' => $request->class_name, 'start_date' => $request->str_date, 'end_date' => $request->end_date],
+        'dpcclass',
+        $request->class_name
+    );
+}
+
+// Add Delete Date from arrange Time Table by System
+public function insert_DateFromArrangeTimeTable(Request $request){
+    $dateOfRequest = $request->dateText;
+    $formatted_date = date('Y-m-d', strtotime($dateOfRequest));
+
+   
+    gathherTo_a_delete_date_from_TimeArrangement::insert([
+        'delete_date_from_TimeArrangement' => $formatted_date
+    ]);
+}
+
+
+/***
+ * Time Arrangement
+ */
+public function timeArrangement_save(Request $request){
+
+    foreach ($request->timeArrangement_array as $data_ofTimeArrangement) {
+        // print($data_ofTimeArrangement['getTeacher_idV']);
+        # code...
+        $formatted_date_of_time_arrangement = date('Y-m-d', strtotime($data_ofTimeArrangement['date_text_val']));
+                 time_arrangemtn_confirm_and_transfer::insert([
+            'Time_arrangement' =>  $formatted_date_of_time_arrangement, 
+            'start_time' => $data_ofTimeArrangement['starttime_text_val'],
+            'end_time' => $data_ofTimeArrangement['endtime_text_val'],
+            'user_id' => $data_ofTimeArrangement['getTeacher_idV'],
+            'class_id' => $data_ofTimeArrangement['classNameVal_data'],
+            'subject_id' => $data_ofTimeArrangement['subjectVal_data'],
+            'transport_id' => $data_ofTimeArrangement['transport_data'] == null ? 1 : $data_ofTimeArrangement['transport_data']
+        ]);
+    }
+}
+/**
+ * per hour salary
+ *
+ */
+
+ public function addSalaryBand(Request $request) {
+    return $this->handleAddData(
+        $request,
+        ['TeacherName' => 'required|string', 'Salary' => 'required|string'],
+        perHouserSalaryForTecher::class,
+        ['user_id' => $request->TeacherName, 'perHourSalary' => $request->Salary, 'published' => now()]
+    );
+ }
+ /**
+  * Add Summery
+  */
+ public function Add_summery_schema(Request $request) {
+      summery_schema::insert(
+         [
+         'month_of_summery'=>$request->month_of_summery,
+         'summery_col_1'=> $request->EXERCS_POEMS,
+         'summery_col_2'=> $request->VOCABULARY,
+         'summery_col_3'=> $request->IDENTIFICATION_3,
+         'summery_col_4'=> $request->CONVERSATION_4,
+         'summery_col_5'=> $request->INSTRCTNS_5,
+         'summery_col_6'=> $request->READING_6,
+         'summery_col_7'=> $request->WRITING_7,
+         'class_id'=>$request->class_id
+         ]
+     );
+     return $this->redirectOptionCompleted();
+ }
+
+ /**
+  * selected teacher
+  */
+public function selected_teacher(Request $request) {
+     $summery_id = $request->summery_id;
+
+    try {
+        foreach ($request->selected_values as $selectedData) {
+            // Insert each selected teacher ID with the summary ID
+            summery_recomendation::insert([
+                'summery_id' => $summery_id,
+                'teacher_id' => $selectedData  // Assuming $selectedData is the teacher ID
+            ]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Data saved successfully']);
+    } catch (\Exception $e) {
+        // Log the exception
+        Log::error('Error saving teacher selection: ' . $e->getMessage());
+        // Return an error response
+        return response()->json(['success' => false, 'message' => 'Error saving data'], 500);
+    }
+}
+
+/**
+ * chat input
+ */
+public function chat_input(Request $request){
+    $getSessionID = auth()->user()->id;
+
+    $getrole = User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
+    ->select('user_roles.roleType')
+    ->where('users.id', $getSessionID)
+    ->first();
+
+    if($getrole->roleType == 'admin' || $getrole->roleType == 'staff'){
+        try {
+        chat_of_summery::insert(
+        ['summery_id' => $request->idOfRow, 'chat_staff'=> $request->chatInput, 'staff_id'=> $getSessionID,'staff_id_view'=> 1, 'Column_id'=> $request->columnNumberOfRow]
+        );
+        return response()->json(['success' => true, 'message' => 'Data send successfully']);
+    } catch (\Throwable $th) {
+        //throw $th;
+        return response()->json(['success' => false, 'message' => $th]);
+    }
+    }
+    else{
+  try {
+        chat_of_summery::insert(
+        ['summery_id' => $request->idOfRow, 'chat_teacher'=> $request->chatInput, 'teacher_id'=> $getSessionID,'teacher_id_view' => 1, 'Column_id'=> $request->columnNumberOfRow]
+        );
+        return response()->json(['success' => true, 'message' => 'Data send successfully']);
+    } catch (\Throwable $th) {
+        //throw $th;
+        return response()->json(['success' => false, 'message' => $th]);
+    }
+    }
     
-
-
-
-
-
-
+}
     /**
      * Alert within redirect function
      */
@@ -299,4 +470,5 @@ public function insert_creditSection(Request $request)
     {
         return redirect()->back()->with('fail', 'Data already exists');
     }
+
 }

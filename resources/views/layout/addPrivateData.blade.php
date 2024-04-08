@@ -93,6 +93,29 @@
                     </div>
                 </div>
             </div>
+             <!--================================== Teacher section ===========================-->
+        @php
+        $routeName = Route::currentRouteName();
+        @endphp
+        @if($routeName == "addPrivateDataUserBy_teacher")
+         <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Change Password Own Password</h4>
+                            <form id="own_pass" method="POST" action="{{ route('ownChangePassword.Update') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="new_pass">New Password<strong id="teacher_name_of_edit"></strong></label>
+                            <input type="text" class="form-control" id="new_pass" name="new_pass">
+                            <span style="color:red"> @error ('new_pass') {{ $message }} @enderror </span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-sm">Password Update</button>
+                    </form>
+                    </div>
+            </div>
+         </div>
+        @endif
         </div>
     </div>
 
