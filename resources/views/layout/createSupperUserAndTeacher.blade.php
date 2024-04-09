@@ -33,6 +33,7 @@
     <div class="content-wrapper">
         <div class="row">
             <!-- == Start Input section == -->
+            @if($which_roletype_of_user->roleType == "admin")
             <!-- Start Supper User input section-->
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
@@ -71,7 +72,7 @@
                 </div>
             </div>
             <!-- End Supper User section -->
-
+            @endif
             <!-- Start Teacher section -->
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
@@ -110,10 +111,11 @@
             <!-- End Teacher input section -->
             <!-- == End input sections == -->
 
-
+           
             <!-- === Start View Section ==-->
             <div class="col-12 grid-margin stretch-card">
-                <!-- Start Class table -->
+                 @if($which_roletype_of_user->roleType == "admin")
+                <!-- Start staff table -->
                 <div class="col-5">
                     <div class="card">
                         <div class="card-body">
@@ -143,9 +145,9 @@
                                                     value="{{ $getStaff->id }}" id="delete_staff"><i
                                                         class="bi bi-trash"></i></button>
                                                 <!-- Permission -->
-                                                <button type="button" class="btn btn-info btn-sm h6 mr-1"
+                                                <!-- <button type="button" class="btn btn-info btn-sm h6 mr-1"
                                                     value="{{ $getStaff->id }}" id="permission_staff">
-                                                    <i class="bi bi-key"></i></button>
+                                                    <i class="bi bi-key"></i></button> -->
                                             </div>
                                         </td>
                                     </tr>
@@ -156,9 +158,9 @@
                         </div>
                     </div>
                 </div>
-                <!-- End Class table -->
-
-                <!-- Start Subject table -->
+                <!-- End staff table -->
+                @endif
+                <!-- Start teacher table -->
                 <div class="col-7">
                     <div class="card">
                         <div class="card-body">
@@ -187,10 +189,10 @@
                                                     value="{{ $getTeacher->id }}" id="delete_teacher" data-toggle="tooltip" data-placement="bottom" title="Delete User"><i
                                                         class="bi bi-trash"></i></button>
                                                 <!-- Permission -->
-                                                <button type="button" class="btn btn-info btn-sm h6 mr-1"
+                                                <!-- <button type="button" class="btn btn-info btn-sm h6 mr-1"
                                                     value="{{ $getTeacher->id }}" id="permission_teacher" data-toggle="tooltip" data-placement="bottom" title="Add permission">
-                                                    <i class="bi bi-key"></i></button> 
-                                                    <!-- Insert User Private Details -->
+                                                    <i class="bi bi-key"></i></button>  -->
+                                                <!-- Insert User Private Details -->
                                                 <button type="button" class="btn btn-info btn-sm h6 mr-1"
                                                     value="{{ $getTeacher->id }}" id="toUserPrivateDetails" data-toggle="tooltip" data-placement="bottom" title="Add The user Private information">
                                                     <i class="bi bi-info-circle"></i></button>
@@ -204,11 +206,12 @@
                         </div>
                     </div>
                 </div>
-                <!-- End Subject table -->
+                <!-- End teacher table -->
             </div>
             <!-- == End View Section == -->
         </div>
     </div>
+    @if($which_roletype_of_user->roleType == "admin")
     <!-- Start Model for Edit the staff-->
     <div class="modal fade modal-open-left" id="leftModal_staff" tabindex="-1" role="dialog"
         aria-labelledby="leftModalLabel" aria-hidden="true">
@@ -240,7 +243,7 @@
         </div>
     </div>
     <!-- End Model for Edit  the staff-->
-
+    @endif
     <!-- Start Model for Edit the teacher-->
     <div class="modal fade modal-open-left" id="leftModal_teacher" tabindex="-1" role="dialog"
         aria-labelledby="leftModalLabel" aria-hidden="true">

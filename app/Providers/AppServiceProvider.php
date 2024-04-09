@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use App\Models\chat_of_summery;
 use App\Models\User;
-
+use App\Utilities\checkRoleType;
 class AppServiceProvider extends ServiceProvider
 {
 
@@ -24,10 +24,12 @@ class AppServiceProvider extends ServiceProvider
 public function boot(): void
 {
     View::composer('*', function ($view) {
-        $notification = new Notification();
-        $checkRoleType = new CheckRoleType();
+        
+         $checkRoleType = new checkRoleType();
+         $userRoleType = $checkRoleType->checkType();
 
         if (auth()->check()) {
+            $notification = new Notification();
             $userRoleType = $checkRoleType->checkType(auth()->user()->id);
 
             if ($userRoleType->roleType == "admin" || $userRoleType->roleType == "staff") {
@@ -39,10 +41,15 @@ public function boot(): void
             } else {
                 $summery_new_notification_count = 0;
                 $summery_new_notification = "none";
+                $userRoleType = "none";
             }
 
             $view->with('summery_new_notification_count', $summery_new_notification_count)
-                 ->with('summery_new_notification', $summery_new_notification);
+                 ->with('summery_new_notification', $summery_new_notification)
+                 ->with('userRoleType', $userRoleType);
+        }
+        else{
+            return redirect('login.login');
         }
     });
 }
@@ -106,15 +113,3 @@ return chat_of_summery::where('chat_of_summeries.teacher_id_view', '0')
 }
 }
 
-/***
- * check User Type
- */
-class checkRoleType{
-    public function checkType(){
-      $getSessionID = auth()->user()->id;
-    return User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
-    ->select('user_roles.roleType')
-    ->where('users.id', $getSessionID)
-    ->first();
-    }
-}

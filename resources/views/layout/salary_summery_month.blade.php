@@ -1,4 +1,7 @@
 @extends('include.commonstr')
+@section('meta')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('css')
 <!-- Start Add link for DataTable -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
@@ -68,12 +71,13 @@
             <div class="col-md-11 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Salary Details</h4>
+                        <h4 class="card-title">Salary Calculation</h4>
                         <table id="calTbl" class="display" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th rowspan="2">Year & Month</th>
+                                    
                                     <th rowspan="2">Description</th>
+                                    <th rowspan="2">Payment type</th>
                                     <th colspan="2">Name</th>
                                     <th colspan="4">Schedule</th>
                                     <th rowspan="2">Additional Payment(LKR)</th>
@@ -89,15 +93,15 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>2024-04</td>
-                                    <td>Schedule</td>
-                                    <td>amal</td>
-                                    <td>xx</td>
-                                    <td>2024-04-05</td>
-                                    <td>2.00</td>
-                                    <td>200.00</td>
-                                    <td>100.00</td>
-                                    <td>100.00</td>
+                                    <td class="description"></td>
+                                    <td class="payment-type"></td>
+                                    <td class="first-name"></td>
+                                    <td class="second-name"></td>
+                                    <td class="date"></td>
+                                    <td class="hour"></td>
+                                    <td class="payment"></td>
+                                    <td class="transport"></td>
+                                    <td class="additional-payment"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -244,58 +248,52 @@
             /**
              * 
              */
-                $(document).on('click', '#calDetails', function () {
-                    var value = $(this).attr('value');
-                    var value_month = $(this).attr('value_month');
+            $(document).on('click', '#calDetails', function () {
+                var value = $(this).attr('value');
+                var value_month = $(this).attr('value_month');
 
-                    $.ajax({
-                        type: "POST",
-                        url: "/administrativehub/teacher_salary_cal_details",
-                        data: {
-                            value: value,
-                            value_month: value_month
-                        },
-                        beforeSend: function (xhr) {
-                                    xhr.setRequestHeader('X-CSRF-TOKEN', $(
-                                        "meta[name='csrf-token']").attr(
-                                        'content'));
-                        },
-                        dataType: "json",
-                        success: function (response) {
-                            if (response.length > 0) {
-                                        var item = response[
-                                            0
-                                        ];
-                                        $('#staff').text(item.name);
-                                        $('#staff_chat').text(item.chat_staff);
-                                        if (item.name == null) {
-                                            $('#time_of_staff').text("");
-                                        } else {
-                                            $('#time_of_staff').text(item
-                                                .chat_time);
-                                        }
-                                        $('#teacher').text(item.first_name + ' ' +
-                                            item
-                                            .second_name);
-                                        $('#teacher_chat').text(item.chat_teacher);
-                                        if (item.first_name == null) {
-                                            $('#time_of_teacher').text("");
-                                        } else {
-                                            $('#time_of_teacher').text(item
-                                                .chat_time);
-                                        }
-                                    } else {
-                                        $('#staff').text("none");
-                                        $('#staff_chat').text("none");
-                                        $('#time_of_staff').text("--");
-                                        $('#teacher').text("none");
-                                        $('#teacher_chat').text("none");
-                                        $('#time_of_teacher').text("--");
-                                    }
+                $.ajax({
+                    type: "POST",
+                    url: "/administrativehub/teacher_salary_cal_details",
+                    data: {
+                        value: value,
+                        value_month: value_month
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-CSRF-TOKEN', $("meta[name='csrf-token']").attr('content'));
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.length > 0) {
+                            var item = response[0];
+                            $('.description').text(item.description);
+                            $('.payment-type').text(item.Payment_description);
+                            $('.first-name').text(item.first_name);
+                            $('.second-name').text(item.second_name);
+                            $('.date').text(item.today_day);
+                            $('.hour').text(item.time_duration);
+                            $('.payment').text(item.salary_on_schedul);
+                            $('.transport').text(item.transport_price);
 
+                            var additionalPayment = item.allowance || item.installment || item.allowance_amount || "0";
+                            $('.additional-payment').text(additionalPayment);
+                        } else {
+                            $('.description, .payment-type, .first-name, .second-name, .date, .hour, .payment, .transport, .additional-payment')
+                                .text("");
                         }
-                    });
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Error saving data" + error,
+                            footer: ''
+                        });
+                    }
                 });
+            });
+
 
             //alert();
             /*

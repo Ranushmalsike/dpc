@@ -5,6 +5,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title></title>
+
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
         <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -85,6 +88,10 @@
                                 <td>{{ $admintb->id }}</td>
                                 <td>{{ $admintb->name  }}</td>
                                 <td>
+                                    <!-- update -->
+                                    <button type="button" class="btn btn-warning btn-sm h6 mr-1"
+                                        value="{{ $admintb->id }}" id="update_admin">Up</button>
+                                    <!-- delete -->
                                     <button type="button" class="btn btn-danger btn-sm h6 mr-1"
                                         value="{{ $admintb->id }}" id="delete_usertb"><i
                                             class="bi bi-trash"></i></button>
@@ -223,6 +230,31 @@
                 <!-- End add Permission page section -->
             </div>
             </div>
+                    <!-- Modal - teacher select -->
+                        <div class="modal fade" id="adm_pass_section" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Update admin pass</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="text" id="admin_id" hidden>
+                                        <label for="">Password</label>
+                                        <input type="text" class="form-control" id="adm_pass">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" id="save_and_update_password">Update</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Model teacher select -->
         </main>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -249,7 +281,8 @@
         <!-- // Start Sweet model script link -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
         <!-- // End Sweet Alert script link -->
-
+            <!-- Then include Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script>
             $(document).ready(function () {
                 // Start Alert section
@@ -366,8 +399,40 @@
                     }
                 });
                 }
-
-
+                /**
+                 * Update model for admin password
+                 */
+            $(document).on('click', '#update_admin', function(){
+                //alert();
+                var value = $(this).val();
+                $('#admin_id').val(value);
+                $('#adm_pass_section').modal('show');
+            });
+                /**
+                 * update password
+                 */
+                
+                $(document).on('click', '#save_and_update_password', function(){
+                //alert();
+                var id = $('#admin_id').val();
+                var password = $('#adm_pass').val();
+                $.ajax({
+                    type: "POST",
+                    url: "/systemMaintenance/adminEdit",
+                    data: {
+                        id: id,
+                        password: password
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-CSRF-TOKEN', $("meta[name='csrf-token']")
+                            .attr('content'));
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        location.reload();
+                    }
+                });
+            });
             });
 
         </script>
