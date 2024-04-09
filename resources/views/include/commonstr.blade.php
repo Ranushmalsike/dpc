@@ -25,14 +25,14 @@
       <!-- partial:partials/_navbar.html -->
       <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <a class="navbar-brand brand-logo" href="index.html"><img src="{{ asset('assets/adminHub/images/logo.svg') }}" alt="logo"/></a>
+          <a class="navbar-brand brand-logo" href="{{ route('administrativehub') }}">M Panel</a>
           <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{{ asset('assets/adminHub/images/logo-mini.svg') }}" alt="logo"/></a>
           <button class="navbar-toggler navbar-toggler align-self-center d-none d-lg-flex" type="button" data-toggle="minimize">
             <span class="typcn typcn-th-menu"></span>
           </button>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-          <ul class="navbar-nav mr-lg-2">
+          <!-- <ul class="navbar-nav mr-lg-2">
             <li class="nav-item  d-none d-lg-flex">
               <a class="nav-link active" href="#">
                 Admin
@@ -48,7 +48,7 @@
                 Teacher
               </a>
             </li>
-          </ul>
+          </ul>-->
           <ul class="navbar-nav navbar-nav-right">
             <!-- <li class="nav-item d-none d-lg-flex  mr-2">
               <a class="nav-link" href="#">
@@ -109,7 +109,7 @@
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
                 <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-               @if ($summery_new_notification !== 'none')
+               @if ($summery_new_notification != 'none')
                 @foreach($summery_new_notification as $notif)
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
@@ -238,6 +238,7 @@
             </a>
           </li>
           <!-- Front end Upgrade -->
+           @if($userRoleType->roleType == "admin" || $userRoleType->roleType == "staff")
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="typcn typcn-briefcase menu-icon"></i>
@@ -338,6 +339,7 @@
               </ul>
             </div> -->
           </li>
+          @endif
           <!-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
               <i class="typcn typcn-user-add-outline menu-icon"></i>
@@ -364,6 +366,7 @@
               </ul>
             </div>
           </li> -->
+              @if($userRoleType->roleType == "teacher")
           <li class="nav-item">
             <a class="nav-link" href="{{ route('teacher_time_tableConfirm') }}">
               <i class="typcn typcn-document-text menu-icon"></i>
@@ -382,6 +385,7 @@
               <span class="menu-title">My Activity</span>
             </a>
           </li>
+          @endif
         <!-- </ul>
          <ul class="sidebar-legend">
           <li>
@@ -396,12 +400,12 @@
   @yield('content')
 
           <!-- partial:partials/_footer.html -->
-          <footer class="footer">
+          <!-- <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="https://www.bootstrapdash.com/" target="_blank">bootstrapdash.com</a> 2020</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Free <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap dashboard </a>templates from Bootstrapdash.com</span>
+              <span class="text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="#" target="_blank"></a> </span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Free <a href="#" target="_blank"></a></span>
             </div>
-          </footer>
+          </footer> -->
           <!-- partial -->
         </div>
         <!-- main-panel ends -->

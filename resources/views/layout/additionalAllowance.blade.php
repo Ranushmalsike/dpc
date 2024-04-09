@@ -66,7 +66,7 @@
             {{-- End trasport Price input section --}}
 
             {{-- Start trasport table with price section --}}
-            <div class="col-md-8 grid-margin stretch-card">
+            <div class="col-md-7 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Additional Allowance</h4>
@@ -91,12 +91,23 @@
                                     <td>{{ $alwdata->Description }}</td>
                                     <td>
                                         <div class="row">
+                                             @if($alwdata->confirmed == 0)
                                             <!-- Delete -->
                                             <button type="button" class="btn btn-danger btn-sm h6 mr-1"
                                                 value="{{ $alwdata->id }}" id="delete_allowance" data-toggle="tooltip"
                                                 data-placement="bottom" title="Delete">
                                                 <i class="bi bi-trash"></i>
                                             </button>
+                                            <!-- Set Default -->                                           
+                                            <button type="button" class="btn btn-info btn-sm h6 mr-1"
+                                                value="{{ $alwdata->id }}"
+                                                id="confirm_additional_allowance" data-toggle="tooltip"
+                                                data-placement="bottom" title="Set default">
+                                                <i class="bi bi-check2-all"></i>
+                                            </button>
+                                            @else
+                                            <p class="mr-1 text-success">Confirmed</p>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -181,6 +192,7 @@
                 deleteDataOfTable(id, del_URL);
             });
 
+
             // >> Delete function
             function deleteDataOfTable(id, del_URL) {
 
@@ -212,6 +224,36 @@
 
             }
             // End Delete
+
+            /**
+             * confirmed
+             */
+            $(document).on('click', '#confirm_additional_allowance', function () {
+                var id = $(this).val();
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able Confirm this",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "GET",
+                            url: "/administrativehub/edit/update_additional_allowance/"+id,
+                            data: {
+                                'X-CSRF-TOKEN': $("input[name=_token]").val()
+                            },
+                            success: function (response) {
+                                success();
+                                location.realod();
+                            }
+                        });
+                    }
+                });
+            });
 
             // Start Alert
             @if(Session::get('success'))

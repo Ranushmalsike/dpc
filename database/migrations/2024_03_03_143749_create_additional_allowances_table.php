@@ -16,6 +16,7 @@ return new class extends Migration
             $table->bigInteger('user_id');
             $table->decimal('allowance_amount', 65, 2);
             $table->text('Description');
+            $table->tinyInteger('confirmed')->default(0);
             $table->timestamps();
             $table->index('id');
         });

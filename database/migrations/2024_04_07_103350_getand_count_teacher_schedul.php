@@ -13,19 +13,20 @@ return new class extends Migration
     {
         //
  DB::unprepared("         
-CREATE FUNCTION get_count_teacher_schedule(in_user_id VARCHAR(255), in_year_month CHAR(7))
-RETURNS INT
-DETERMINISTIC
-BEGIN
-    DECLARE count_result INT;
+    CREATE FUNCTION get_count_teacher_schedule(in_user_id VARCHAR(255), in_year_month CHAR(7))
+    RETURNS INT
+    DETERMINISTIC
+    BEGIN
+        DECLARE count_result INT;
 
-    SELECT COUNT(id) INTO count_result,
-    FROM `time_arrangemtn_confirm_and_transfers`
-    WHERE `user_id` = in_user_id
-      AND DATE_FORMAT(Time_arrangement, '%Y-%m') = in_year_month;
+        SELECT COUNT(id) INTO count_result
+        FROM `time_arrangemtn_confirm_and_transfers`
+        WHERE `user_id` = in_user_id
+        AND DATE_FORMAT(Time_arrangement, '%Y-%m') = in_year_month;
 
-    RETURN count_result;
-END");
+        RETURN count_result;
+    END
+");
     }
 
     /**

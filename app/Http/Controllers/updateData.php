@@ -76,6 +76,30 @@ class updateData extends Controller
             return redirect(route('classAndSubject'))->with('fail', 'Fail data');
     }
     }
+     /*
+    >> admin Update
+    */
+    public function adminEdit(Request $request){
+        //Check empty data and condition
+        $id = $request->id;
+        $pass = $request->password;
+        $this->validate($request, [
+            'password' => ['required', new CustomPasswordValidation($pass), ],
+        ]);
+
+        $upd = User::findOrFail($id);
+        if(!empty($request->password)){
+             $upd->password= bcrypt($request->password);
+        }
+         $upd->update();
+        
+    // if($upd){
+    //         // return redirect(route('homeStaff'))->with('success', 'Add data successful');
+    //  }
+    //     else{
+    //         // return redirect(route('homeStaff'))->with('fail', 'Fail data');
+    // }
+    }
     /*
     >> Staff Update
     */
@@ -342,6 +366,35 @@ public function setDefaultSalaryBand($id){
             return redirect(route('addPrivateDataUserBy_teacher'))->with('fail', 'Fail data');
     }
     }
+/*
+>> Confirm updated in additional allowance and save in how gen table
+*/
+    public function update_additional_allowance($id){
 
+        DB::table('additional_allowances')
+        ->where('id', $id)
+        ->update(['confirmed' => 1]);
+
+        $user_id = DB::table('additional_allowances')
+              ->where('id', $id)
+              ->value('user_id');
+              
+        $query = "CALL Insert_allowance_into_how_gen(:teacher_id, :id_of_allowance_additional);";
+
+            $bind = [
+                'teacher_id' => $user_id,
+                'id_of_allowance_additional' => $id // Ensure this is correct
+            ];
+
+            DB::beginTransaction();
+            try {
+                DB::statement($query, $bind);
+                DB::commit();
+                // Consider adding a return statement here to indicate success
+            } catch (\Exception $e) {
+                DB::rollBack();
+                // Log the error or return an error response
+            }
+    }
 }
 

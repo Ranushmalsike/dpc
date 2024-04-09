@@ -26,7 +26,8 @@ class User extends Authenticatable
         'teacher_name',
         'pass_teacher',
         'staff_password_edit',
-        'teacher_password_edit'
+        'teacher_password_edit',
+        'id'
     ];
 
     /**

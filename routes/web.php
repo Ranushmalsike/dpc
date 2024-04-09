@@ -38,37 +38,123 @@ Route::group(['prefix' => '/systemMaintenance'], function () {
     Route::get('/user.delete/{id}', [deleteData::class, 'adminDelete'])->name('delete.userBySystemDeveloper');
     Route::get('/userRole.delete/{id}', [deleteData::class, 'userRoleDelete'])->name('delete.userRoleBySystemDeveloper');
     Route::get('/permissionPage.delete/{id}', [deleteData::class, 'permissionPgDelete'])->name('delete.permissionBySystemDeveloper');
+    Route::POST('/adminEdit', [updateData::class, 'adminEdit'])->name('adminEdit.Update');
 });
 
-/*
->> administrative route
-*/
 Route::group(['prefix' => '/administrativehub'], function () {
-    Route::get('/index', [pgControll::class, 'administrativehub'])->name('administrativehub');
     Route::POST('/login_data', [pgControll::class, 'login_data'])->name('login');
-    Route::get('/Class&Subject', [pgControll::class, 'administrativehubClassAndSubject'])->name('classAndSubject');
-    Route::get('/RegisterStaff', [pgControll::class, 'administrativehubRegStaffAndTeacher'])->name('RegisterStaff');
-    Route::get('/permission/{id}', [pgControll::class, 'administrativehubpermission'])->name('permissionForStaffOrTeacher');
-    Route::get('/userPrivateData/{id}', [pgControll::class, 'addPrivateDataUserByStaff'])->name('userPrivateData');
-    Route::get('/SalaryRangePerHour', [pgControll::class, 'addSalaryRangeData'])->name('SalaryRangePerHour');
-    Route::get('/trasnportInformation', [pgControll::class, 'trasnportInformation'])->name('trasnportInformationAdd');
-    Route::get('/allowance', [pgControll::class, 'get_allowance'])->name('allowance');
-    Route::get('/additional_allowance', [pgControll::class, 'get_additional_allowance'])->name('additional_allowance');
-    Route::get('/credit', [pgControll::class, 'get_creditSection'])->name('credit');
-    Route::get('/TimeTableArrangement', [pgControll::class, 'TimeTableArrangement'])->name('TimeTableArrangement');
-    Route::get('/teacher_time_tableConfirm', [pgControll::class, 'teacher_time_tableConfirm'])->name('teacher_time_tableConfirm');
-    Route::get('/myActivity_salaryCal', [pgControll::class, 'myActivity_salaryCal'])->name('myActivity_salaryCal');
-    Route::get('/summery_add', [pgControll::class, 'summery_for_staff'])->name('summery_add');
+    Route::get('/index', [pgControll::class, 'administrativehub'])->name('administrativehub');
+    Route::get('/logout', [pgControll::class, 'logout'])->name('logout');
     Route::POST('/summery_for_chat', [pgControll::class, 'summery_for_chat'])->name('summery_for_chat');
     Route::POST('/summery_recommendedTeacher', [pgControll::class, 'summery_recommendedTeacher'])->name('summery_recommendedTeacher');
-    Route::get('/summery_for_teacher', [pgControll::class, 'summery_for_teacher'])->name('summery_for_teacher');
-    Route::get('/addPrivateDataUserBy_teacher', [pgControll::class, 'addPrivateDataUserBy_teacher'])->name('addPrivateDataUserBy_teacher');
-    Route::get('/logout', [pgControll::class, 'logout'])->name('logout');
     Route::get('/bySalaryOfTeachers', [pgControll::class, 'bySalaryOfTeachers'])->name('bySalaryOfTeachers');
-    Route::get('/teacher_salary_cal_details', [pgControll::class, 'teacher_salary_cal_details'])->name('teacher_salary_cal_details');
-   
+    Route::POST('/teacher_salary_cal_details', [pgControll::class, 'teacher_salary_cal_details'])->name('teacher_salary_cal_details');
+    /*// Add Class
+    Route::get('/Class&Subject', [pgControll::class, 'administrativehubClassAndSubject'])->name('classAndSubject');
+    // Register Staff and teacher
+    Route::get('/RegisterStaff', [pgControll::class, 'administrativehubRegStaffAndTeacher'])->name('RegisterStaff');
+    // Add permission
+    Route::get('/permission/{id}', [pgControll::class, 'administrativehubpermission'])->name('permissionForStaffOrTeacher');
+    // Add private details By admin or staff
+    Route::get('/userPrivateData/{id}', [pgControll::class, 'addPrivateDataUserByStaff'])->name('userPrivateData');
+    // Add Per hour salary
+    Route::get('/SalaryRangePerHour', [pgControll::class, 'addSalaryRangeData'])->name('SalaryRangePerHour');
+    // transport information 
+    Route::get('/trasnportInformation', [pgControll::class, 'trasnportInformation'])->name('trasnportInformationAdd');
+    // Allowance
+    Route::get('/allowance', [pgControll::class, 'get_allowance'])->name('allowance');
+    // additional Allowance
+    Route::get('/additional_allowance', [pgControll::class, 'get_additional_allowance'])->name('additional_allowance');
+    // credit
+    Route::get('/credit', [pgControll::class, 'get_creditSection'])->name('credit');
+    // Time Arrangement 
+    Route::get('/TimeTableArrangement', [pgControll::class, 'TimeTableArrangement'])->name('TimeTableArrangement');
+    // summery add
+    Route::get('/summery_add', [pgControll::class, 'summery_for_staff'])->name('summery_add');
+*/
 });
 
+/**
+ * =================Admin=======================
+ */
+Route::middleware(['staff'])->group(function () {
+     /**
+     * >>>>>>>>>>>>>>>>>>>>>>Forward Page>>>>>>>>>>>>>>>>>>>>>>>>>
+     */
+    Route::group(['prefix' => '/administrativehub'], function () {
+        // Add Class
+        Route::get('/Class&Subject', [pgControll::class, 'administrativehubClassAndSubject'])->name('classAndSubject');
+        // Register Staff and teacher
+        Route::get('/RegisterStaff', [pgControll::class, 'administrativehubRegStaffAndTeacher'])->name('RegisterStaff');
+        // Add permission
+        Route::get('/permission/{id}', [pgControll::class, 'administrativehubpermission'])->name('permissionForStaffOrTeacher');
+        // Add private details By admin or staff
+        Route::get('/userPrivateData/{id}', [pgControll::class, 'addPrivateDataUserByStaff'])->name('userPrivateData');
+        // Add Per hour salary
+        Route::get('/SalaryRangePerHour', [pgControll::class, 'addSalaryRangeData'])->name('SalaryRangePerHour');
+        // transport information 
+        Route::get('/trasnportInformation', [pgControll::class, 'trasnportInformation'])->name('trasnportInformationAdd');
+        // Allowance
+        Route::get('/allowance', [pgControll::class, 'get_allowance'])->name('allowance');
+        // additional Allowance
+        Route::get('/additional_allowance', [pgControll::class, 'get_additional_allowance'])->name('additional_allowance');
+        // credit
+        Route::get('/credit', [pgControll::class, 'get_creditSection'])->name('credit');
+        // Time Arrangement 
+        Route::get('/TimeTableArrangement', [pgControll::class, 'TimeTableArrangement'])->name('TimeTableArrangement');
+        // summery add
+        Route::get('/summery_add', [pgControll::class, 'summery_for_staff'])->name('summery_add');
+    });
+});
+/**
+ * =================Staff=======================
+ */
+/*Route::middleware(['staff'])->group(function () {
+    /**
+     * >>>>>>>>>>>>>>>>>>>>>>Forward Page>>>>>>>>>>>>>>>>>>>>>>>>>
+     */
+   /* Route::group(['prefix' => '/administrativehub'], function () {
+        // Add Class
+        Route::get('/Class&Subject', [pgControll::class, 'administrativehubClassAndSubject'])->name('classAndSubject');
+        // Register staff and teacher
+        Route::get('/RegisterStaff', [pgControll::class, 'administrativehubRegStaffAndTeacher'])->name('RegisterStaff');
+        // Add private details By admin or staff
+        Route::get('/userPrivateData/{id}', [pgControll::class, 'addPrivateDataUserByStaff'])->name('userPrivateData');
+        // Add Per hour salary
+        Route::get('/SalaryRangePerHour', [pgControll::class, 'addSalaryRangeData'])->name('SalaryRangePerHour');
+        // transport information 
+        Route::get('/trasnportInformation', [pgControll::class, 'trasnportInformation'])->name('trasnportInformationAdd');
+        // Allowance
+        Route::get('/allowance', [pgControll::class, 'get_allowance'])->name('allowance');
+        // additional Allowance
+        Route::get('/additional_allowance', [pgControll::class, 'get_additional_allowance'])->name('additional_allowance');
+        // credit
+        Route::get('/credit', [pgControll::class, 'get_creditSection'])->name('credit');
+        // Time Arrangement 
+        Route::get('/TimeTableArrangement', [pgControll::class, 'TimeTableArrangement'])->name('TimeTableArrangement');
+        // summery add
+        Route::get('/summery_add', [pgControll::class, 'summery_for_staff'])->name('summery_add');
+    });
+});*/
+/**
+ * =================teacher=======================
+ */
+Route::middleware(['teacher'])->group(function () {
+    /**
+     * >>>>>>>>>>>>>>>>>>>>>>Forward Page>>>>>>>>>>>>>>>>>>>>>>>>>
+     */
+    Route::group(['prefix' => '/administrativehub'], function () {
+        // Time Table confirm
+        Route::get('/teacher_time_tableConfirm', [pgControll::class, 'teacher_time_tableConfirm'])->name('teacher_time_tableConfirm');
+        // My activity
+        Route::get('/myActivity_salaryCal', [pgControll::class, 'myActivity_salaryCal'])->name('myActivity_salaryCal');
+        // summery
+        Route::get('/summery_for_teacher', [pgControll::class, 'summery_for_teacher'])->name('summery_for_teacher');
+        // add own private data
+        Route::get('/addPrivateDataUserBy_teacher', [pgControll::class, 'addPrivateDataUserBy_teacher'])->name('addPrivateDataUserBy_teacher');
+
+    });
+});
 /*
 >> Data transpiring through routes
 */
@@ -130,6 +216,7 @@ Route::group(['prefix' => '/administrativehub/edit'], function () {
     Route::GET('/setDefaultSalaryBand/{id}', [updateData::class, 'setDefaultSalaryBand'])->name('setDefaultSalaryBand.Update');
     Route::POST('/Update_percentage', [updateData::class, 'Update_percentage'])->name('Update_percentage.Update');
     Route::POST('/ownChangePassword', [updateData::class, 'ownChangePassword'])->name('ownChangePassword.Update');
+    Route::get('/update_additional_allowance/{id}', [updateData::class, 'update_additional_allowance'])->name('update_additional_allowance.Update');
 });
 
 

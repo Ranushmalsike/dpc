@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Utilities\checkRoleType;
 //use App\models\
 use App\Models\User;
 use App\Models\classTb;
@@ -86,12 +87,36 @@ class insertData extends Controller
             $request,
             ['username' => 'required', 'useremail' => 'required', 'pass' => 'required'],
             User::class,
-            ['name' => $request->username, 'email' => $request->useremail, 'password' => bcrypt($request->pass)],
+            ['name' => $request->username, 'user_role' => 1, 'password' => bcrypt($request->pass)],
             'name',
             $request->username
         );
     }
 
+    //staff method
+    public function staffRegInputeData(Request $request)
+    {
+        return $this->handleAddData(
+            $request,
+            ['supper_user' => 'required', 'supper_user_pass' => 'required'],
+            User::class,
+            ['name' => $request->supper_user, 'user_role' => 2, 'password' => bcrypt($request->supper_user_pass)],
+            'name',
+            $request->supper_user
+        );
+    }
+    //teacher method
+    public function teacherRegInputeData(Request $request)
+    {
+        return $this->handleAddData(
+            $request,
+            ['teacher_name' => 'required', 'pass_teacher' => 'required'],
+            User::class,
+            ['name' => $request->teacher_name, 'user_role' => 3, 'password' => bcrypt($request->pass_teacher)],
+            'name',
+            $request->teacher_name
+        );
+    }
     //permissionData method
     public function permissionData(Request $request)
     {
@@ -167,34 +192,34 @@ class insertData extends Controller
         ]);
 
         // Use the DB facade with parameter binding to prevent SQL injection
-           $result = \DB::select("SELECT insert_additional_allowance(:TeacherName, :additionalAllowance, :description) AS last_insert_id", [
+        $result = \DB::select("SELECT insert_additional_allowance(:TeacherName, :additionalAllowance, :description) AS last_insert_id", [
         'TeacherName' => $request->TeacherName,
         'additionalAllowance' => $request->additionalAllowance,
         'description' => $request->description,
-    ]);
+        ]);
 
-        if (!empty($result)) {
-           $lastInsertId = $result[0]->last_insert_id;
-            $query = "CALL Insert_allowance_into_how_gen(:teacher_id, :id_of_allowance_additional);";
+        // if (!empty($result)) {
+        //     $lastInsertId = $result[0]->last_insert_id;
+        //     $query = "CALL Insert_allowance_into_how_gen(:teacher_id, :id_of_allowance_additional);";
 
-            $bind = [
-                'teacher_id' => $request->TeacherName,
-                'id_of_allowance_additional' => $lastInsertId // Ensure this is correct
-            ];
+        //     $bind = [
+        //         'teacher_id' => $request->TeacherName,
+        //         'id_of_allowance_additional' => $lastInsertId // Ensure this is correct
+        //     ];
 
-            DB::beginTransaction();
-            try {
-                DB::statement($query, $bind);
-                DB::commit();
-                // Consider adding a return statement here to indicate success
-            } catch (\Exception $e) {
-                DB::rollBack();
-                // Log the error or return an error response
-            }
-        } else {
-            return $this->redirectOptionFail();
-            // Handle the case where $result is empty, indicating the function did not execute as expected
-        }
+        //     DB::beginTransaction();
+        //     try {
+        //         DB::statement($query, $bind);
+        //         DB::commit();
+        //         // Consider adding a return statement here to indicate success
+        //     } catch (\Exception $e) {
+        //         DB::rollBack();
+        //         // Log the error or return an error response
+        //     }
+        // } else {
+        //     return $this->redirectOptionFail();
+        //     // Handle the case where $result is empty, indicating the function did not execute as expected
+        // }
         return $this->redirectOptionCompleted();
     }
 
@@ -429,10 +454,8 @@ public function selected_teacher(Request $request) {
 public function chat_input(Request $request){
     $getSessionID = auth()->user()->id;
 
-    $getrole = User::join('user_roles', 'users.user_role', '=', 'user_roles.id')
-    ->select('user_roles.roleType')
-    ->where('users.id', $getSessionID)
-    ->first();
+    $checkRoleType = new checkRoleType();
+    $getrole = $checkRoleType->checkType();
 
     if($getrole->roleType == 'admin' || $getrole->roleType == 'staff'){
         try {
